@@ -118,9 +118,10 @@ public class UserDocReqController {
                     docRequestManager.getDocRequirementFiles()
             );
 
+            userDocReqService.checkDocRequestIfUnique(documentRequest);
             userDocReqService.addDocumentRequest(documentRequest);
             return true;
-        }catch (OperationFailedException e){
+        }catch (OperationFailedException | IllegalArgumentException e){
             Util.printException(e.getMessage());
         }
 

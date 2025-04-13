@@ -81,6 +81,13 @@ public class UserDocReqService{
         );
     }
 
+    protected void checkDocRequestIfUnique(DocumentRequest documentRequest){
+        int docRequestCount = documentRequestDao.getUserDocRequestCount(documentRequest);
+        if(docRequestCount > 0){
+            throw new IllegalArgumentException("Duplicate document request! Request will cancelled.");
+        }
+    }
+
     protected void addDocumentRequest(DocumentRequest documentRequest){
         if(!documentRequestDao.addDocRequest(documentRequest)){
             throw new OperationFailedException("Request Failed! Please try again.");

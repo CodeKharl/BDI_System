@@ -189,7 +189,8 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
         try(Connection connection = MySQLDBConnection.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
-
+            preStatement.setString(1, referenceId);
+            return preStatement.executeUpdate() == 1;
         }catch (SQLException e){
             SystemLogger.logWarning(MySqlDocumentRequest.class, e.getMessage());
         }
@@ -205,9 +206,18 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
         try(Connection connection = MySQLDBConnection.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
+            preStatement.setInt(1, documentRequest.userId());
+            preStatement.setInt(2, documentRequest.barangayId());
+            preStatement.setInt(3, documentRequest.documentId());
 
+            ResultSet resultSet = preStatement.executeQuery();
+            if(resultSet.next()){
+                return resultSet.getInt(1);
+            }
         }catch (SQLException e){
             SystemLogger.logWarning(MySqlDocumentRequest.class, e.getMessage());
         }
+
+        return 0;
     }
 }

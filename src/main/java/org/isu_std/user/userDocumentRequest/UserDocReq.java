@@ -20,6 +20,7 @@ public class UserDocReq {
         }
 
         documentProcess();
+
     }
 
     private void documentProcess(){
