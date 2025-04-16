@@ -5,6 +5,7 @@ import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,15 +34,19 @@ public class DocRequirement {
                 continue;
             }
 
-            if(!SystemInput.isPerformConfirmed(
-                    "Continue to locate Requirement Files",
-                    ChoiceCollection.OPEN.getValue(),
-                    ChoiceCollection.SUB_CANCEL.getValue()
-            )){
-                return null;
+            if(!isContinueToLocate()){
+                return new ArrayList<>();
             }
         }
 
         return docRequirementController.getRequirementFiles();
+    }
+
+    private boolean isContinueToLocate(){
+        return SystemInput.isPerformConfirmed(
+                "Continue to locate Requirement Files",
+                ChoiceCollection.OPEN.getValue(),
+                ChoiceCollection.SUB_CANCEL.getValue()
+        );
     }
 }

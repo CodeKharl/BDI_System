@@ -65,7 +65,7 @@ public class RequestedDocumentController {
     protected boolean isRequestFinishProcess(int choice){
         switch(choice){
             case 1 -> requestApprove();
-            case 2 -> reqDocsManager.getDocument().printlnStats();
+            case 2 -> reqDocsManager.getDocument().printDetailsWithDocumentFile();
             case 3 -> reqDocsManager.getUserPersonal().printPersonalStats();
             case 4 -> requirementFileView();
         }

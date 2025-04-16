@@ -10,12 +10,22 @@ public record Document(String documentName, double price, String requirements, F
         return "%s - %.2f - %s -> %s".formatted(documentName, price, requirements, documentFile.getName());
     }
 
-    public void printlnStats() {
+    public String getDetails(){
+        return "%s - %.2f - %s".formatted(documentName, price, requirements);
+    }
+
+    public void printDetailsWithDocumentFile() {
         Util.printSectionTitle("Document Information");
         Util.printInformation("Document Name -> %s".formatted(documentName));
         Util.printInformation("Price -> %.2f".formatted(price));
         Util.printInformation("Requirements -> %s".formatted(requirements));
         Util.printInformation("Document File -> %s".formatted(documentFile.getName()));
+    }
+
+    public void printDetails(){
+        Util.printInformation("Document Name -> %s".formatted(documentName));
+        Util.printInformation("Price -> %.2f".formatted(price));
+        Util.printInformation("Requirements -> %s".formatted(requirements));
     }
 
     public String[] getRequirementsArr() {

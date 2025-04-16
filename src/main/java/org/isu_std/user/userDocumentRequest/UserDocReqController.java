@@ -45,7 +45,7 @@ public class UserDocReqController {
         docInfoManager.getBarangayDocumentsMap()
                 .forEach((_,document) -> {
                     Util.printChoices(
-                            "%d. %s".formatted(count.get() + 1, document)
+                            "%d. %s".formatted(count.get() + 1, document.getDetails())
                     );
 
             count.getAndIncrement();
@@ -68,12 +68,9 @@ public class UserDocReqController {
 
     protected boolean isDocumentChoiceAccepted(int choice){
         try{
-            userDocReqService.checkDocumentChoice(
-                    docInfoManager
-                            .getBarangayDocumentsMap()
-                            .size(),
-                    choice
-            );
+            int brgyDocMapLength = docInfoManager.getBarangayDocumentsMap().size();
+            userDocReqService.checkDocumentChoice(brgyDocMapLength, choice);
+
             return true;
         }catch (IllegalArgumentException e){
             Util.printException(e.getMessage());
@@ -83,11 +80,12 @@ public class UserDocReqController {
     }
 
     protected boolean setDocUserRequirements(){
+        String[] requirementsInfo = docRequestManager.getDocument().getRequirementsArr();
         List<File> requirementFiles = userDocReqService
-                .createDocRequirement(docRequestManager.getDocument().getRequirementsArr())
+                .createDocRequirement(requirementsInfo)
                 .getUserDocReqList();
 
-        if(requirementFiles != null){
+        if(!requirementFiles.isEmpty()){
             docRequestManager.setRequirements(requirementFiles);
             return true;
         }
@@ -103,7 +101,8 @@ public class UserDocReqController {
     }
 
     protected void printAllInformations(){
-        docRequestManager.getDocument().printlnStats();
+        Util.printSectionTitle("Information Confirmation");
+        docRequestManager.getDocument().printDetails();
         userInfoManager.userPersonal().printPersonalStats();
         printDocRequirementsPath();
     }
