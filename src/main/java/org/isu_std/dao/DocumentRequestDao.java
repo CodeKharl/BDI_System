@@ -10,4 +10,5 @@ public interface DocumentRequestDao {
     boolean setRequestApprove(String referenceId);
     boolean deleteDocRequest(String referenceId);
     int getUserDocRequestCount(DocumentRequest documentRequest);
+    boolean isRequestApprove(String referenceId);
 }
