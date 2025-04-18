@@ -61,8 +61,4 @@ public class AddingDocService {
 
         return optionalFile;
     }
-
-    protected void openDocFile(File docFile){
-        FileChooser.openFile(docFile);
-    }
 }

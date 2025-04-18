@@ -7,8 +7,7 @@ import org.isu_std.io.Util;
    It is a console based - program which the user or admin interacts with.
 */
 
-public final class
-SystemUI{
+public final class SystemUI{
     private final String[] CHOICES = {"Login", "Sign-in", "About the System", "Exit"};
 
     private final SystemController systemController;

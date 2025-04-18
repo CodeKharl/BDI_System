@@ -67,7 +67,6 @@ public class AddingDocController {
 
             if (optionalDocFile.isPresent()) {
                 File docFile = optionalDocFile.get();
-                addingDocService.openDocFile(docFile);
                 this.documentBuilder.documentFile(docFile);
 
                 return true;

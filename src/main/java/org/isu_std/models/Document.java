@@ -3,6 +3,8 @@ package org.isu_std.models;
 import org.isu_std.io.Util;
 
 import java.io.File;
+import java.lang.reflect.RecordComponent;
+import java.util.Arrays;
 
 public record Document(String documentName, double price, String requirements, File documentFile) {
     @Override
