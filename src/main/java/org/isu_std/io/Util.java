@@ -3,6 +3,8 @@ package org.isu_std.io;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public final class Util{
     public static void printInputInvalidMessage(String errorType){
@@ -74,6 +76,14 @@ public final class Util{
         for (int i = 0; i < types.length; i++) {
             printInformation(format.formatted(labels[i], types[i].toString()));
         }
+    }
+
+    public static void printListWithCount(List<?> objectList){
+        AtomicInteger count = new AtomicInteger();
+        objectList.forEach((object) -> Util.printChoices(
+                        "%d. %s".formatted(count.getAndIncrement() + 1, object.toString())
+                )
+        );
     }
 }
 

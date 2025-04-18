@@ -1,6 +1,5 @@
-package org.isu_std.admin.requested_documents.req_files_view;
+package org.isu_std.admin.admin_main.req_files_view;
 
-import org.isu_std.io.SystemLogger;
 import org.isu_std.io.Util;
 
 import java.io.File;

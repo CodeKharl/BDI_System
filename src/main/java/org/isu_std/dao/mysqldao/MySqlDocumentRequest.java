@@ -78,7 +78,9 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
 
     @Override
     public List<DocumentRequest> getDocRequestPendingList(int barangayId) {
-        String query = "SELECT reference_id, user_id, barangay_id, document_id FROM document_request WHERE barangay_id = ? AND is_approve = FALSE";
+        String query = "SELECT reference_id, user_id, barangay_id, document_id " +
+                "FROM document_request WHERE barangay_id = ? AND is_approve = FALSE";
+
         List<DocumentRequest> docReqList = new ArrayList<>();
 
         try(Connection connection = MySQLDBConnection.getConnection();
@@ -95,6 +97,29 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
         }
 
         return docReqList;
+    }
+
+    @Override
+    public List<DocumentRequest> getApprovedDocList(int barangayId){
+        var query = "SELECT reference_id, user_id, barangay_id, document_id " +
+                "FROM document_request WHERE barangay_id = ? AND is_approve = TRUE";
+
+        List<DocumentRequest> approvedDocList = new ArrayList<>();
+
+        try(Connection connection = MySQLDBConnection.getConnection();
+            PreparedStatement preStatement = connection.prepareStatement(query)
+        ){
+            preStatement.setInt(1, barangayId);
+
+            ResultSet resultSet = preStatement.executeQuery();
+            while (resultSet.next()){
+                approvedDocList.add(getDocumentRequest(connection, resultSet));
+            }
+        }catch (SQLException e){
+            SystemLogger.logWarning(MySqlDocumentRequest.class, e.getMessage());
+        }
+
+        return approvedDocList;
     }
 
     private DocumentRequest getDocumentRequest(Connection connection, ResultSet resultSet) throws SQLException{
@@ -221,7 +246,6 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
         return 0;
     }
 
-    @Override
     public boolean isRequestApprove(String referenceId){
         var query = "SELECT is_approve FROM document_request WHERE reference_id = ? LIMIT 1";
 

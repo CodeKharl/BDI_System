@@ -1,4 +1,4 @@
-package org.isu_std.admin.admin_ui;
+package org.isu_std.admin.admin_main;
 
 import org.isu_std.models.Admin;
 import org.isu_std.models.Barangay;

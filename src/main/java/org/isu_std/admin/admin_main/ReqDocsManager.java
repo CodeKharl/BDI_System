@@ -1,4 +1,4 @@
-package org.isu_std.admin.requested_documents;
+package org.isu_std.admin.admin_main;
 
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
@@ -9,7 +9,7 @@ public class ReqDocsManager {
     private final UserPersonal userPersonal;
     private final Document document;
 
-    protected ReqDocsManager(DocumentRequest documentRequest, UserPersonal userPersonal, Document document){
+    public ReqDocsManager(DocumentRequest documentRequest, UserPersonal userPersonal, Document document){
         this.documentRequest = documentRequest;
         this.userPersonal = userPersonal;
         this.document = document;

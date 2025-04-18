@@ -1,4 +1,4 @@
-package org.isu_std.admin.admin_ui;
+package org.isu_std.admin.admin_main;
 
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.dao.UserPersonalDao;

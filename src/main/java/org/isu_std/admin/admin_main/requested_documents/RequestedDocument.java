@@ -1,4 +1,4 @@
-package org.isu_std.admin.requested_documents;
+package org.isu_std.admin.admin_main.requested_documents;
 
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
@@ -7,7 +7,7 @@ public class RequestedDocument {
     private final RequestedDocumentController reqDocController;
     private final String[] REQUEST_VIEW_CONTENTS = {
             "Approve the Request", "Display Requested Document",
-            "Display User Details", "View Requirement Files", "Back to Pending Document Requests"
+            "Display User Details", "View Requirement Files", "Return to Choose Requested Docs"
     };
 
     protected RequestedDocument(RequestedDocumentController reqDocController){
@@ -24,7 +24,7 @@ public class RequestedDocument {
                 return;
             }
 
-            docRequestProcess();
+            docRequestValidationProcess();
         }
     }
 
@@ -48,9 +48,9 @@ public class RequestedDocument {
         }
     }
 
-    private void docRequestProcess(){
+    private void docRequestValidationProcess(){
         while(true){
-            Util.printSectionTitle(reqDocController.getDocReqSubTitle());
+            Util.printSectionTitle(reqDocController.getDocReqSectionTitle());
             Util.printChoices(REQUEST_VIEW_CONTENTS);
 
             int choice = SystemInput.getIntChoice("Enter your choice : ", REQUEST_VIEW_CONTENTS.length);
@@ -59,9 +59,7 @@ public class RequestedDocument {
                 return;
             }
 
-            if(reqDocController.isRequestFinishProcess(choice)){
-                return;
-            }
+            reqDocController.reqValidatingOnProcess(choice);
         }
     }
 }

@@ -1,4 +1,4 @@
-package org.isu_std.admin.requested_documents.req_approve;
+package org.isu_std.admin.admin_main.requested_documents.req_approve;
 
 import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.SystemInput;

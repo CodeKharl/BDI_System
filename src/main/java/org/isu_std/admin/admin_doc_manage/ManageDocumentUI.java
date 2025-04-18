@@ -1,6 +1,5 @@
 package org.isu_std.admin.admin_doc_manage;
 
-import org.isu_std.admin.admin_ui.AdminUI;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 

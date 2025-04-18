@@ -1,9 +1,9 @@
-package org.isu_std.admin.admin_ui;
+package org.isu_std.admin.admin_main;
 
 import org.isu_std.admin.admin_doc_manage.ManageDocumentFactory;
 import org.isu_std.admin.admin_doc_manage.ManageDocumentUI;
-import org.isu_std.admin.requested_documents.RequestedDocument;
-import org.isu_std.admin.requested_documents.RequestedDocumentFactory;
+import org.isu_std.admin.admin_main.requested_documents.RequestedDocument;
+import org.isu_std.admin.admin_main.requested_documents.RequestedDocumentFactory;
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.DocumentRequestDao;

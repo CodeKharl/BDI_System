@@ -1,4 +1,4 @@
-package org.isu_std.admin.requested_documents.req_approve;
+package org.isu_std.admin.admin_main.requested_documents.req_approve;
 
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.io.exception.OperationFailedException;
@@ -11,10 +11,6 @@ public class RequestApproveService {
     }
 
     protected void requestApprovePerformed(String referenceId){
-        if(!documentRequestDao.isRequestApprove(referenceId)){
-            throw new IllegalArgumentException("The request has already been approve!");
-        }
-
         if(!documentRequestDao.setRequestApprove(referenceId)){
             throw new OperationFailedException("Failed to Approve the Requested Document! Please try again.");
         }

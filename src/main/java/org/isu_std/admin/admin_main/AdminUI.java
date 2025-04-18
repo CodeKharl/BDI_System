@@ -1,4 +1,4 @@
-package org.isu_std.admin.admin_ui;
+package org.isu_std.admin.admin_main;
 
 /*
     This class will be the UI for Admins.
@@ -11,7 +11,10 @@ import org.isu_std.io.Util;
 
 
 public class AdminUI {
-    private final String[] ADMIN_UI_CONTENTS = {"Pending/Processed Document Requests", "Manage Documents", "Account Settings", "Sign-out"};
+    private final String[] ADMIN_UI_CONTENTS = {
+            "Pending/Processed Document Requests", "Approved Documents", "Manage Documents",
+            "Account Settings", "Sign-out"
+    };
 
     private final AdminUIController adminUIController;
 
