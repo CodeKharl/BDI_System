@@ -1,15 +1,11 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.modify;
 
-import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.RequirementHandler;
 import org.isu_std.io.Util;
 import org.isu_std.io.exception.OperationFailedException;
-import org.isu_std.io.file_setup.MSWordMessage;
+import org.isu_std.io.file_setup.DocxMessage;
 
-import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.Optional;
-import java.util.concurrent.CancellationException;
 
 public class ModifyingDocController {
     private final String[] document_info;
@@ -125,7 +121,7 @@ public class ModifyingDocController {
     }
 
     protected boolean setDocFile(){
-        Util.printMessage(MSWordMessage.NEED_DOCX_FILE_MESSAGE.getMessage());
+        Util.printMessage(DocxMessage.NEED_DOCX_FILE_MESSAGE.getMessage());
         
         try {
             Optional<File> optionalDocFile = modifyingDocService.getOptionalDocumentFile();

@@ -4,8 +4,7 @@ import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentFileHandl
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentConfig;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.RequirementHandler;
 import org.isu_std.io.exception.OperationFailedException;
-import org.isu_std.io.file_setup.FileChooser;
-import org.isu_std.io.file_setup.MSWord;
+import org.isu_std.io.file_setup.DocxFileHandler;
 import org.isu_std.models.Document;
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.io.collections.InputMessageCollection;
@@ -57,7 +56,7 @@ public class AddingDocService {
 
     protected Optional<File> getOptionalDocumentFile() throws IllegalArgumentException{
         Optional<File> optionalFile = DocumentFileHandler.getOptionalDocFile();
-        optionalFile.ifPresent(MSWord::docxFileOrThrow);
+        optionalFile.ifPresent(DocxFileHandler::docxFileOrThrow);
 
         return optionalFile;
     }

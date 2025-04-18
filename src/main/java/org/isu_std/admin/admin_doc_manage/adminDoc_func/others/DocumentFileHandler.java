@@ -5,8 +5,8 @@ import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.file_setup.FileChooser;
-import org.isu_std.io.file_setup.MSWord;
-import org.isu_std.io.file_setup.MSWordMessage;
+import org.isu_std.io.file_setup.DocxFileHandler;
+import org.isu_std.io.file_setup.DocxMessage;
 import org.isu_std.models.UserPersonal;
 
 import java.io.File;
@@ -14,7 +14,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -22,7 +21,7 @@ public class DocumentFileHandler {
     public static Optional<File> getOptionalDocFile(){
         while(true) {
             Util.printSubSectionTitle("Choosing File Document");
-            Util.printMessage(MSWordMessage.NEED_DOCX_FILE_MESSAGE.getMessage());
+            Util.printMessage(DocxMessage.NEED_DOCX_FILE_MESSAGE.getMessage());
 
             Optional<File> optionalFile = getOptionalFile();
             if (optionalFile.isEmpty()) {
@@ -60,7 +59,7 @@ public class DocumentFileHandler {
 
     private static boolean modificationDocumentProcess(File documentFile){
         Field[] userPersonalFields = UserPersonal.class.getDeclaredFields();
-        Set<String> placeHolders = MSWord.convertFieldsToPlaceHoldersSet(userPersonalFields);
+        Set<String> placeHolders = DocxFileHandler.convertFieldsToPlaceHoldersSet(userPersonalFields);
 
         printAvailableTextPlaceHolders(placeHolders);
         FileChooser.openFile(documentFile);
@@ -76,7 +75,7 @@ public class DocumentFileHandler {
         try(InputStream inputStream = new FileInputStream(documentFile);
             XWPFDocument document = new XWPFDocument(inputStream);
         ){
-            if(MSWord.containsPlaceHoldersInParagraphs(document, placeHolders)){
+            if(DocxFileHandler.containsPlaceHoldersInParagraphs(document, placeHolders)){
                 return true;
             }
 

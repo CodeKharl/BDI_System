@@ -1,6 +1,6 @@
 package org.isu_std.io.file_setup;
 
-public enum MSWordMessage {
+public enum DocxMessage {
     NEED_DOCX_FILE_MESSAGE("File must be a type of docx file."),
     NOT_DOCX_FILE_MESSAGE("The file is not a docx file!"),
     NEED_CONTAIN_TEXT_PLACEHOLDERS("File must contain text place holders."),
@@ -8,7 +8,7 @@ public enum MSWordMessage {
 
     private final String value;
 
-    MSWordMessage(String value){
+    DocxMessage(String value){
         this.value = value;
     }
 

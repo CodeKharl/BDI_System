@@ -10,12 +10,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 // Class that deals the docx files.
 
-public class MSWord {
+public class DocxFileHandler {
     private final static String FILE_FORMAT = ".docx";
 
     public static boolean isDocxFile(File file){
@@ -25,7 +24,7 @@ public class MSWord {
     public static void docxFileOrThrow(File file){
         if(!isDocxFile(file)){
             throw new IllegalArgumentException(
-                    MSWordMessage.NOT_DOCX_FILE_MESSAGE.getMessage()
+                    DocxMessage.NOT_DOCX_FILE_MESSAGE.getMessage()
             );
         }
     }

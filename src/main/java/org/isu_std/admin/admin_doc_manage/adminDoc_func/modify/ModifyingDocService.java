@@ -9,7 +9,7 @@ import org.isu_std.io.collections.InputMessageCollection;
 import org.isu_std.io.Validation;
 import org.isu_std.io.exception.OperationFailedException;
 import org.isu_std.io.file_setup.FileChooser;
-import org.isu_std.io.file_setup.MSWord;
+import org.isu_std.io.file_setup.DocxFileHandler;
 import org.isu_std.models.modelbuilders.BuilderFactory;
 
 import java.io.File;
@@ -93,7 +93,7 @@ public class ModifyingDocService {
 
     protected Optional<File> getOptionalDocumentFile(){
         Optional<File> optionalFile = FileChooser.getOptionalDocFile("Document File");
-        optionalFile.ifPresent(MSWord::docxFileOrThrow);
+        optionalFile.ifPresent(DocxFileHandler::docxFileOrThrow);
 
         return optionalFile;
     }
