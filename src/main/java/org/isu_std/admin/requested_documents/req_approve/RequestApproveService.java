@@ -11,6 +11,10 @@ public class RequestApproveService {
     }
 
     protected void requestApprovePerformed(String referenceId){
+        if(!documentRequestDao.isRequestApprove(referenceId)){
+            throw new IllegalArgumentException("The request has already been approve!");
+        }
+
         if(!documentRequestDao.setRequestApprove(referenceId)){
             throw new OperationFailedException("Failed to Approve the Requested Document! Please try again.");
         }
