@@ -3,14 +3,11 @@ package org.isu_std.io.file_setup;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.isu_std.io.Util;
+import org.isu_std.io.exception.OperationFailedException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 // Class that deals the docx files.
 
@@ -29,19 +26,31 @@ public class DocxFileHandler {
         }
     }
 
-    public static boolean containsPlaceHoldersInParagraphs(XWPFDocument xwpfDocument, Set<String> placeHolders) {
+    public static boolean containsPlaceHoldersInParagraphs(File file,  Set<String> placeHolders) throws IOException {
         // Checks if the document file has at least one placeHolder.
-        for (XWPFParagraph paragraph : xwpfDocument.getParagraphs()) {
-            for (XWPFRun run : paragraph.getRuns()) {
-                String txt = run.getText(0);
-
-                if (txt == null) {
-                    continue;
-                }
-
-                if (containsPlaceHolders(placeHolders, txt)) {
+        try(InputStream inputStream = new FileInputStream(file);
+            XWPFDocument document = new XWPFDocument(inputStream))
+        {
+            for (XWPFParagraph paragraph : document.getParagraphs()) {
+                if(isParagraphContainsPlaceHolders(paragraph, placeHolders)){
                     return true;
                 }
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean isParagraphContainsPlaceHolders(XWPFParagraph paragraph, Set<String> placeHolders){
+        for (XWPFRun run : paragraph.getRuns()) {
+            String txt = run.getText(0);
+
+            if (txt == null) {
+                continue;
+            }
+
+            if (containsPlaceHolders(placeHolders, txt)) {
+                return true;
             }
         }
 
@@ -58,16 +67,69 @@ public class DocxFileHandler {
         return false;
     }
 
-    public static void editDocxPlaceHolders(File file){
-        try(FileInputStream fis = new FileInputStream(file);
-            XWPFDocument xwpfDocument = new XWPFDocument(fis)
+    public static void editDocxPlaceHolders(File file, Map<String, String> informations) throws IOException, OperationFailedException{
+        try(InputStream inputStream = new FileInputStream(file);
+            XWPFDocument document = new XWPFDocument(inputStream);
+            OutputStream outputStream = new FileOutputStream(file)
         ){
-            for(XWPFParagraph xwpfParagraph : xwpfDocument.getParagraphs()){
-                String text = xwpfParagraph.getText();
-
+            for(XWPFParagraph paragraph : document.getParagraphs()){
+                Optional<List<XWPFRun>> runList = Optional.ofNullable(paragraph.getRuns());
+                runList.ifPresent((runs) -> modifiedProcess(runs, informations));
             }
-        }catch(IOException e){
-            Util.printException(e.getMessage());
+
+            document.write(outputStream);
+        }
+    }
+
+    private static void modifiedProcess(List<XWPFRun> runList, Map<String, String> informations)throws OperationFailedException{
+        for(XWPFRun run : runList){
+            String txt = run.getText(0);
+            if(txt == null){
+                continue;
+            }
+
+            String existingPlaceHolder = getExistingPlaceHolders(informations.keySet(), txt);
+            if(existingPlaceHolder == null){
+                continue;
+            }
+
+            String info = informations.get(existingPlaceHolder);
+            txt = txt.replace(existingPlaceHolder, info);
+            run.setText(txt, 0);
+        }
+    }
+
+    private static String getParagraphTxt(List<XWPFRun> runList){
+        var fullTxt = new StringBuilder();
+        for(XWPFRun run : runList){
+            String txt = run.getText(0);
+
+            if(txt != null) {
+                fullTxt.append(run.getText(0));
+            }
+        }
+
+        return fullTxt.toString();
+    }
+
+
+    private static String getExistingPlaceHolders(Set<String> placeHolders, String txt){
+        for(String holder : placeHolders){
+            if(txt.contains(holder)){
+                return holder;
+            }
+        }
+
+        return null;
+    }
+
+    private static void clearRuns(XWPFParagraph paragraph){
+        int numRuns = paragraph.getRuns().size();
+
+        for(int i = numRuns - 1; i >= 0; i--){
+            if(!paragraph.removeRun(i)){
+                throw new OperationFailedException("Failed to clear the runs on the paragraph!");
+            }
         }
     }
 

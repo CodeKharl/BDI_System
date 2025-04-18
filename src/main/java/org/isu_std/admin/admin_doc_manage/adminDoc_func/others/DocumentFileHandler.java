@@ -72,20 +72,15 @@ public class DocumentFileHandler {
     }
 
     private static boolean isDocumentFileAccepted(File documentFile, Set<String> placeHolders){
-        try(InputStream inputStream = new FileInputStream(documentFile);
-            XWPFDocument document = new XWPFDocument(inputStream);
-        ){
-            if(DocxFileHandler.containsPlaceHoldersInParagraphs(document, placeHolders)){
-                return true;
+        try{
+            if(!DocxFileHandler.containsPlaceHoldersInParagraphs(documentFile, placeHolders)){
+                Util.printMessage("File has no placeholders!");
+                return false;
             }
-
-            Util.printMessage("File has no placeholders!");
         }catch(IOException e){
             Util.printException(e.getMessage());
         }
-
-
-        return false;
+        return true;
     }
 
     private static void printAvailableTextPlaceHolders(Set<String> userPerPlaceHolders){
