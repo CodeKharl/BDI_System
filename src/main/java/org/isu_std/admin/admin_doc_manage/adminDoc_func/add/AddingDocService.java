@@ -55,9 +55,6 @@ public class AddingDocService {
     }
 
     protected Optional<File> getOptionalDocumentFile() throws IllegalArgumentException{
-        Optional<File> optionalFile = DocumentFileHandler.getOptionalDocFile();
-        optionalFile.ifPresent(DocxFileHandler::docxFileOrThrow);
-
-        return optionalFile;
+        return DocumentFileHandler.getOptionalDocFile();
     }
 }

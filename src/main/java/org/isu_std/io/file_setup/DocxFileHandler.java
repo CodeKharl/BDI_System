@@ -32,7 +32,13 @@ public class DocxFileHandler {
             XWPFDocument document = new XWPFDocument(inputStream))
         {
             for (XWPFParagraph paragraph : document.getParagraphs()) {
-                if(isParagraphContainsPlaceHolders(paragraph, placeHolders)){
+                List<XWPFRun> runList = paragraph.getRuns();
+
+                if(runList == null){
+                    continue;
+                }
+
+                if(isParagraphContainsPlaceHolders(runList, placeHolders)){
                     return true;
                 }
             }
@@ -41,77 +47,12 @@ public class DocxFileHandler {
         return false;
     }
 
-    private static boolean isParagraphContainsPlaceHolders(XWPFParagraph paragraph, Set<String> placeHolders){
-        for (XWPFRun run : paragraph.getRuns()) {
-            String txt = run.getText(0);
+    private static boolean isParagraphContainsPlaceHolders(List<XWPFRun> runList, Set<String> placeHolders){
+        String paragraphTxt = getParagraphTxt(runList);
+        String placeHolder = getExistingPlaceHolders(placeHolders, paragraphTxt);
 
-            if (txt == null) {
-                continue;
-            }
-
-            if (containsPlaceHolders(placeHolders, txt)) {
-                return true;
-            }
-        }
-
-        return false;
+        return placeHolder != null;
     }
-
-    private static boolean containsPlaceHolders(Set<String> placeHolders, String txt){
-        for(String holder : placeHolders){
-            if(txt.contains(holder)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static void editDocxPlaceHolders(File file, Map<String, String> informations) throws IOException, OperationFailedException{
-        try(InputStream inputStream = new FileInputStream(file);
-            XWPFDocument document = new XWPFDocument(inputStream);
-            OutputStream outputStream = new FileOutputStream(file)
-        ){
-            for(XWPFParagraph paragraph : document.getParagraphs()){
-                Optional<List<XWPFRun>> runList = Optional.ofNullable(paragraph.getRuns());
-                runList.ifPresent((runs) -> modifiedProcess(runs, informations));
-            }
-
-            document.write(outputStream);
-        }
-    }
-
-    private static void modifiedProcess(List<XWPFRun> runList, Map<String, String> informations)throws OperationFailedException{
-        for(XWPFRun run : runList){
-            String txt = run.getText(0);
-            if(txt == null){
-                continue;
-            }
-
-            String existingPlaceHolder = getExistingPlaceHolders(informations.keySet(), txt);
-            if(existingPlaceHolder == null){
-                continue;
-            }
-
-            String info = informations.get(existingPlaceHolder);
-            txt = txt.replace(existingPlaceHolder, info);
-            run.setText(txt, 0);
-        }
-    }
-
-    private static String getParagraphTxt(List<XWPFRun> runList){
-        var fullTxt = new StringBuilder();
-        for(XWPFRun run : runList){
-            String txt = run.getText(0);
-
-            if(txt != null) {
-                fullTxt.append(run.getText(0));
-            }
-        }
-
-        return fullTxt.toString();
-    }
-
 
     private static String getExistingPlaceHolders(Set<String> placeHolders, String txt){
         for(String holder : placeHolders){
@@ -123,14 +64,123 @@ public class DocxFileHandler {
         return null;
     }
 
-    private static void clearRuns(XWPFParagraph paragraph){
-        int numRuns = paragraph.getRuns().size();
+    private static String getParagraphTxt(List<XWPFRun> runList){
+        var fullTxt = new StringBuilder();
+        for(XWPFRun run : runList){
+            String txt = run.getText(0);
 
-        for(int i = numRuns - 1; i >= 0; i--){
-            if(!paragraph.removeRun(i)){
-                throw new OperationFailedException("Failed to clear the runs on the paragraph!");
+            if(txt != null) {
+                fullTxt.append(txt);
             }
         }
+
+        return fullTxt.toString();
+    }
+
+
+    public static void editDocxPlaceHolders(File file, Map<String, String> informations) throws IOException, OperationFailedException{
+        try(InputStream inputStream = new FileInputStream(file);
+            XWPFDocument document = new XWPFDocument(inputStream);
+            OutputStream outputStream = new FileOutputStream(file)
+        ){
+            for(XWPFParagraph paragraph : document.getParagraphs()){
+                Optional<List<XWPFRun>> runList = Optional.ofNullable(paragraph.getRuns());
+                runList.ifPresent((runs) -> editOnProcess(runs, informations));
+            }
+
+            document.write(outputStream);
+        }
+    }
+
+    private static void editOnProcess(List<XWPFRun> runList, Map<String, String> informations)throws OperationFailedException{
+        List<Integer> runStartIndexes = new ArrayList<>();
+        String paragraphTxt = getParagraphTxt(runList, runStartIndexes);
+
+        for(Map.Entry<String, String> entry : informations.entrySet()){
+            String placeHolder = entry.getKey();
+            String replacement = entry.getValue();
+
+            int index;
+            while((index = paragraphTxt.indexOf(placeHolder)) != - 1){
+                int endIndex = index + placeHolder.length();
+
+                List<Integer> affectedRuns = getAffectedRuns(runList, runStartIndexes, index, endIndex);
+                clearRunsText(runList, affectedRuns);
+                setReplacementWithStyle(runList, affectedRuns, replacement);
+
+                paragraphTxt = paragraphTxt.substring(0, index)
+                        + replacement + paragraphTxt.substring(endIndex);
+
+                runStartIndexes = reCalculateRunStartIndex(runList);
+            }
+        }
+    }
+
+    private static String getParagraphTxt(List<XWPFRun> runList, List<Integer> runStartIndexes){
+        var fullTxt = new StringBuilder();
+        for(XWPFRun run : runList){
+            runStartIndexes.add(fullTxt.length());
+            String txt = run.getText(0);
+
+            if(txt != null) {
+                fullTxt.append(txt);
+            }
+        }
+
+        return fullTxt.toString();
+    }
+
+    private static List<Integer> getAffectedRuns(List<XWPFRun> runList, List<Integer> runStartIndexes, int startIndex, int endIndex){
+        List<Integer> indices = new ArrayList<>();
+
+        for(int i = 0; i < runList.size(); i++){
+            XWPFRun run = runList.get(i);
+            String txt = run.getText(0);
+
+            if(txt == null){
+                continue;
+            }
+
+            int runStart = runStartIndexes.get(i);
+            int runEnd = runStart + txt.length();
+
+            if(runEnd > startIndex && runStart < endIndex){
+                indices.add(i);
+            }
+        }
+
+        return indices;
+    }
+
+    private static void setReplacementWithStyle(List<XWPFRun> runList, List<Integer> affectedIndices, String replacement){
+        if(affectedIndices.isEmpty()){
+            return;
+        }
+
+        XWPFRun baseRun = runList.get(affectedIndices.getFirst());
+        baseRun.setText(replacement, 0);
+    }
+
+    private static void clearRunsText(List<XWPFRun> runList, List<Integer> indices){
+        for(int idx : indices){
+            runList.get(idx).setText("", 0);
+        }
+    }
+
+    private static List<Integer> reCalculateRunStartIndex(List<XWPFRun> runList){
+        List<Integer> indexes = new ArrayList<>();
+
+        int currentLength = 0;
+        for(XWPFRun run : runList){
+            indexes.add(currentLength);
+
+            String txt = run.getText(0);
+            if(txt != null){
+                currentLength += txt.length();
+            }
+        }
+
+        return indexes;
     }
 
     public static Set<String> convertFieldsToPlaceHoldersSet(Field[] fields){

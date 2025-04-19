@@ -23,28 +23,20 @@ public class AdminUI {
     }
 
     public void adminMenu(){
-        do {
+        while(true){
             Util.printSectionTitle(
-                    "Admin Menu (%s)".formatted(
-                            adminUIController.getAdminName()
-                    )
+                    "Admin Menu (%s)".formatted(adminUIController.getAdminName())
             );
 
             Util.printChoices(ADMIN_UI_CONTENTS);
-        }while(isAdminActive());
-    }
+            int choice = SystemInput.getIntChoice("Enter your choice : ", ADMIN_UI_CONTENTS.length);
 
-    private boolean isAdminActive(){
-        switch(SystemInput.getIntChoice("Enter your choice : ", ADMIN_UI_CONTENTS.length)){
-            case 1 -> adminUIController.startRequestedDocument();
-            case 2 -> adminUIController.startManageDocument();
-            case 3 -> {}
-            case 4 -> {
+            if(choice == ADMIN_UI_CONTENTS.length){
                 Util.printMessage("Account sign-out...");
-                return false;
+                return;
             }
-        };
 
-        return true;
+            adminUIController.adminOnProcess(choice);
+        }
     }
 }

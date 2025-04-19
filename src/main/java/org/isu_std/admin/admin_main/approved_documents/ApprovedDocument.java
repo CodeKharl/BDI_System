@@ -3,7 +3,7 @@ package org.isu_std.admin.admin_main.approved_documents;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 
-public class ApprovedDocuments {
+public class ApprovedDocument {
     private final String[] APPROVE_SECTION_CONTENTS = {
             "Deploy the Document File", "Check Payment Method","Open Approved Document File",
             "Display User Details", "View Requirement Files", "Return to Choose Approved Docs"
@@ -11,7 +11,7 @@ public class ApprovedDocuments {
 
     private final ApprovedController approvedController;
 
-    protected ApprovedDocuments(ApprovedController approvedController){
+    protected ApprovedDocument(ApprovedController approvedController){
         this.approvedController = approvedController;
     }
 
@@ -49,6 +49,7 @@ public class ApprovedDocuments {
 
     private void docApprovedValidationProcess(){
         Util.printSectionTitle(approvedController.getApprovedSectionTitle());
+        Util.printChoices(APPROVE_SECTION_CONTENTS);
 
         while(true){
             int choice = SystemInput.getIntChoice("Enter your choice : ", APPROVE_SECTION_CONTENTS.length);

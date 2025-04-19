@@ -1,5 +1,6 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.others;
 
+import org.apache.poi.sl.draw.geom.GuideIf;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
@@ -28,13 +29,25 @@ public class DocumentFileHandler {
                 return Optional.empty();
             }
 
-            if(modificationDocumentProcess(optionalFile.get())){
-                Util.printMessage("Document file accepted!");
-                return optionalFile;
+            File file = optionalFile.get();
+            if(!DocxFileHandler.isDocxFile(file)){
+                Util.printMessage(DocxMessage.NOT_DOCX_FILE_MESSAGE.getMessage());
+                continue;
             }
 
-            Util.printMessage("File not accepted! Please try again.");
+            if(isModificationSuccess(file)){
+                return Optional.of(file);
+            }
         }
+    }
+
+    private static boolean isModificationSuccess(File docxFile){
+        if(modificationDocumentProcess(docxFile)){
+            Util.printMessage("Document file accepted!");
+            return true;
+        }
+
+        return false;
     }
 
     private static Optional<File> getOptionalFile(){

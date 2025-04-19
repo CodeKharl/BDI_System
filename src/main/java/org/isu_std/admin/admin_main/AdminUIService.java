@@ -2,6 +2,8 @@ package org.isu_std.admin.admin_main;
 
 import org.isu_std.admin.admin_doc_manage.ManageDocumentFactory;
 import org.isu_std.admin.admin_doc_manage.ManageDocumentUI;
+import org.isu_std.admin.admin_main.approved_documents.ApprovedDocument;
+import org.isu_std.admin.admin_main.approved_documents.ApprovedDocumentFactory;
 import org.isu_std.admin.admin_main.requested_documents.RequestedDocument;
 import org.isu_std.admin.admin_main.requested_documents.RequestedDocumentFactory;
 import org.isu_std.dao.DocManageDao;
@@ -23,7 +25,7 @@ public class AdminUIService {
         this.userPersonalDao = userPersonalDao;
     }
 
-    protected ManageDocumentUI createManageDocumentUI(int barangayID){
+    protected ManageDocumentUI getManageDocumentUI(int barangayID){
         ManageDocumentFactory manageDocumentFactory = ManageDocumentFactory.getInstance(
                 docManageDao,
                 documentDao
@@ -37,5 +39,13 @@ public class AdminUIService {
                 .getInstance(documentRequestDao, documentDao, userPersonalDao);
 
         return reqDocFactory.createRequestedDocument(barangay);
+    }
+
+    protected ApprovedDocument getApprovedDocsRequest(Barangay barangay){
+        ApprovedDocumentFactory approvedDocumentFactory = new ApprovedDocumentFactory(
+                documentRequestDao, documentDao, userPersonalDao
+        );
+
+        return approvedDocumentFactory.createApprovedDocument(barangay);
     }
 }

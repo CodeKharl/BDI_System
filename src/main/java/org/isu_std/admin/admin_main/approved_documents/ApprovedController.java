@@ -3,6 +3,7 @@ package org.isu_std.admin.admin_main.approved_documents;
 import org.isu_std.admin.admin_main.ReqDocsManager;
 import org.isu_std.admin.admin_main.req_files_view.RequirementFilesView;
 import org.isu_std.io.Util;
+import org.isu_std.io.exception.NotFoundException;
 import org.isu_std.io.exception.OperationFailedException;
 import org.isu_std.models.Barangay;
 import org.isu_std.models.DocumentRequest;
@@ -24,7 +25,7 @@ public class ApprovedController {
         try {
             approvedDocList = approvedService.getApproveDocList(barangay.barangayId());
             return true;
-        }catch (IllegalArgumentException e){
+        }catch (NotFoundException e){
             Util.printMessage(e.getMessage());
         }
 

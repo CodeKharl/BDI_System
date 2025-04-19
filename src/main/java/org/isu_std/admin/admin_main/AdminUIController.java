@@ -14,17 +14,22 @@ public class AdminUIController {
         this.barangay = barangay;
     }
 
-    protected void startManageDocument(){
-        adminUIService.createManageDocumentUI(
-                admin.barangayId()
-        ).manageMenu();
-    }
-
-    protected void startRequestedDocument(){
-        adminUIService.getRequestedDocument(barangay).requestedDocSection();
-    }
-
     protected String getAdminName(){
         return this.admin.adminName();
+    }
+
+    protected void adminOnProcess(int choice){
+        switch(choice){
+            case 1 -> adminUIService.getRequestedDocument(barangay)
+                    .requestedDocSection();
+
+            case 2 -> adminUIService.getApprovedDocsRequest(barangay)
+                    .approvedDocView();
+
+            case 3 -> adminUIService.getManageDocumentUI(admin.barangayId())
+                    .manageMenu();
+
+            case 4 -> {}
+        };
     }
 }
