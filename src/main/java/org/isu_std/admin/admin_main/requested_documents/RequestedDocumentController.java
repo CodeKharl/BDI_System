@@ -3,6 +3,7 @@ package org.isu_std.admin.admin_main.requested_documents;
 import org.isu_std.admin.admin_main.ReqDocsManager;
 import org.isu_std.admin.admin_main.requested_documents.req_approve.RequestApprove;
 import org.isu_std.admin.admin_main.req_files_view.RequirementFilesView;
+import org.isu_std.admin.admin_main.requested_documents.req_decline.RequestDecline;
 import org.isu_std.io.Util;
 import org.isu_std.io.exception.NotFoundException;
 import org.isu_std.io.exception.OperationFailedException;
@@ -60,26 +61,32 @@ public class RequestedDocumentController {
     protected void reqValidatingOnProcess(int choice){
         switch(choice){
             case 1 -> requestApprove();
-            case 2 -> reqDocsManager.getDocument().printDetailsWithDocumentFile();
-            case 3 -> reqDocsManager.getUserPersonal().printPersonalStats();
-            case 4 -> requirementFileView();
+            case 2 -> requestDecline();
+            case 3 -> reqDocsManager.getDocument().printDetailsWithDocumentFile();
+            case 4 -> reqDocsManager.getUserPersonal().printPersonalStats();
+            case 5 -> requirementFileView();
         }
     }
 
     protected void requirementFileView(){
-        RequirementFilesView requirementFilesView = reqDocService.getReqFilesView(
-                reqDocsManager.getDocumentRequest().requirementDocList()
-        );
+        RequirementFilesView requirementFilesView = reqDocService
+                .getReqFilesView(reqDocsManager.getDocumentRequest().requirementDocList());
 
         requirementFilesView.viewProcess();
     }
 
     protected void requestApprove(){
-        RequestApprove requestApprove = reqDocService.createRequestApprove(
-                reqDocsManager.getDocumentRequest()
-        );
+        RequestApprove requestApprove = reqDocService
+                .createRequestApprove(reqDocsManager.getDocumentRequest());
 
-        requestApprove.RequestApprovePerformed();
+        requestApprove.requestApprovePerformed();
+    }
+
+    protected void requestDecline(){
+        RequestDecline requestDecline = reqDocService
+                .createRequestDecline(reqDocsManager.getDocumentRequest());
+
+        requestDecline.requestDeclinePerformed();
     }
 
     protected int getReqDocListLength(){

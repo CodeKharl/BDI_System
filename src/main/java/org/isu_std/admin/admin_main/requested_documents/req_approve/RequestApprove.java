@@ -11,7 +11,7 @@ public class RequestApprove {
         this.requestApproveController = requestApproveController;
     }
 
-    public void RequestApprovePerformed(){
+    public void requestApprovePerformed(){
         Util.printSectionTitle("Request Approve");
         if(!isConfirm()){
             return;

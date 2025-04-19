@@ -6,7 +6,7 @@ import org.isu_std.io.Util;
 public class RequestedDocument {
     private final RequestedDocumentController reqDocController;
     private final String[] REQUEST_VIEW_CONTENTS = {
-            "Approve the Request", "Display Requested Document",
+            "Approve the Request", "Decline the Request", "Display Requested Document",
             "Display User Details", "View Requirement Files", "Return to Choose Requested Docs"
     };
 

@@ -208,19 +208,33 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
     }
 
     @Override
-    public boolean deleteDocRequest(String referenceId){
+    public boolean deleteDocRequest(DocumentRequest documentRequest){
         String query = "DELETE FROM document_request WHERE reference_id = ?";
 
         try(Connection connection = MySQLDBConnection.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
-            preStatement.setString(1, referenceId);
-            return preStatement.executeUpdate() == 1;
+            preStatement.setString(1, documentRequest.referenceId());
+
+            if(preStatement.executeUpdate() == 1){
+                return deleteDocRequestRequestFiles(connection, documentRequest);
+            }
         }catch (SQLException e){
             SystemLogger.logWarning(MySqlDocumentRequest.class, e.getMessage());
         }
 
         return false;
+    }
+
+    private boolean deleteDocRequestRequestFiles(Connection connection, DocumentRequest documentRequest) throws SQLException{
+        String query = "DELETE FROM doc_requirement_request WHERE reference_id = ?";
+
+        try(PreparedStatement preStatement = connection.prepareStatement(query)){
+            int requirementFIleCount = documentRequest.requirementDocList().size();
+
+            preStatement.setString(1, documentRequest.referenceId());
+            return preStatement.executeUpdate() == requirementFIleCount;
+        }
     }
 
     @Override

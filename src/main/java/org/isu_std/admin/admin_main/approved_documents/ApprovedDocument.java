@@ -5,7 +5,7 @@ import org.isu_std.io.Util;
 
 public class ApprovedDocument {
     private final String[] APPROVE_SECTION_CONTENTS = {
-            "Deploy the Document File", "Check Payment Method","Open Approved Document File",
+            "Deploy the Document File", "Check Payment Method","View Approved Document File",
             "Display User Details", "View Requirement Files", "Return to Choose Approved Docs"
     };
 

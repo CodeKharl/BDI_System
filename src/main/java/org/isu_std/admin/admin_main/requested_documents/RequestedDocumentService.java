@@ -10,6 +10,9 @@ import org.isu_std.admin.admin_main.requested_documents.req_approve.RequestAppro
 import org.isu_std.admin.admin_main.requested_documents.req_approve.RequestApproveController;
 import org.isu_std.admin.admin_main.requested_documents.req_approve.RequestApproveService;
 import org.isu_std.admin.admin_main.req_files_view.RequirementFilesView;
+import org.isu_std.admin.admin_main.requested_documents.req_decline.RequestDecline;
+import org.isu_std.admin.admin_main.requested_documents.req_decline.RequestDeclineController;
+import org.isu_std.admin.admin_main.requested_documents.req_decline.RequestDeclineService;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.dao.UserPersonalDao;
@@ -54,5 +57,14 @@ public class RequestedDocumentService {
         );
 
         return new RequestApprove(requestApproveController);
+    }
+
+    protected RequestDecline createRequestDecline(DocumentRequest documentRequest){
+        RequestDeclineService requestDeclineService = new RequestDeclineService(documentRequestDao);
+        RequestDeclineController requestDeclineController = new RequestDeclineController(
+                requestDeclineService, documentRequest
+        );
+
+        return new RequestDecline(requestDeclineController);
     }
 }
