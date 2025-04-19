@@ -24,8 +24,8 @@ public class AdminUI {
 
     public void adminMenu(){
         while(true){
-            Util.printSectionTitle(
-                    "Admin Menu (%s)".formatted(adminUIController.getAdminName())
+            Util.printSectionTitle("Admin Menu (%s) (%s)"
+                    .formatted(adminUIController.getAdminName(), adminUIController.getBarangayFullName())
             );
 
             Util.printChoices(ADMIN_UI_CONTENTS);

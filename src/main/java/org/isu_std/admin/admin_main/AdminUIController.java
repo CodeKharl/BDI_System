@@ -18,6 +18,14 @@ public class AdminUIController {
         return this.admin.adminName();
     }
 
+    protected String getBarangayFullName(){
+        return "%s, %s, %s".formatted(
+                barangay.barangayName(),
+                barangay.municipality(),
+                barangay.province()
+        );
+    }
+
     protected void adminOnProcess(int choice){
         switch(choice){
             case 1 -> adminUIService.getRequestedDocument(barangay)
