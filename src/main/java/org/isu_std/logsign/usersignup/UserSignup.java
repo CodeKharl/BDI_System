@@ -33,7 +33,7 @@ public class UserSignup implements Signup {
 
     public boolean setUserInformation(String[] userInfoContents){
         int count = 0;
-        while (count < userInfoContents.length - 1) {
+        while (count < userInfoContents.length) {
             String input = SystemInput.getStringInput(
                     "Enter a %s (%c == Cancel) : "
                             .formatted(userInfoContents[count], ChoiceCollection.EXIT_CODE.getValue())

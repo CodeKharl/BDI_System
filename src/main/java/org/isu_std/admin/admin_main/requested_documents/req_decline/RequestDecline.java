@@ -11,14 +11,17 @@ public class RequestDecline {
         this.requestDeclineController = requestDeclineController;
     }
 
-    public void requestDeclinePerformed(){
+    public boolean requestDeclinePerformed(){
         if(!isDeclinedConfirmed()){
-            return;
+            return false;
         }
 
         if(requestDeclineController.isRequestRemovedSuccess()){
             Util.printMessage("The request is declined and have been removed.");
+            return true;
         }
+
+        return false;
     }
 
     private boolean isDeclinedConfirmed(){

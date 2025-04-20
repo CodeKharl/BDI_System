@@ -11,17 +11,18 @@ public class RequestApprove {
         this.requestApproveController = requestApproveController;
     }
 
-    public void requestApprovePerformed(){
+    public boolean requestApprovePerformed(){
         Util.printSectionTitle("Request Approve");
         if(!isConfirm()){
-            return;
+            return false;
         }
 
         if(!requestApproveController.isReqApproved()){
-            return;
+            return false;
         }
 
         Util.printMessage("Document request approve");
+        return true;
     }
 
     private boolean isConfirm(){

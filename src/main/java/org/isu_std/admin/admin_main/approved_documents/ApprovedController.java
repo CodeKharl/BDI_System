@@ -33,7 +33,7 @@ public class ApprovedController {
     }
 
     protected void printApprovedDocuments(){
-        Util.printSectionTitle("Approved Requests (User ID - Document ID");
+        Util.printSectionTitle("Approved Requests (User ID - Document ID)");
         Util.printListWithCount(approvedDocList);
     }
 
@@ -43,7 +43,7 @@ public class ApprovedController {
 
     protected boolean isDocumentRequestSet(int docsChoice){
         try{
-            DocumentRequest documentRequest = approvedDocList.get(docsChoice);
+            DocumentRequest documentRequest = approvedDocList.get(docsChoice - 1);
             this.reqDocsManager = approvedService.getReqDocsManager(documentRequest);
 
             return true;
@@ -62,7 +62,7 @@ public class ApprovedController {
     protected void approvedValidatingOnProcess(int choice){
         switch (choice){
             case 1 -> {}
-            case 2 -> {}
+            case 2 -> viewApprovedFile();
             case 3 -> reqDocsManager.getDocument().printDetails();
             case 4 -> reqDocsManager.getUserPersonal().printPersonalStats();
             case 5 -> requirementFilesView();
@@ -75,5 +75,14 @@ public class ApprovedController {
         );
 
         requirementFilesView.viewProcess();
+    }
+
+    protected void viewApprovedFile(){
+        try{
+            Util.printMessage("Opening the user document file...");
+            approvedService.openApprovedDocFile(reqDocsManager);
+        }catch (NotFoundException e){
+            Util.printException(e.getMessage());
+        }
     }
 }

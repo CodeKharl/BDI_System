@@ -9,7 +9,8 @@ import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.dao.UserPersonalDao;
 import org.isu_std.io.exception.NotFoundException;
 import org.isu_std.io.exception.OperationFailedException;
-import org.isu_std.models.Document;
+import org.isu_std.io.file_setup.FileChooser;
+import org.isu_std.io.folder_setup.FolderConfig;
 import org.isu_std.models.DocumentRequest;
 
 import java.io.File;
@@ -43,5 +44,19 @@ public class ApprovedService {
 
     protected RequirementFilesView getReqFilesView(List<File> requirementFiles){
         return ReqFilesViewFactory.createReqFilesView(requirementFiles);
+    }
+
+    protected void openApprovedDocFile(ReqDocsManager reqDocsManager){
+        String filePath = FolderConfig.DOC_APPROVE_PATH.getPath();
+        String fileName = reqDocsManager.getDocumentRequest().referenceId() +
+                reqDocsManager.getDocument().documentFile().getName();
+
+        File outputFile = new File("%s_%s".formatted(filePath, fileName));
+
+        if(!outputFile.exists()){
+            throw new NotFoundException("Theres no existing approved document file!");
+        }
+
+        FileChooser.openFile(outputFile);
     }
 }

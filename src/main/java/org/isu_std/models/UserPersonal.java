@@ -1,5 +1,6 @@
 package org.isu_std.models;
 
+import org.apache.poi.ss.formula.ptg.AreaNPtg;
 import org.isu_std.io.Util;
 
 public class UserPersonal{
@@ -97,5 +98,17 @@ public class UserPersonal{
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String[] valueToStringArr(){
+        return new String[]{
+                name,
+                String.valueOf(sex),
+                String.valueOf(age),
+                birthDate,
+                civilStatus,
+                nationality,
+                phoneNumber
+        };
     }
 }

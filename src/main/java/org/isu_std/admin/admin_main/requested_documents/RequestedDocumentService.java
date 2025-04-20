@@ -50,10 +50,10 @@ public class RequestedDocumentService {
         return ReqFilesViewFactory.createReqFilesView(requirmentFileList);
     }
 
-    protected RequestApprove createRequestApprove(DocumentRequest documentRequest){
+    protected RequestApprove createRequestApprove(ReqDocsManager reqDocsManager){
         RequestApproveService requestApproveService = new RequestApproveService(documentRequestDao);
         RequestApproveController requestApproveController = new RequestApproveController(
-                requestApproveService, documentRequest
+                requestApproveService, reqDocsManager
         );
 
         return new RequestApprove(requestApproveController);

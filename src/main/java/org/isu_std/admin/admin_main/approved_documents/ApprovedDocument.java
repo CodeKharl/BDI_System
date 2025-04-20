@@ -5,7 +5,7 @@ import org.isu_std.io.Util;
 
 public class ApprovedDocument {
     private final String[] APPROVE_SECTION_CONTENTS = {
-            "Deploy the Document File", "Check Payment Method","View Approved Document File",
+            "Confirm and Export the File", "View Approved Document File", "Check Payment Method",
             "Display User Details", "View Requirement Files", "Return to Choose Approved Docs"
     };
 
@@ -33,6 +33,7 @@ public class ApprovedDocument {
         int backValue = approvedController.getApprovedDocsCount() + 1;
 
         approvedController.printApprovedDocuments();
+        Util.printChoices("%d. Back to Admin Menu".formatted(backValue));
 
         while(true){
             int docsChoice = SystemInput.getIntChoice("Enter approved document choice : ", backValue);
@@ -48,10 +49,10 @@ public class ApprovedDocument {
     }
 
     private void docApprovedValidationProcess(){
-        Util.printSectionTitle(approvedController.getApprovedSectionTitle());
-        Util.printChoices(APPROVE_SECTION_CONTENTS);
-
         while(true){
+            Util.printSectionTitle(approvedController.getApprovedSectionTitle());
+            Util.printChoices(APPROVE_SECTION_CONTENTS);
+
             int choice = SystemInput.getIntChoice("Enter your choice : ", APPROVE_SECTION_CONTENTS.length);
 
             if(choice == APPROVE_SECTION_CONTENTS.length){

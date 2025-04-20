@@ -140,7 +140,7 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
         String path = FolderConfig.DOC_REQUEST_PATH.getPath();
 
         // Setting the folder that stores the requirement files.
-        setDocReqFilePath(path);
+        Folder.setFileFolder(path);
 
         try(PreparedStatement preStatement = connection.prepareStatement(query)){
             preStatement.setString(1, referenceId);
@@ -157,19 +157,19 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
 
     private Optional<File> getOptionalReqFile(ResultSet resultSet, String path) throws SQLException{
         String fileName = resultSet.getString(1);
-        InputStream inputStream = resultSet.getBinaryStream(2);
-
         File file = new File(path + File.separator + fileName);
 
         if(file.exists()){
             return Optional.of(file);
         }
 
-        return createOptionalNewReqFile(inputStream, file);
+        return createOptionalNewReqFile(resultSet, file);
     }
 
-    private Optional<File> createOptionalNewReqFile(InputStream inputStream, File file){
-        try(OutputStream outputStream = new FileOutputStream(file)){
+    private Optional<File> createOptionalNewReqFile(ResultSet resultSet, File file) throws SQLException{
+        try(InputStream inputStream = resultSet.getBinaryStream(2);
+            OutputStream outputStream = new FileOutputStream(file)
+        ){
             byte[] bytes = new byte[8192];
             int reader;
 
@@ -185,15 +185,10 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
         return Optional.empty();
     }
 
-    private void setDocReqFilePath(String filePath){
-        if(!new File(filePath).isDirectory()){
-            Folder.createFolder(filePath);
-        }
-    }
 
     @Override
     public boolean setRequestApprove(String referenceId){
-        String query = "MODIFY document_request SET is_Approve = TRUE WHERE reference_id = ? ";
+        String query = "UPDATE document_request SET is_Approve = TRUE WHERE reference_id = ? ";
 
         try(Connection connection = MySQLDBConnection.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);

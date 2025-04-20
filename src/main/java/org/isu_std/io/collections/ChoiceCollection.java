@@ -4,7 +4,7 @@ public enum ChoiceCollection {
     CONFIRM('C'),
     SUB_CANCEL('D'),
     OPEN('O'),
-    EXIT_CODE('X'),
+    EXIT_CODE('$'),
     EXIT_INT_CODE(0);
 
     private char value;

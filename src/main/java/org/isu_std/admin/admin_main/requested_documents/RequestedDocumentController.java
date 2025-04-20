@@ -58,14 +58,21 @@ public class RequestedDocumentController {
                 .formatted(reqDocsManager.getUserId(), reqDocsManager.getDocumentId());
     }
 
-    protected void reqValidatingOnProcess(int choice){
+    protected boolean isReqValidationFinish(int choice){
         switch(choice){
-            case 1 -> requestApprove();
-            case 2 -> requestDecline();
+            case 1 -> {
+                return requestApprove();
+            }
+            case 2 -> {
+                return requestDecline();
+            }
+
             case 3 -> reqDocsManager.getDocument().printDetailsWithDocumentFile();
             case 4 -> reqDocsManager.getUserPersonal().printPersonalStats();
             case 5 -> requirementFileView();
         }
+
+        return false;
     }
 
     protected void requirementFileView(){
@@ -75,18 +82,18 @@ public class RequestedDocumentController {
         requirementFilesView.viewProcess();
     }
 
-    protected void requestApprove(){
+    protected boolean requestApprove(){
         RequestApprove requestApprove = reqDocService
-                .createRequestApprove(reqDocsManager.getDocumentRequest());
+                .createRequestApprove(reqDocsManager);
 
-        requestApprove.requestApprovePerformed();
+        return requestApprove.requestApprovePerformed();
     }
 
-    protected void requestDecline(){
+    protected boolean requestDecline(){
         RequestDecline requestDecline = reqDocService
                 .createRequestDecline(reqDocsManager.getDocumentRequest());
 
-        requestDecline.requestDeclinePerformed();
+        return requestDecline.requestDeclinePerformed();
     }
 
     protected int getReqDocListLength(){
