@@ -14,7 +14,7 @@ public class DaoFactory {
     }
 
     public UserDao getUserDao(){
-        return new MySqlUserDao();
+        return new MySqlUser();
     }
 
     public BarangayDao getBrgyDao(){
@@ -22,7 +22,7 @@ public class DaoFactory {
     }
 
     public DocumentDao getDocumentDao(){
-        return new MySqlDocumentDao();
+        return new MySqlDocument();
     }
 
     public AdminDao getAdminDao(){
@@ -30,14 +30,18 @@ public class DaoFactory {
     }
 
     public DocManageDao getDocManageDao(){
-        return new MySqlDocumentDao();
+        return new MySqlDocument();
     }
 
     public UserPersonalDao getPersonalDao(){
-        return new MySqlUserDao();
+        return new MySqlUser();
     }
 
     public DocumentRequestDao getDocumentRequestDao(){
         return new MySqlDocumentRequest();
+    }
+
+    public PaymentDao paymentDao(){
+        return new MySqlPayment();
     }
 }

@@ -22,10 +22,12 @@ public class AdminBrgyService {
     private final DocumentDao documentDao;
     private final UserPersonalDao userPersonalDao;
     private final DocumentRequestDao documentRequestDao;
+    private final PaymentDao paymentDao;
 
     protected AdminBrgyService(
             BarangayDao barangayDao, AdminDao adminDao, DocManageDao docManageDao,
-            DocumentDao documentDao, UserPersonalDao userPersonalDao, DocumentRequestDao documentRequestDao
+            DocumentDao documentDao, UserPersonalDao userPersonalDao, DocumentRequestDao documentRequestDao,
+            PaymentDao paymentDao
     ){
         this.barangayDao = barangayDao;
         this.adminDao = adminDao;
@@ -33,6 +35,7 @@ public class AdminBrgyService {
         this.documentDao = documentDao;
         this.userPersonalDao = userPersonalDao;
         this.documentRequestDao = documentRequestDao;
+        this.paymentDao = paymentDao;
     }
 
     protected RegisterBarangay createRegisterBrgy(){
@@ -57,7 +60,8 @@ public class AdminBrgyService {
                 docManageDao,
                 documentDao,
                 documentRequestDao,
-                userPersonalDao
+                userPersonalDao,
+                paymentDao
         );
 
         Optional<Barangay> optionalBarangay = barangayDao.getOptionalBarangay(admin.barangayId());

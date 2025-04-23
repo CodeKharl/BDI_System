@@ -43,7 +43,7 @@ public class RequestedDocumentController {
     protected boolean setDocumentReqChoice(int docChoice){
         try{
             DocumentRequest documentRequest = documentRequestList.get(docChoice - 1);
-            this.reqDocsManager = reqDocService.getReDocsManager(documentRequest);
+            this.reqDocsManager = reqDocService.getReqDocsManager(documentRequest);
 
             return true;
         }catch (OperationFailedException e){
@@ -67,8 +67,8 @@ public class RequestedDocumentController {
                 return requestDecline();
             }
 
-            case 3 -> reqDocsManager.getDocument().printDetailsWithDocumentFile();
-            case 4 -> reqDocsManager.getUserPersonal().printPersonalStats();
+            case 3 -> reqDocsManager.document().printDetailsWithDocumentFile();
+            case 4 -> reqDocsManager.userPersonal().printPersonalStats();
             case 5 -> requirementFileView();
         }
 
@@ -77,7 +77,7 @@ public class RequestedDocumentController {
 
     protected void requirementFileView(){
         RequirementFilesView requirementFilesView = reqDocService
-                .getReqFilesView(reqDocsManager.getDocumentRequest().requirementDocList());
+                .getReqFilesView(reqDocsManager.documentRequest().requirementDocList());
 
         requirementFilesView.viewProcess();
     }
@@ -91,7 +91,7 @@ public class RequestedDocumentController {
 
     protected boolean requestDecline(){
         RequestDecline requestDecline = reqDocService
-                .createRequestDecline(reqDocsManager.getDocumentRequest());
+                .createRequestDecline(reqDocsManager.documentRequest());
 
         return requestDecline.requestDeclinePerformed();
     }

@@ -1,30 +1,38 @@
 package org.isu_std.admin.admin_main.approved_documents;
 
 import org.isu_std.admin.admin_main.ReqDocsManager;
+import org.isu_std.admin.admin_main.ReqDocsManagerBuilder;
 import org.isu_std.admin.admin_main.ReqDocsManagerFactory;
 import org.isu_std.admin.admin_main.req_files_view.ReqFilesViewFactory;
 import org.isu_std.admin.admin_main.req_files_view.RequirementFilesView;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.DocumentRequestDao;
+import org.isu_std.dao.PaymentDao;
 import org.isu_std.dao.UserPersonalDao;
 import org.isu_std.io.exception.NotFoundException;
 import org.isu_std.io.exception.OperationFailedException;
 import org.isu_std.io.file_setup.FileChooser;
 import org.isu_std.io.folder_setup.FolderConfig;
+import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
+import org.isu_std.models.Payment;
+import org.isu_std.models.UserPersonal;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
-public class ApprovedService {
+public class ApprovedDocumentService {
     private final DocumentRequestDao documentRequestDao;
     private final DocumentDao documentDao;
     private final UserPersonalDao userPersonalDao;
+    private final PaymentDao paymentDao;
 
-    protected ApprovedService(DocumentRequestDao documentRequestDao, DocumentDao documentDao, UserPersonalDao userPersonalDao){
+    protected ApprovedDocumentService(DocumentRequestDao documentRequestDao, DocumentDao documentDao, UserPersonalDao userPersonalDao, PaymentDao paymentDao){
         this.documentRequestDao = documentRequestDao;
         this.documentDao = documentDao;
         this.userPersonalDao = userPersonalDao;
+        this.paymentDao = paymentDao;
     }
 
     protected List<DocumentRequest> getApproveDocList(int barangayId){
@@ -38,18 +46,30 @@ public class ApprovedService {
     }
 
     protected ReqDocsManager getReqDocsManager(DocumentRequest documentRequest) throws OperationFailedException {
-        ReqDocsManagerFactory reqDocsManagerFactory = new ReqDocsManagerFactory(documentDao, userPersonalDao);
-        return reqDocsManagerFactory.createReDocsManager(documentRequest);
+        ReqDocsManagerBuilder reqDocsManagerBuilder = new ReqDocsManagerBuilder(documentRequest);
+        UserPersonal userPersonal = ReqDocsManagerFactory.getUserPersonal(userPersonalDao, documentRequest.userId());
+        Document document = ReqDocsManagerFactory.getDocument(
+                documentDao, documentRequest.barangayId(), documentRequest.documentId()
+        );
+
+        Payment payment = ReqDocsManagerFactory.getPayment(paymentDao, documentRequest.referenceId());
+
+        reqDocsManagerBuilder
+                .userPersonal(userPersonal)
+                .document(document)
+                .payment(payment);
+
+        return reqDocsManagerBuilder.build();
     }
 
     protected RequirementFilesView getReqFilesView(List<File> requirementFiles){
         return ReqFilesViewFactory.createReqFilesView(requirementFiles);
     }
 
-    protected void openApprovedDocFile(ReqDocsManager reqDocsManager){
+    protected File getApprovedDocFile(ReqDocsManager reqDocsManager){
         String filePath = FolderConfig.DOC_APPROVE_PATH.getPath();
-        String fileName = reqDocsManager.getDocumentRequest().referenceId() +
-                reqDocsManager.getDocument().documentFile().getName();
+        String fileName = reqDocsManager.documentRequest().referenceId() +
+                reqDocsManager.document().documentFile().getName();
 
         File outputFile = new File("%s_%s".formatted(filePath, fileName));
 
@@ -57,6 +77,18 @@ public class ApprovedService {
             throw new NotFoundException("Theres no existing approved document file!");
         }
 
-        FileChooser.openFile(outputFile);
+        return outputFile;
+    }
+
+    protected Payment getPayment(Payment payment){
+        Optional<Payment> optionalPayment = Optional.ofNullable(payment);
+
+        return optionalPayment.orElseThrow(
+                () -> new NotFoundException("Theres no existing payment information of this approved request!")
+        );
+    }
+
+    protected void openDocFile(File file){
+        FileChooser.openFile(file);
     }
 }

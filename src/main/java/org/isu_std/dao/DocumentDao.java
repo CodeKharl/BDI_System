@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface DocumentDao {
     Map<Integer, Document> getDocumentMap(int barangayId);
     Optional<String> getDocumentName(int barangayId, int documentId);
-    Optional<Document> getOptionalDocument(int documentId);
+    Optional<Document> getOptionalDocument(int barangayId, int documentId);
 }

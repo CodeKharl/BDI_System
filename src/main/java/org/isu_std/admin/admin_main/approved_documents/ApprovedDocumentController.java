@@ -7,23 +7,25 @@ import org.isu_std.io.exception.NotFoundException;
 import org.isu_std.io.exception.OperationFailedException;
 import org.isu_std.models.Barangay;
 import org.isu_std.models.DocumentRequest;
+import org.isu_std.models.Payment;
 
+import java.io.File;
 import java.util.List;
 
-public class ApprovedController {
-    private final ApprovedService approvedService;
+public class ApprovedDocumentController {
+    private final ApprovedDocumentService approvedDocumentService;
     private final Barangay barangay;
     private List<DocumentRequest> approvedDocList;
     private ReqDocsManager reqDocsManager;
 
-    protected ApprovedController(ApprovedService approvedService, Barangay barangay){
-        this.approvedService = approvedService;
+    protected ApprovedDocumentController(ApprovedDocumentService approvedDocumentService, Barangay barangay){
+        this.approvedDocumentService = approvedDocumentService;
         this.barangay = barangay;
     }
 
     protected boolean isThereExistingApprovedRequests(){
         try {
-            approvedDocList = approvedService.getApproveDocList(barangay.barangayId());
+            approvedDocList = approvedDocumentService.getApproveDocList(barangay.barangayId());
             return true;
         }catch (NotFoundException e){
             Util.printMessage(e.getMessage());
@@ -44,7 +46,7 @@ public class ApprovedController {
     protected boolean isDocumentRequestSet(int docsChoice){
         try{
             DocumentRequest documentRequest = approvedDocList.get(docsChoice - 1);
-            this.reqDocsManager = approvedService.getReqDocsManager(documentRequest);
+            this.reqDocsManager = approvedDocumentService.getReqDocsManager(documentRequest);
 
             return true;
         }catch (OperationFailedException e){
@@ -63,15 +65,16 @@ public class ApprovedController {
         switch (choice){
             case 1 -> {}
             case 2 -> viewApprovedFile();
-            case 3 -> reqDocsManager.getDocument().printDetails();
-            case 4 -> reqDocsManager.getUserPersonal().printPersonalStats();
-            case 5 -> requirementFilesView();
+            case 3 -> viewApprovedPayment();
+            case 4 -> reqDocsManager.document().printDetails();
+            case 5 -> reqDocsManager.userPersonal().printPersonalStats();
+            case 6 -> requirementFilesView();
         }
     }
 
     protected void requirementFilesView(){
-        RequirementFilesView requirementFilesView = approvedService.getReqFilesView(
-                reqDocsManager.getDocumentRequest().requirementDocList()
+        RequirementFilesView requirementFilesView = approvedDocumentService.getReqFilesView(
+                reqDocsManager.documentRequest().requirementDocList()
         );
 
         requirementFilesView.viewProcess();
@@ -79,8 +82,18 @@ public class ApprovedController {
 
     protected void viewApprovedFile(){
         try{
+            File docFile = approvedDocumentService.getApprovedDocFile(reqDocsManager);
             Util.printMessage("Opening the user document file...");
-            approvedService.openApprovedDocFile(reqDocsManager);
+            approvedDocumentService.openDocFile(docFile);
+        }catch (NotFoundException e){
+            Util.printException(e.getMessage());
+        }
+    }
+
+    protected void viewApprovedPayment(){
+        try{
+            Payment payment = approvedDocumentService.getPayment(reqDocsManager.payment());
+            Util.printInformation(payment.toString());
         }catch (NotFoundException e){
             Util.printException(e.getMessage());
         }

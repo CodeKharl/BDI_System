@@ -13,7 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class MySqlUserDao implements UserDao, UserPersonalDao {
+public class MySqlUser implements UserDao, UserPersonalDao {
     @Override
     public int getUserId(String username) {
         String query = "SELECT user_id FROM user WHERE user_name = ? LIMIT 1";
@@ -28,7 +28,7 @@ public class MySqlUserDao implements UserDao, UserPersonalDao {
                 return resultSet.getInt(1);
             }
         }catch (SQLException e){
-            SystemLogger.logWarning(MySqlUserDao.class, e.getMessage());
+            SystemLogger.logWarning(MySqlUser.class, e.getMessage());
         }
 
         return 0;
@@ -47,7 +47,7 @@ public class MySqlUserDao implements UserDao, UserPersonalDao {
 
             return preStatement.executeUpdate() == 1;
         }catch (SQLException e){
-            SystemLogger.logWarning(MySqlUserDao.class, e.getMessage());
+            SystemLogger.logWarning(MySqlUser.class, e.getMessage());
         }
 
         return false;
@@ -67,7 +67,7 @@ public class MySqlUserDao implements UserDao, UserPersonalDao {
                 return Optional.of(getResultUser(resultSet));
             }
         }catch (SQLException e){
-            SystemLogger.logWarning(MySqlUserDao.class, e.getMessage());
+            SystemLogger.logWarning(MySqlUser.class, e.getMessage());
         }
 
         return Optional.empty();
@@ -98,7 +98,7 @@ public class MySqlUserDao implements UserDao, UserPersonalDao {
                 return Optional.of(getResultUserPersonal(resultSet));
             }
         }catch (SQLException e){
-            SystemLogger.logWarning(MySqlUserDao.class, e.getMessage());
+            SystemLogger.logWarning(MySqlUser.class, e.getMessage());
         }
 
         return Optional.empty();
@@ -136,7 +136,7 @@ public class MySqlUserDao implements UserDao, UserPersonalDao {
 
             return preStatement.executeUpdate() == 1;
         }catch (SQLException e){
-            SystemLogger.logWarning(MySqlUserDao.class, e.getMessage());
+            SystemLogger.logWarning(MySqlUser.class, e.getMessage());
         }
 
         return false;

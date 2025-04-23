@@ -28,7 +28,8 @@ public class AdminBrgyAccFactory {
                 daoFactory.getDocManageDao(),
                 daoFactory.getDocumentDao(),
                 daoFactory.getPersonalDao(),
-                daoFactory.getDocumentRequestDao()
+                daoFactory.getDocumentRequestDao(),
+                daoFactory.paymentDao()
         );
 
         AdminBrgyAccController adminBrgyAccController = new AdminBrgyAccController(admin, adminBrgyService);

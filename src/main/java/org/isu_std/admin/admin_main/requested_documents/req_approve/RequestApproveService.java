@@ -1,6 +1,5 @@
 package org.isu_std.admin.admin_main.requested_documents.req_approve;
 
-import org.apache.poi.sl.draw.geom.GuideIf;
 import org.isu_std.admin.admin_main.ReqDocsManager;
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.io.Util;
@@ -8,14 +7,12 @@ import org.isu_std.io.exception.OperationFailedException;
 import org.isu_std.io.file_setup.DocxFileHandler;
 import org.isu_std.io.folder_setup.Folder;
 import org.isu_std.io.folder_setup.FolderConfig;
-import org.isu_std.models.DocumentRequest;
 import org.isu_std.models.UserPersonal;
 
 import java.io.*;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class RequestApproveService {
     private final DocumentRequestDao documentRequestDao;
@@ -29,7 +26,7 @@ public class RequestApproveService {
             throw new OperationFailedException("Failed to Create Document Output File! Please try again.");
         }
 
-        String referenceId = reqDocsManager.getDocumentRequest().referenceId();
+        String referenceId = reqDocsManager.documentRequest().referenceId();
         if (!documentRequestDao.setRequestApprove(referenceId)) {
             throw new OperationFailedException("Failed to Approve the Requested Document! Please try again.");
         }
@@ -44,7 +41,7 @@ public class RequestApproveService {
             return false;
         }
 
-        UserPersonal userPersonal = reqDocsManager.getUserPersonal();
+        UserPersonal userPersonal = reqDocsManager.userPersonal();
         Map<String, String> informations = getInformationsMap(userPersonal);
         DocxFileHandler.editDocxPlaceHolders(outputFile, informations);
 
@@ -52,8 +49,8 @@ public class RequestApproveService {
     }
 
     protected File copyDefaultFile(ReqDocsManager reqDocsManager, String filePath){
-        File defaultFile = reqDocsManager.getDocument().documentFile();
-        String fileName = reqDocsManager.getDocumentRequest().referenceId() + defaultFile.getName();
+        File defaultFile = reqDocsManager.document().documentFile();
+        String fileName = reqDocsManager.documentRequest().referenceId() + defaultFile.getName();
 
         File newFile = new File("%s_%s".formatted(filePath, fileName));
 

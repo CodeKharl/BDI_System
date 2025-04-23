@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 
 
-public class MySqlDocumentDao implements DocManageDao, DocumentDao{
+public class MySqlDocument implements DocManageDao, DocumentDao{
     @Override
     public boolean add(int barangayId, Document document){
         String query = "INSERT INTO document(barangay_id, document_id, " +
@@ -51,7 +51,7 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
 
     private int getDocumentId(int barangayId){
         // Checks first if there's a stored document id.
-        int storedDocumentId = MySqlDeletedDoc.getStoredDocumentId(barangayId);
+        int storedDocumentId = MySqlDeletedDocument.getStoredDocumentId(barangayId);
 
         // 0 indicates that there's no stored id.
         if(storedDocumentId != 0){
@@ -93,7 +93,7 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
                 return resultSet.getInt(1);
             }
         }catch (SQLException e){
-            SystemLogger.logWarning(MySqlDocumentDao.class, e.getMessage());
+            SystemLogger.logWarning(MySqlDocument.class, e.getMessage());
         }
 
         return 0;
@@ -108,7 +108,7 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
 
             return modifyDocumentInfo(connection, modifyDocManager);
         }catch (SQLException e){
-            SystemLogger.logWarning(MySqlDocumentDao.class, e.getMessage());
+            SystemLogger.logWarning(MySqlDocument.class, e.getMessage());
         }
 
         return false;
@@ -168,7 +168,7 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
 
             return preStatement.executeUpdate() == 1;
         }catch (IOException e){
-            SystemLogger.logWarning(MySqlDocumentDao.class, e.getMessage());
+            SystemLogger.logWarning(MySqlDocument.class, e.getMessage());
         }
 
         return false;
@@ -188,7 +188,7 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
             ResultSet resultSet = preStatement.executeQuery();
             return getDocumentMap(resultSet);
         }catch (SQLException e){
-            SystemLogger.logWarning(MySqlDocumentDao.class, e.getMessage());
+            SystemLogger.logWarning(MySqlDocument.class, e.getMessage());
         }
 
         return new HashMap<>();
@@ -259,7 +259,7 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
                 return Optional.of(resultSet.getString(1));
             }
         }catch (SQLException e){
-            SystemLogger.logWarning(MySqlDocumentDao.class, e.getMessage());
+            SystemLogger.logWarning(MySqlDocument.class, e.getMessage());
         }
 
         return Optional.empty();
@@ -267,8 +267,8 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
 
     @Override
     public boolean isDeleteSuccess(int barangayId, int documentId){
-        if(!MySqlDeletedDoc.storeDocumentId(barangayId, documentId)){
-            SystemLogger.logWarning(MySqlDocumentDao.class, "Failed to store the documentID");
+        if(!MySqlDeletedDocument.storeDocumentId(barangayId, documentId)){
+            SystemLogger.logWarning(MySqlDocument.class, "Failed to store the documentID");
             return false;
         }
 
@@ -281,27 +281,28 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
 
             return preStatement.executeUpdate() == 1;
         }catch (SQLException e){
-            SystemLogger.logWarning(MySqlDocumentDao.class, e.getMessage());
+            SystemLogger.logWarning(MySqlDocument.class, e.getMessage());
         }
 
         return false;
     }
 
     @Override
-    public Optional<Document> getOptionalDocument(int documentId) {
+    public Optional<Document> getOptionalDocument(int barangayId, int documentId) {
         String query = "SELECT document_name, price, requirements, doc_file_name, document_file " +
-                "FROM document WHERE document_id = ? LIMIT 1";
+                "FROM document WHERE barangay_id = ? AND document_id = ? LIMIT 1";
         try(Connection connection = MySQLDBConnection.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
-            preStatement.setInt(1, documentId);
+            preStatement.setInt(1, barangayId);
+            preStatement.setInt(2, documentId);
 
             ResultSet resultSet = preStatement.executeQuery();
             if(resultSet.next()){
                 return Optional.of(getResultDocument(resultSet));
             }
         }catch (SQLException e){
-            SystemLogger.logWarning(MySqlDocumentDao.class, e.getMessage());
+            SystemLogger.logWarning(MySqlDocument.class, e.getMessage());
         }
 
         return Optional.empty();

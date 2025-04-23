@@ -11,8 +11,8 @@ import java.sql.SQLException;
 // Class that handles the deleted documents.
 // Doesn't need to create object. Functional programming was used in this class.
 
-public class MySqlDeletedDoc {
-    private MySqlDeletedDoc(){}
+public class MySqlDeletedDocument {
+    private MySqlDeletedDocument(){}
 
     public static boolean storeDocumentId(int barangayId, int documentId){
         // Executes when the admin deleted a document. This method store the document id.
@@ -26,7 +26,7 @@ public class MySqlDeletedDoc {
 
             return preStatement.executeUpdate() == 1;
         }catch (SQLException e){
-            SystemLogger.logWarning(MySqlDeletedDoc.class, e.getMessage());
+            SystemLogger.logWarning(MySqlDeletedDocument.class, e.getMessage());
         }
 
         return false;
@@ -50,7 +50,7 @@ public class MySqlDeletedDoc {
                 return storedDocId;
             }
         }catch (SQLException e){
-            SystemLogger.logWarning(MySqlDeletedDoc.class, e.getMessage());
+            SystemLogger.logWarning(MySqlDeletedDocument.class, e.getMessage());
         }
 
         return 0;

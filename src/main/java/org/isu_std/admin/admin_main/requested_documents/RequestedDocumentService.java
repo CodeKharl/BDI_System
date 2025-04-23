@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import org.isu_std.admin.admin_main.ReqDocsManager;
+import org.isu_std.admin.admin_main.ReqDocsManagerBuilder;
 import org.isu_std.admin.admin_main.ReqDocsManagerFactory;
 import org.isu_std.admin.admin_main.req_files_view.ReqFilesViewFactory;
 import org.isu_std.admin.admin_main.requested_documents.req_approve.RequestApprove;
@@ -18,7 +19,9 @@ import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.dao.UserPersonalDao;
 import org.isu_std.io.exception.NotFoundException;
 import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
+import org.isu_std.models.UserPersonal;
 
 public class RequestedDocumentService {
     private final DocumentRequestDao documentRequestDao;
@@ -41,9 +44,15 @@ public class RequestedDocumentService {
         return documentReqList;
     }
 
-    protected ReqDocsManager getReDocsManager(DocumentRequest documentRequest) throws OperationFailedException{
-        ReqDocsManagerFactory reqDocsManagerFactory = new ReqDocsManagerFactory(documentDao, userPersonalDao);
-        return reqDocsManagerFactory.createReDocsManager(documentRequest);
+    protected ReqDocsManager getReqDocsManager(DocumentRequest documentRequest) throws OperationFailedException{
+        ReqDocsManagerBuilder reqDocsManagerBuilder = new ReqDocsManagerBuilder(documentRequest);
+        UserPersonal userPersonal = ReqDocsManagerFactory.getUserPersonal(userPersonalDao, documentRequest.userId());
+        Document document = ReqDocsManagerFactory.getDocument(
+                documentDao, documentRequest.barangayId(), documentRequest.documentId()
+        );
+
+        reqDocsManagerBuilder.userPersonal(userPersonal).document(document);
+        return reqDocsManagerBuilder.build();
     }
 
     protected RequirementFilesView getReqFilesView(List<File> requirmentFileList){

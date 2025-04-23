@@ -5,19 +5,19 @@ import org.isu_std.io.Util;
 
 public class ApprovedDocument {
     private final String[] APPROVE_SECTION_CONTENTS = {
-            "Confirm and Export the File", "View Approved Document File", "Check Payment Method",
-            "Display User Details", "View Requirement Files", "Return to Choose Approved Docs"
+            "Confirm and Export the File", "Open Approved Document File", "View Payment Method",
+            "Display User Details", "Open Requirement Files", "Return to Choose Approved Docs"
     };
 
-    private final ApprovedController approvedController;
+    private final ApprovedDocumentController approvedDocumentController;
 
-    protected ApprovedDocument(ApprovedController approvedController){
-        this.approvedController = approvedController;
+    protected ApprovedDocument(ApprovedDocumentController approvedDocumentController){
+        this.approvedDocumentController = approvedDocumentController;
     }
 
     public void approvedDocView(){
         while(true) {
-            if (!approvedController.isThereExistingApprovedRequests()) {
+            if (!approvedDocumentController.isThereExistingApprovedRequests()) {
                 return;
             }
 
@@ -30,9 +30,9 @@ public class ApprovedDocument {
     }
 
     private boolean setApprovedDocumentChoice(){
-        int backValue = approvedController.getApprovedDocsCount() + 1;
+        int backValue = approvedDocumentController.getApprovedDocsCount() + 1;
 
-        approvedController.printApprovedDocuments();
+        approvedDocumentController.printApprovedDocuments();
         Util.printChoices("%d. Back to Admin Menu".formatted(backValue));
 
         while(true){
@@ -42,7 +42,7 @@ public class ApprovedDocument {
                 return false;
             }
 
-            if(approvedController.isDocumentRequestSet(docsChoice)){
+            if(approvedDocumentController.isDocumentRequestSet(docsChoice)){
                 return true;
             }
         }
@@ -50,7 +50,7 @@ public class ApprovedDocument {
 
     private void docApprovedValidationProcess(){
         while(true){
-            Util.printSectionTitle(approvedController.getApprovedSectionTitle());
+            Util.printSectionTitle(approvedDocumentController.getApprovedSectionTitle());
             Util.printChoices(APPROVE_SECTION_CONTENTS);
 
             int choice = SystemInput.getIntChoice("Enter your choice : ", APPROVE_SECTION_CONTENTS.length);
@@ -59,7 +59,7 @@ public class ApprovedDocument {
                 return;
             }
 
-            approvedController.approvedValidatingOnProcess(choice);
+            approvedDocumentController.approvedValidatingOnProcess(choice);
         }
     }
 }

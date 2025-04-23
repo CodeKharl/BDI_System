@@ -18,14 +18,6 @@ public class DocRequestManager {
         this.documentId = documentId;
     }
 
-    public Document getSelectedDocument() {
-        return selectedDocument;
-    }
-
-    public void setSelectedDocument(Document selectedDocument) {
-        this.selectedDocument = selectedDocument;
-    }
-
     public void setRequirements(List<File> docRequirementFiles) {
         this.docRequirementFiles = docRequirementFiles;
     }
