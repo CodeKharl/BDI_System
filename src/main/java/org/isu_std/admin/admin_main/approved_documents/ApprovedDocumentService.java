@@ -3,6 +3,9 @@ package org.isu_std.admin.admin_main.approved_documents;
 import org.isu_std.admin.admin_main.ReqDocsManager;
 import org.isu_std.admin.admin_main.ReqDocsManagerBuilder;
 import org.isu_std.admin.admin_main.ReqDocsManagerFactory;
+import org.isu_std.admin.admin_main.approved_documents.approved_documents_export.ApprovedDocExport;
+import org.isu_std.admin.admin_main.approved_documents.approved_documents_export.ApprovedDocExportController;
+import org.isu_std.admin.admin_main.approved_documents.approved_documents_export.ApprovedDocExportService;
 import org.isu_std.admin.admin_main.req_files_view.ReqFilesViewFactory;
 import org.isu_std.admin.admin_main.req_files_view.RequirementFilesView;
 import org.isu_std.dao.DocumentDao;
@@ -86,6 +89,23 @@ public class ApprovedDocumentService {
         return optionalPayment.orElseThrow(
                 () -> new NotFoundException("Theres no existing payment information of this approved request!")
         );
+    }
+
+    protected ApprovedDocExport createApprovedDocExport(File documentFile){
+        ApprovedDocExportService approvedDocExportService = new ApprovedDocExportService();
+        ApprovedDocExportController approvedDocExportController = new ApprovedDocExportController(
+                approvedDocExportService, documentFile
+        );
+
+        return new ApprovedDocExport(approvedDocExportController);
+    }
+
+    protected void deleteApprovedRequestDocs(DocumentRequest documentRequest){
+        if(!documentRequestDao.deleteDocRequest(documentRequest)){
+            throw new OperationFailedException(
+                    "Failed to delete the approved request document. Request can see but failed to process."
+            );
+        }
     }
 
     protected void openDocFile(File file){

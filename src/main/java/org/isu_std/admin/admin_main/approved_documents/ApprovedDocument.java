@@ -59,7 +59,9 @@ public class ApprovedDocument {
                 return;
             }
 
-            approvedDocumentController.approvedValidatingOnProcess(choice);
+            if(approvedDocumentController.isApprovedValidatingFinished(choice)){
+                return;
+            }
         }
     }
 }
