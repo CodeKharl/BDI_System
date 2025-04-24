@@ -78,7 +78,7 @@ public class ApprovedDocumentController {
             case 6 -> requirementFilesView();
         }
 
-        return true;
+        return false;
     }
 
     protected void requirementFilesView(){
@@ -129,7 +129,8 @@ public class ApprovedDocumentController {
 
     private void viewApprovedPayment(){
         try{
-            Payment payment = approvedDocumentService.getPayment(reqDocsManager.payment());
+            Payment payment = reqDocsManager.payment();
+            approvedDocumentService.checkPayment(payment);
             Util.printInformation(payment.toString());
         }catch (NotFoundException e){
             Util.printException(e.getMessage());

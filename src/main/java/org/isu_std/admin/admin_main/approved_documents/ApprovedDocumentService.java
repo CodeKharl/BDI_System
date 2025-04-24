@@ -83,12 +83,10 @@ public class ApprovedDocumentService {
         return outputFile;
     }
 
-    protected Payment getPayment(Payment payment){
-        Optional<Payment> optionalPayment = Optional.ofNullable(payment);
-
-        return optionalPayment.orElseThrow(
-                () -> new NotFoundException("Theres no existing payment information of this approved request!")
-        );
+    protected void checkPayment(Payment payment){
+        if(payment == null){
+            throw new NotFoundException("Theres no existing payment information of this approved request!");
+        }
     }
 
     protected ApprovedDocExport createApprovedDocExport(File documentFile){
