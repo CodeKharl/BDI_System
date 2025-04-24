@@ -1,9 +1,8 @@
 package org.isu_std.admin.admin_main.approved_documents.approved_documents_export;
 
 import org.isu_std.admin.admin_main.ReqDocsManager;
-import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
-import org.isu_std.io.collections.ChoiceCollection;
+import org.isu_std.io.exception.OperationFailedException;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,13 +12,15 @@ import java.util.Optional;
 
 public class ApprovedDocExportController {
     private final ApprovedDocExportService approvedDocExportService;
-    private final File documentFile;
+    private final ReqDocsManager reqDocsManager;
+    private final File outputDocumentFile;
 
     private Path targetPath;
 
-    public ApprovedDocExportController(ApprovedDocExportService approvedDocExportService, File documentFile){
+    public ApprovedDocExportController(ApprovedDocExportService approvedDocExportService, ReqDocsManager reqDocsManager, File outputDocumentFile){
         this.approvedDocExportService = approvedDocExportService;
-        this.documentFile = documentFile;
+        this.reqDocsManager = reqDocsManager;
+        this.outputDocumentFile = outputDocumentFile;
     }
 
     protected boolean isTargetPathSet(){
@@ -29,7 +30,7 @@ public class ApprovedDocExportController {
             Path chosenPath = optionalPath.get();
             Util.printInformation("Target Path : " + chosenPath);
 
-            this.targetPath = Paths.get(chosenPath.toString(), documentFile.getName());
+            this.targetPath = Paths.get(chosenPath.toString(), outputDocumentFile.getName());
 
             return true;
         }
@@ -39,9 +40,11 @@ public class ApprovedDocExportController {
 
     protected boolean exportPerformed() {
         try{
-            approvedDocExportService.docFileMoveDirPerformed(documentFile, targetPath);
+            approvedDocExportService.docFileMoveDirPerformed(outputDocumentFile, this.targetPath);
+            approvedDocExportService.addReceipt(targetPath, reqDocsManager);
+
             return true;
-        }catch(IOException e) {
+        }catch(OperationFailedException e) {
             Util.printException(e.getMessage());
         }
 

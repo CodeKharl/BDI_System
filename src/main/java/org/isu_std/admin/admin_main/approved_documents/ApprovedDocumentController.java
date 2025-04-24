@@ -19,7 +19,6 @@ public class ApprovedDocumentController {
 
     private List<DocumentRequest> approvedDocList;
     private ReqDocsManager reqDocsManager;
-
     private File outputDocFile;
 
     protected ApprovedDocumentController(ApprovedDocumentService approvedDocumentService, Barangay barangay){
@@ -91,7 +90,7 @@ public class ApprovedDocumentController {
 
     private boolean approvedDocExport(){
         ApprovedDocExport approvedDocExport = approvedDocumentService
-                .createApprovedDocExport(this.outputDocFile);
+                .createApprovedDocExport(this.reqDocsManager, this.outputDocFile);
 
         if(!approvedDocExport.isExported()) {
             return false;

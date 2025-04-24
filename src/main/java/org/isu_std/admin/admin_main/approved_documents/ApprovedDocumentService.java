@@ -89,10 +89,10 @@ public class ApprovedDocumentService {
         }
     }
 
-    protected ApprovedDocExport createApprovedDocExport(File documentFile){
+    protected ApprovedDocExport createApprovedDocExport(ReqDocsManager reqDocsManager, File outputDocumentFile){
         ApprovedDocExportService approvedDocExportService = new ApprovedDocExportService();
         ApprovedDocExportController approvedDocExportController = new ApprovedDocExportController(
-                approvedDocExportService, documentFile
+                approvedDocExportService, reqDocsManager, outputDocumentFile
         );
 
         return new ApprovedDocExport(approvedDocExportController);
