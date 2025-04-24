@@ -89,6 +89,10 @@ public class ApprovedDocumentController {
     }
 
     private boolean approvedDocExport(){
+        if(!isPaymentPresent()){
+            return false;
+        }
+
         ApprovedDocExport approvedDocExport = approvedDocumentService
                 .createApprovedDocExport(this.reqDocsManager, this.outputDocFile);
 
@@ -126,13 +130,21 @@ public class ApprovedDocumentController {
         }
     }
 
-    private void viewApprovedPayment(){
+    private boolean isPaymentPresent(){
         try{
-            Payment payment = reqDocsManager.payment();
-            approvedDocumentService.checkPayment(payment);
-            Util.printInformation(payment.toString());
+            approvedDocumentService.checkPayment(reqDocsManager.payment());
+            return true;
         }catch (NotFoundException e){
             Util.printException(e.getMessage());
+        }
+
+        return false;
+    }
+
+    private void viewApprovedPayment(){
+        if(isPaymentPresent()){
+            Payment payment = reqDocsManager.payment();
+            Util.printInformation(payment.toString());
         }
     }
 }
