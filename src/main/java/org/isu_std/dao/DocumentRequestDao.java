@@ -6,9 +6,10 @@ import java.util.List;
 
 public interface DocumentRequestDao {
     boolean addDocRequest(DocumentRequest documentRequest);
-    List<DocumentRequest> getDocRequestPendingList(int barangayId);
+    List<DocumentRequest> getBrgyDocReqPendingList(int barangayId);
     List<DocumentRequest> getApprovedDocList(int barangayId);
     boolean setRequestApprove(String referenceId);
     boolean deleteDocRequest(DocumentRequest documentRequest);
     int getUserDocRequestCount(DocumentRequest documentRequest);
+    List<Integer> getUserDocIdPendingList(int userId, int barangayId);
 }

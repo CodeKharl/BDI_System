@@ -6,7 +6,7 @@ import org.isu_std.io.Util;
 
 public class UserUI implements PostLoginNavigator {
     private static final String[] USER_UI_CONTENTS = {
-            "Purchase Documents", "Manage Account", "Sign-out"
+            "Request Document", "Check Existing Requests", "Manage Account", "Sign-out"
     };
 
     private final UserController userController;
@@ -24,14 +24,11 @@ public class UserUI implements PostLoginNavigator {
                     "Enter your choice : ", USER_UI_CONTENTS.length
             );
 
-            switch(choice){
-                case 1 -> userController.userDocumentRequest();
-                case 2 -> userController.userManageAcc();
-                case 3 -> {
-                    Util.printMessage("Account sign-out...");
-                    return;
-                }
+            if(choice == USER_UI_CONTENTS.length){
+                return;
             }
+
+            userController.userOnProcess(USER_UI_CONTENTS, choice);
         }
     }
 
@@ -42,9 +39,5 @@ public class UserUI implements PostLoginNavigator {
         );
 
         Util.printChoices(USER_UI_CONTENTS);
-    }
-
-    public static String getContent(int index){
-        return USER_UI_CONTENTS[index];
     }
 }

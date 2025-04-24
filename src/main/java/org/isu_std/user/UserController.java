@@ -8,23 +8,21 @@ public class UserController {
     private final UserService userService;
     private final User user;
 
+    private UserProcess[] userProcesses;
+
     protected UserController(UserService userService, User user){
         this.userService = userService;
         this.user = user;
     }
 
-    protected void userDocumentRequest(){
-        try {
-            userService.getUserDocReq(user).requestDocument();
-        }catch(NotFoundException e){
-            Util.printException(e.getMessage());
+    protected void userOnProcess(String[] processTitles, int choice){
+        if(this.userProcesses == null){
+            this.userProcesses = userService.createUserProcesses(user);
         }
-    }
 
-    protected void userManageAcc(){
-        userService.getUserManageAcc(
-                user.userId()
-        ).manageMenu();
+        int index = choice - 1;
+        UserProcess userProcess = userProcesses[index];
+        userProcess.processPerformed(processTitles[index]);
     }
 
     protected String getUsername(){

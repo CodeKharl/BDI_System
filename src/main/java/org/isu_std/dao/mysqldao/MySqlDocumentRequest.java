@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class MySqlDocumentRequest implements DocumentRequestDao {
     @Override
@@ -77,7 +78,7 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
     }
 
     @Override
-    public List<DocumentRequest> getDocRequestPendingList(int barangayId) {
+    public List<DocumentRequest> getBrgyDocReqPendingList(int barangayId) {
         String query = "SELECT reference_id, user_id, barangay_id, document_id " +
                 "FROM document_request WHERE barangay_id = ? AND is_approve = FALSE";
 
@@ -272,5 +273,28 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
         }
 
         return false;
+    }
+
+    @Override
+    public List<Integer> getUserDocIdPendingList(int userId, int barangayId) {
+        String query = "SELECT document_id FROM document_request WHERE user_id = ? AND barangay_id = ?";
+
+        List<Integer> documentIdList = new ArrayList<>();
+
+        try(Connection connection = MySQLDBConnection.getConnection();
+            PreparedStatement preStatement = connection.prepareStatement(query)
+        ){
+            preStatement.setInt(1, userId);
+            preStatement.setInt(2, barangayId);
+
+            ResultSet resultSet = preStatement.executeQuery();
+            while(resultSet.next()){
+                documentIdList.add(resultSet.getInt(1));
+            }
+        }catch (SQLException e){
+            SystemLogger.logWarning(MySqlDocumentRequest.class, e.getMessage());
+        }
+
+        return documentIdList;
     }
 }

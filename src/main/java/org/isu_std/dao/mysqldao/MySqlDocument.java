@@ -8,6 +8,7 @@ import org.isu_std.io.SystemLogger;
 import org.isu_std.io.folder_setup.Folder;
 import org.isu_std.io.folder_setup.FolderConfig;
 import org.isu_std.models.Document;
+import org.isu_std.models.modelbuilders.DocumentBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -15,9 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 public class MySqlDocument implements DocManageDao, DocumentDao{
@@ -318,5 +317,39 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
                         resultSet.getBinaryStream(5)
                 )
         );
+    }
+
+    @Override
+    public Optional<Document> getOptionalDocDetail(int barangayId, int documentId) {
+        String query = "SELECT document_name, price, requirements " +
+                "FROM document WHERE barangay_id = ? AND document_id = ?";
+
+        try(Connection connection = MySQLDBConnection.getConnection();
+            PreparedStatement preStatement = connection.prepareStatement(query)
+        ){
+            preStatement.setInt(1, barangayId);
+            preStatement.setInt(2, documentId);
+
+            ResultSet resultSet = preStatement.executeQuery();
+            if(resultSet.next()){
+                Document documentDetail = buildDocumentDetail(resultSet);
+                return Optional.of(documentDetail);
+            }
+        }catch(SQLException e){
+            SystemLogger.logWarning(MySqlDocument.class, e.getMessage());
+        }
+
+        return Optional.empty();
+    }
+
+    private Document buildDocumentDetail(ResultSet resultSet) throws SQLException{
+        DocumentBuilder documentBuilder = new DocumentBuilder();
+
+        documentBuilder
+                .documentName(resultSet.getString(1))
+                .price(resultSet.getDouble(2))
+                .requirements(resultSet.getString(3));
+
+        return documentBuilder.build();
     }
 }

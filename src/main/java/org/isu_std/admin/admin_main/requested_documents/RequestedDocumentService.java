@@ -35,7 +35,7 @@ public class RequestedDocumentService {
     }
 
     protected List<DocumentRequest> getDocumentReqList(int barangayId){
-        List<DocumentRequest> documentReqList = documentRequestDao.getDocRequestPendingList(barangayId);
+        List<DocumentRequest> documentReqList = documentRequestDao.getBrgyDocReqPendingList(barangayId);
 
         if(documentReqList.isEmpty()){
             throw new NotFoundException("There are currently no pending document requests.");

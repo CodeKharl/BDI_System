@@ -13,8 +13,6 @@ public class DocumentBuilder {
     private String requirements;
     private File documentFile;
 
-    protected DocumentBuilder(){}
-
     public DocumentBuilder documentName(String documentName){
         this.documentName = documentName;
         return this;
