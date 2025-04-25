@@ -3,6 +3,7 @@ package org.isu_std.dao;
 import org.isu_std.models.DocumentRequest;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DocumentRequestDao {
     boolean addDocRequest(DocumentRequest documentRequest);
@@ -11,5 +12,5 @@ public interface DocumentRequestDao {
     boolean setRequestApprove(String referenceId);
     boolean deleteDocRequest(DocumentRequest documentRequest);
     int getUserDocRequestCount(DocumentRequest documentRequest);
-    List<Integer> getUserDocIdPendingList(int userId, int barangayId);
+    List<DocumentRequest> getUserReqDocList(int userId, int barangayId);
 }

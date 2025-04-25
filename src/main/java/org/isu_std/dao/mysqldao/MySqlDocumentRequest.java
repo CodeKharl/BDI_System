@@ -12,10 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class MySqlDocumentRequest implements DocumentRequestDao {
     @Override
@@ -276,10 +273,11 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
     }
 
     @Override
-    public List<Integer> getUserDocIdPendingList(int userId, int barangayId) {
-        String query = "SELECT document_id FROM document_request WHERE user_id = ? AND barangay_id = ?";
+    public List<DocumentRequest> getUserReqDocList(int userId, int barangayId) {
+        var query = "SELECT reference_id, document_id " +
+                "FROM document_request WHERE user_id = ? AND barangay_id = ?";
 
-        List<Integer> documentIdList = new ArrayList<>();
+        List<DocumentRequest> userDocReqList = new ArrayList<>();
 
         try(Connection connection = MySQLDBConnection.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query)
@@ -289,12 +287,25 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
 
             ResultSet resultSet = preStatement.executeQuery();
             while(resultSet.next()){
-                documentIdList.add(resultSet.getInt(1));
+                userDocReqList.add(getUserRequest(connection, resultSet, userId, barangayId));
             }
         }catch (SQLException e){
             SystemLogger.logWarning(MySqlDocumentRequest.class, e.getMessage());
         }
 
-        return documentIdList;
+        return userDocReqList;
+    }
+
+    public DocumentRequest getUserRequest(Connection connection, ResultSet resultSet, int userId, int barangayId) throws SQLException{
+        String referenceId = resultSet.getString(1);
+        int documentId = resultSet.getInt(2);
+
+        return new DocumentRequest(
+                referenceId,
+                userId,
+                barangayId,
+                documentId,
+                getRequirementFileList(connection, referenceId)
+        );
     }
 }

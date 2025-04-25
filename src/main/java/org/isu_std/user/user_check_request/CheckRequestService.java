@@ -2,8 +2,11 @@ package org.isu_std.user.user_check_request;
 
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.DocumentRequestDao;
+import org.isu_std.io.collections.InputMessageCollection;
 import org.isu_std.io.exception.NotFoundException;
+import org.isu_std.io.exception.OperationFailedException;
 import org.isu_std.models.Document;
+import org.isu_std.models.DocumentRequest;
 
 import java.util.*;
 
@@ -20,30 +23,48 @@ public class CheckRequestService {
         return new ReqInfoManager(barangayId, userId);
     }
 
-    protected List<Integer> getDocumentIdList(int userId, int barangayId){
-        List<Integer> documentIdList = documentRequestDao.getUserDocIdPendingList(userId, barangayId);
+    protected List<DocumentRequest> getUserDocReqMap(int userId, int barangayId){
+        List<DocumentRequest> userDocReqList = documentRequestDao.getUserReqDocList(userId, barangayId);
 
-        if(documentIdList.isEmpty()){
+        if(userDocReqList.isEmpty()){
             throw new NotFoundException("Theres no existing request found!");
         }
 
-        return documentIdList;
+        return userDocReqList;
     }
 
-    protected Map<Integer, Document> getDocumentDetailMap(int barangayId, List<Integer> documentIdList){
+    protected Map<Integer, Document> getDocumentDetailMap(int barangayId, List<DocumentRequest> userDocReqList){
         Map<Integer, Document> documentDetailList = new HashMap<>();
 
-        for(Integer documentId : documentIdList){
+        userDocReqList.forEach((docReq) -> {
+            int documentId = docReq.documentId();
             Optional<Document> optionalDocDetail = documentDao.getOptionalDocDetail(barangayId, documentId);
+
             optionalDocDetail.ifPresent(
                     (docDetail) -> documentDetailList.put(documentId, docDetail)
             );
-        }
+        });
 
         if(documentDetailList.isEmpty()){
             throw new NotFoundException("Theres no existing document detail for the existing request.");
         }
 
         return documentDetailList;
+    }
+
+    protected Document getCheckDocument(Map<Integer, Document> documentMap, int inputDocId){
+        Document document = documentMap.get(inputDocId);
+        Optional<Document> optionalDocument = Optional.ofNullable(document);
+        return optionalDocument.orElseThrow(
+                () -> new IllegalArgumentException(
+                        InputMessageCollection.INPUT_OBJECT_NOT_EXIST.getFormattedMessage("Document ID")
+                )
+        );
+    }
+
+    protected void deleteRequestPerformed(DocumentRequest documentRequest){
+        if(!documentRequestDao.deleteDocRequest(documentRequest)){
+            throw new OperationFailedException("Failed to delete the request! Please try to cancel it again.");
+        }
     }
 }
