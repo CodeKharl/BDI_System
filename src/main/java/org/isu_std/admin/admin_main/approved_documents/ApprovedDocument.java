@@ -6,7 +6,7 @@ import org.isu_std.io.Util;
 public class ApprovedDocument {
     private final String[] APPROVE_SECTION_CONTENTS = {
             "Confirm and Export the File", "Open Approved Document File", "View Payment Method",
-            "Display User Details", "Open Requirement Files", "Return to Choose Approved Docs"
+            "Display User Details", "Open Requirement Files", "Return to Approve Requests Selection"
     };
 
     private final ApprovedDocumentController approvedDocumentController;

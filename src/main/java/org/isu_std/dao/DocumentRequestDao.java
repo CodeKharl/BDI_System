@@ -10,6 +10,7 @@ public interface DocumentRequestDao {
     List<DocumentRequest> getBrgyDocReqPendingList(int barangayId);
     List<DocumentRequest> getApprovedDocList(int barangayId);
     boolean setRequestApprove(String referenceId);
+    boolean isRequestApproved(String referenceId);
     boolean deleteDocRequest(DocumentRequest documentRequest);
     int getUserDocRequestCount(DocumentRequest documentRequest);
     List<DocumentRequest> getUserReqDocList(int userId, int barangayId);

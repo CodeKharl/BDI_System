@@ -23,6 +23,10 @@ public class CheckRequestService {
         return new ReqInfoManager(barangayId, userId);
     }
 
+    protected ReqSelectManager createReqSelectManager(){
+        return new ReqSelectManager();
+    }
+
     protected List<DocumentRequest> getUserDocReqMap(int userId, int barangayId){
         List<DocumentRequest> userDocReqList = documentRequestDao.getUserReqDocList(userId, barangayId);
 
@@ -52,14 +56,9 @@ public class CheckRequestService {
         return documentDetailList;
     }
 
-    protected Document getCheckDocument(Map<Integer, Document> documentMap, int inputDocId){
-        Document document = documentMap.get(inputDocId);
-        Optional<Document> optionalDocument = Optional.ofNullable(document);
-        return optionalDocument.orElseThrow(
-                () -> new IllegalArgumentException(
-                        InputMessageCollection.INPUT_OBJECT_NOT_EXIST.getFormattedMessage("Document ID")
-                )
-        );
+
+    protected boolean checkRequestedStatus(String referenceId){
+        return documentRequestDao.isRequestApproved(referenceId);
     }
 
     protected void deleteRequestPerformed(DocumentRequest documentRequest){

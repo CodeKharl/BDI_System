@@ -22,7 +22,7 @@ public class ReqInfoManager {
         this.userDocRequestMap = userDocRequestMap;
     }
 
-    public List<DocumentRequest> getUserDocRequestMap(){
+    public List<DocumentRequest> getUserDocRequestList(){
         return this.userDocRequestMap;
     }
 

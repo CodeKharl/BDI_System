@@ -14,13 +14,12 @@ import java.util.Map;
 public class CheckRequestController {
     private final CheckRequestService checkRequestService;
     private final ReqInfoManager reqInfoManager;
-
-    private DocumentRequest selectedDocRequest;
-    private Document selectedDocument;
+    private final ReqSelectManager reqSelectManager;
 
     public CheckRequestController(CheckRequestService checkRequestService, int barangayId, int userId){
         this.checkRequestService = checkRequestService;
         this.reqInfoManager = checkRequestService.createReqInfoManager(barangayId, userId);
+        this.reqSelectManager = checkRequestService.createReqSelectManager();
     }
 
     protected boolean isExistingDocMapSet(){
@@ -47,32 +46,37 @@ public class CheckRequestController {
     }
 
     protected void printDocumentDetails(){
-        Util.printSubSectionTitle("Existing Request (Document ID -> Document Name - Price - Requirements");
+        Util.printSubSectionTitle("Existing Request (Document Name - Price - Requirements");
+        Util.printMessage("Note! Requested document cannot be found once the admin reject it.");
 
+        List<DocumentRequest> documentRequestList = reqInfoManager.getUserDocRequestList();
         Map<Integer, Document> documentDetailsMap = reqInfoManager.getDocumentDetailMap();
-        documentDetailsMap.forEach((documentId, document) ->
-            Util.printInformation(
-                    "%d -> %s".formatted(documentId, document.getDetails())
-            )
-        );
+
+        for(int i = 0; i < documentDetailsMap.size(); i++){
+            int documentId = documentRequestList.get(i).documentId();
+            Document document = documentDetailsMap.get(documentId);
+
+            Util.printInformation("%d. %s".formatted(i + 1, document.getDetails()));
+        }
     }
 
-    protected boolean isChosenDocumentSet(int inputDocId){
-        try{
-            this.selectedDocument = checkRequestService
-                    .getCheckDocument(reqInfoManager.getDocumentDetailMap(), inputDocId);
+    protected void setChosenDocument(int documentChoice){
+        int index = documentChoice - 1;
+        DocumentRequest selectedDocRequest = reqInfoManager.getUserDocRequestList().get(index);
+        reqSelectManager.setSelectedDocRequest(selectedDocRequest);
 
-            return true;
-        }catch (IllegalArgumentException e){
-            Util.printException(e.getMessage());
-        }
+        int documentId = selectedDocRequest.documentId();
+        setSelectedDocument(documentId);
+    }
 
-        return false;
+    private void setSelectedDocument(int documentId){
+        Document selectedDocument = reqInfoManager.getDocumentDetailMap().get(documentId);
+        reqSelectManager.setSelectedDocument(selectedDocument);
     }
 
     protected boolean isRequestProcessFinished(int choice){
         switch (choice){
-            case 1 -> {}
+            case 1 -> checkRequestStatus();
             case 2 -> {}
             case 3 -> {
                 return requestCancellationPerformed();
@@ -82,13 +86,27 @@ public class CheckRequestController {
         return false;
     }
 
+    protected void checkRequestStatus(){
+        String referenceId = reqSelectManager.getSelectedDocRequest().referenceId();
+
+        if(!checkRequestService.checkRequestedStatus(referenceId)){
+            Util.printMessage("Your request is in validation state! Please wait for admin approval.");
+            return;
+        }
+
+        Util.printMessage("Your request has been approved!");
+        Util.printMessage("You can now proceed to payment selection (Payment Manage)");
+    }
+
     private boolean requestCancellationPerformed(){
         if(!isRequestCancellationConfirmed()){
             return false;
         }
 
         try{
-            checkRequestService.deleteRequestPerformed();
+            checkRequestService.deleteRequestPerformed(
+                    reqSelectManager.getSelectedDocRequest()
+            );
 
             return true;
         }catch (OperationFailedException e){
@@ -107,6 +125,10 @@ public class CheckRequestController {
     }
 
     protected String selectedDocName(){
-        return selectedDocument.documentName();
+        return reqSelectManager.getSelectedDocument().documentName();
+    }
+
+    protected int docRequestListLength(){
+        return reqInfoManager.getUserDocRequestList().size();
     }
 }

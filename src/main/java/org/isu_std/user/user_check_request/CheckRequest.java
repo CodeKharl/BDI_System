@@ -2,12 +2,11 @@ package org.isu_std.user.user_check_request;
 
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
-import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.user.UserProcess;
 
 public class CheckRequest implements UserProcess {
     private final String[] CHECK_REQUEST_CONTENTS = {
-            "Check Status", "Check Payment", "Cancel Request","Back to User Menu"
+            "Check Status", "Payment Manage", "Cancel Request","Back to Document Selection"
     };
 
     private final CheckRequestController checkRequestController;
@@ -30,31 +29,28 @@ public class CheckRequest implements UserProcess {
                 return;
             }
 
-            if(!checkRequestOnProcess()){
-                return;
-            }
+            checkRequestProcess();
         }
     }
 
     private boolean setDocumentChoice(){
-        int cancellationValue =  ChoiceCollection.EXIT_INT_CODE.getIntValue();
+        int cancellationValue = checkRequestController.docRequestListLength() + 1;
+        Util.printChoices("%d. Back to User Menu".formatted(cancellationValue));
 
-        while(true) {
-            int inputDocId = SystemInput.getIntInput(
-                    "Enter chosen document id (%d == cancel) : ".formatted(cancellationValue)
-            );
+        int choice = SystemInput.getIntChoice(
+                "Enter the chosen document : ",
+                cancellationValue
+        );
 
-            if (inputDocId == cancellationValue) {
-                return false;
-            }
-
-            if (checkRequestController.isChosenDocumentSet(inputDocId)) {
-                return true;
-            }
+        if (choice == cancellationValue) {
+            return false;
         }
+
+        checkRequestController.setChosenDocument(choice);
+        return true;
     }
 
-    private boolean checkRequestOnProcess(){
+    private void checkRequestProcess(){
         while (true){
             Util.printSectionTitle("Check Request Section -> " + checkRequestController.selectedDocName());
             Util.printChoices(CHECK_REQUEST_CONTENTS);
@@ -63,11 +59,11 @@ public class CheckRequest implements UserProcess {
             int choice = SystemInput.getIntChoice("Enter your choice : ", contentsLength);
 
             if(choice == contentsLength){
-                return false;
+                return;
             }
 
             if(checkRequestController.isRequestProcessFinished(choice)){
-                return true;
+                return;
             }
         }
     }

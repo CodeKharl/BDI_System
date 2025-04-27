@@ -138,6 +138,7 @@ public class ApprovedDocumentController {
             Util.printException(e.getMessage());
         }
 
+        Util.printMessage("Payment information is not yet set.");
         return false;
     }
 

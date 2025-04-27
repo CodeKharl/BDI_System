@@ -253,7 +253,8 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
         return 0;
     }
 
-    public boolean isRequestApprove(String referenceId){
+    @Override
+    public boolean isRequestApproved(String referenceId){
         var query = "SELECT is_approve FROM document_request WHERE reference_id = ? LIMIT 1";
 
         try(Connection connection = MySQLDBConnection.getConnection();
