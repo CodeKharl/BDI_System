@@ -18,4 +18,8 @@ public class BuilderFactory {
     public static DocumentBuilder createDocumentBuilder(){
         return new DocumentBuilder();
     }
+
+    public static PaymentBuilder createPaymentBuilder(){
+        return new PaymentBuilder();
+    }
 }

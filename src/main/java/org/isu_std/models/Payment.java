@@ -1,8 +1,8 @@
 package org.isu_std.models;
 
-public record Payment(String paymentType, double documentCost, double paymentAmount){
+public record Payment(String paymentType, String paymentNumber, double documentCost, String paymentDateTime){
     @Override
     public String toString(){
-        return "%s - %.2f - %.2f".formatted(paymentType, documentCost, paymentAmount);
+        return "%s - %s - %.2f - %s".formatted(paymentType, paymentNumber, documentCost, paymentDateTime);
     }
 }

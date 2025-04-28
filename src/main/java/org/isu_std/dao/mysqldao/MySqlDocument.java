@@ -352,4 +352,24 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
 
         return documentBuilder.build();
     }
+
+    public double getDocumentPrice(int barangayId, int documentId){
+        String query = "SELECT price FROM document WHERE barangay_id = ? AND document_id = ? LIMIT 1";
+
+        try(Connection connection = MySQLDBConnection.getConnection();
+            PreparedStatement preStatement = connection.prepareStatement(query)
+        ){
+            preStatement.setInt(1, barangayId);
+            preStatement.setInt(2, documentId);
+
+            ResultSet resultSet = preStatement.executeQuery();
+            if(resultSet.next()){
+                return resultSet.getDouble(1);
+            }
+        }catch (SQLException e){
+            SystemLogger.logWarning(MySqlDocument.class, e.getMessage());
+        }
+
+        return 0;
+    }
 }

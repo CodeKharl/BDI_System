@@ -14,7 +14,7 @@ import java.util.Optional;
 public class MySqlPayment implements PaymentDao {
     @Override
     public Optional<Payment> getOptionalPayment(String referenceId) {
-        String query = "SELECT payment_type, document_cost, payment_amount FROM payment WHERE reference_id = ?";
+        String query = "SELECT payment_type, payment_number, document_cost, payment_date_time FROM payment WHERE reference_id = ?";
 
         try(Connection connection = MySQLDBConnection.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query)
@@ -35,8 +35,9 @@ public class MySqlPayment implements PaymentDao {
     private Payment createPayment(ResultSet resultSet) throws SQLException{
         return new Payment(
                 resultSet.getString(1),
-                resultSet.getDouble(2),
-                resultSet.getDouble(3)
+                resultSet.getString(2),
+                resultSet.getDouble(3),
+                resultSet.getString(4)
         );
     }
 }

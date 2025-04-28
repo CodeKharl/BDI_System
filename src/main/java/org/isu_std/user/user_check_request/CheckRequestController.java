@@ -75,9 +75,11 @@ public class CheckRequestController {
     }
 
     protected boolean isRequestProcessFinished(int choice){
+        String referenceId = reqSelectManager.getSelectedDocRequest().referenceId();
+
         switch (choice){
-            case 1 -> checkRequestStatus();
-            case 2 -> {}
+            case 1 -> checkRequestStatus(referenceId);
+            case 2 -> paymentManage(referenceId);
             case 3 -> {
                 return requestCancellationPerformed();
             }
@@ -86,9 +88,7 @@ public class CheckRequestController {
         return false;
     }
 
-    protected void checkRequestStatus(){
-        String referenceId = reqSelectManager.getSelectedDocRequest().referenceId();
-
+    protected void checkRequestStatus(String referenceId){
         if(!checkRequestService.checkRequestedStatus(referenceId)){
             Util.printMessage("Your request is in validation state! Please wait for admin approval.");
             return;
@@ -122,6 +122,14 @@ public class CheckRequestController {
                 ChoiceCollection.CONFIRM.getValue(),
                 ChoiceCollection.EXIT_CODE.getValue()
         );
+    }
+
+    private void paymentManage(String referenceId){
+        if(!checkRequestService.checkRequestedStatus(referenceId)){
+            Util.printMessage("You cannot proceed in this section!");
+            Util.printMessage("Please wait for the admin request approval");
+            return;
+        }
     }
 
     protected String selectedDocName(){

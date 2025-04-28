@@ -9,19 +9,19 @@ public class ReqSelectManager {
 
     protected ReqSelectManager(){}
 
-    protected void setSelectedDocRequest(DocumentRequest selectedDocRequest){
+    public void setSelectedDocRequest(DocumentRequest selectedDocRequest){
         this.selectedDocRequest = selectedDocRequest;
     }
 
-    protected void setSelectedDocument(Document selectedDocument){
+    public void setSelectedDocument(Document selectedDocument){
         this.selectedDocument = selectedDocument;
     }
 
-    protected DocumentRequest getSelectedDocRequest(){
+    public DocumentRequest getSelectedDocRequest(){
         return this.selectedDocRequest;
     }
 
-    protected Document getSelectedDocument(){
+    public Document getSelectedDocument(){
         return this.selectedDocument;
     }
 }
