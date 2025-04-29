@@ -15,11 +15,19 @@ public class PaymentManage {
         Util.printSectionTitle("Payment Manage");
 
         if(paymentManageController.isPaymentAlreadyExist()){
-            Util.printInformation(paymentManageController.paymentDetail());
-            Util.printMessage(paymentManageController.getPaymentSuccessMessage());
+            paymentManageController.printPaySuccessMessage();
+            paymentManageController.printPaymentDetails();
             return;
         }
 
+        if(!setPayment()){
+            return;
+        }
+
+        if(paymentManageController.isAddPaymentSuccess()){
+            paymentManageController.printPaySuccessMessage();
+            paymentManageController.printPaymentDetails();
+        }
     }
 
     private boolean setPayment(){
@@ -27,9 +35,8 @@ public class PaymentManage {
         Util.printMessage("Reason : On development stage");
 
         String paymentType = "Cash on Barangay";
-
         if(isConfirmedPayment(paymentType)){
-
+            return paymentManageController.settingUpPayment(paymentType);
         }
 
         return false;
@@ -42,5 +49,4 @@ public class PaymentManage {
                 ChoiceCollection.SUB_CANCEL.getValue()
         );
     }
-
 }

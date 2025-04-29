@@ -29,7 +29,8 @@ public final class UserFactory {
         UserService userService = UserService.getInstance(
                 daoFactory.getDocumentDao(),
                 daoFactory.getPersonalDao(),
-                daoFactory.getDocumentRequestDao()
+                daoFactory.getDocumentRequestDao(),
+                daoFactory.paymentDao()
         );
 
         UserController userController = new UserController(userService, user);

@@ -7,6 +7,7 @@ import org.isu_std.io.exception.NotFoundException;
 import org.isu_std.io.exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
+import org.isu_std.user.user_check_request.user_payment_manage.PaymentManage;
 
 import java.util.List;
 import java.util.Map;
@@ -130,6 +131,9 @@ public class CheckRequestController {
             Util.printMessage("Please wait for the admin request approval");
             return;
         }
+
+        PaymentManage paymentManage = checkRequestService.createPaymentManage(reqSelectManager);
+        paymentManage.sectionPerformed();
     }
 
     protected String selectedDocName(){

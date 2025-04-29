@@ -1,6 +1,7 @@
 package org.isu_std.user;
 
 import org.isu_std.dao.DocumentRequestDao;
+import org.isu_std.dao.PaymentDao;
 import org.isu_std.dao.UserPersonalDao;
 import org.isu_std.io.Symbols;
 import org.isu_std.io.exception.NotFoundException;
@@ -20,20 +21,22 @@ public class UserService {
     private final DocumentDao documentDao;
     private final UserPersonalDao userPersonalDao;
     private final DocumentRequestDao documentRequestDao;
+    private final PaymentDao paymentDao;
 
-    private UserService(DocumentDao documentDao, UserPersonalDao userPersonalDao, DocumentRequestDao documentRequestDao){
+    private UserService(DocumentDao documentDao, UserPersonalDao userPersonalDao, DocumentRequestDao documentRequestDao, PaymentDao paymentDao){
         this.documentDao = documentDao;
         this.userPersonalDao = userPersonalDao;
         this.documentRequestDao = documentRequestDao;
+        this.paymentDao = paymentDao;
     }
 
     private final static class Holder{
         private static UserService userService;
     }
 
-    protected static UserService getInstance(DocumentDao documentDao, UserPersonalDao userPersonalDao, DocumentRequestDao documentRequestDao){
+    protected static UserService getInstance(DocumentDao documentDao, UserPersonalDao userPersonalDao, DocumentRequestDao documentRequestDao, PaymentDao paymentDao){
         if(Holder.userService == null){
-            Holder.userService = new UserService(documentDao, userPersonalDao, documentRequestDao);
+            Holder.userService = new UserService(documentDao, userPersonalDao, documentRequestDao, paymentDao);
         }
 
         return Holder.userService;
@@ -78,7 +81,7 @@ public class UserService {
     }
 
     private CheckRequest getCheckRequest(int barangayId, int userId){
-        CheckRequestFactory checkRequestFactory = new CheckRequestFactory(documentDao, documentRequestDao);
+        CheckRequestFactory checkRequestFactory = new CheckRequestFactory(documentDao, documentRequestDao, paymentDao);
         return checkRequestFactory.create(barangayId, userId);
     }
 }

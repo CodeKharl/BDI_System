@@ -145,7 +145,7 @@ public class ApprovedDocumentController {
     private void viewApprovedPayment(){
         if(isPaymentPresent()){
             Payment payment = reqDocsManager.payment();
-            Util.printInformation(payment.toString());
+            payment.printPaymentDetails();
         }
     }
 }
