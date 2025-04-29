@@ -8,6 +8,10 @@ import org.isu_std.models.UserPersonal;
 public record ReqDocsManager(DocumentRequest documentRequest, UserPersonal userPersonal, Document document,
                              Payment payment) {
 
+    public String getReferenceId(){
+        return this.documentRequest.referenceId();
+    }
+
     public int getUserId() {
         return this.documentRequest.userId();
     }

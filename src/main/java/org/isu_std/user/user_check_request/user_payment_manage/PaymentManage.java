@@ -13,6 +13,7 @@ public class PaymentManage {
 
     public void sectionPerformed(){
         Util.printSectionTitle("Payment Manage");
+        Util.printMessage("Important: Payment can only be set once. Please review carefully before submitting.");
 
         if(paymentManageController.isPaymentAlreadyExist()){
             paymentManageController.printPaySuccessMessage();

@@ -38,8 +38,14 @@ public class ApprovedDocumentController {
     }
 
     protected void printApprovedDocuments(){
-        Util.printSectionTitle("Approved Requests (User ID - Document ID)");
-        Util.printListWithCount(approvedDocList);
+        Util.printSectionTitle("Approved Requests (Reference ID -> User ID - Document ID)");
+
+        for(int i = 0; i < approvedDocList.size(); i++){
+            String details = approvedDocList.get(i).getWithReferenceId();
+
+            Util.printInformation(
+                    "%d. %s".formatted(i + 1, details));
+        }
     }
 
     protected int getApprovedDocsCount(){
@@ -60,8 +66,9 @@ public class ApprovedDocumentController {
     }
 
     protected String getApprovedSectionTitle(){
-        return "Approved Document View -> (User ID - %d | Document ID - %d)"
-                .formatted(reqDocsManager.getUserId(), reqDocsManager.getDocumentId());
+        DocumentRequest documentRequest = reqDocsManager.documentRequest();
+        return "Approved Document View -> (Reference ID -> %s : User ID - %d | Document ID - %d)"
+                .formatted(documentRequest.referenceId(), documentRequest.userId(), documentRequest.documentId());
     }
 
     protected boolean isApprovedValidatingFinished(int choice){
