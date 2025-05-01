@@ -1,7 +1,7 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.modify;
 
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentManageCodes;
-import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.RequirementHandler;
+import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.RequirementProvider;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.docIdValidation.DocIDValidation;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentConfig;
 import org.isu_std.dao.DocManageDao;
@@ -36,16 +36,16 @@ public class ModifyingDocService {
         return Holder.instance;
     }
 
-    protected ModifyDocManager createModDocModel(int barangayID){
-        return new ModifyDocManager(barangayID, BuilderFactory.createDocumentBuilder());
+    protected ModifyDocumentContext createModDocModel(int barangayID){
+        return new ModifyDocumentContext(barangayID, BuilderFactory.createDocumentBuilder());
     }
 
     protected String[] getDocumentArrInfo(){
         return DocumentManageCodes.DOCUMENT_INFO.getArrCode();
     }
 
-    protected final boolean modifyPerformed(ModifyDocManager modifyDocManager) {
-        if(docManageRepository.modify(modifyDocManager)){
+    protected final boolean modifyPerformed(ModifyDocumentContext modifyDocumentContext) {
+        if(docManageRepository.modify(modifyDocumentContext)){
             return true;
         }
 
@@ -88,7 +88,7 @@ public class ModifyingDocService {
     }
 
     protected Optional<String> getOptionalRequirements(){
-        return RequirementHandler.getRequirements();
+        return RequirementProvider.getRequirements();
     }
 
     protected Optional<File> getOptionalDocumentFile(){

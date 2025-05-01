@@ -6,7 +6,7 @@ import java.util.Optional;
 
 // Functional Paradigm for this class. Structure are not necessary.
 
-public class RequirementHandler{
+public class RequirementProvider {
     private final static String CONFIRM_VALUE = "SET";
     private final static String CANCEL_VALUE = "ESC";
     private final static int MIN_REQUIREMENT_LENGTH = 3;

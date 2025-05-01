@@ -13,16 +13,16 @@ public class SystemService {
         this.daoFactory = daoFactory;
     }
 
-    protected ClientManager createClientManager(){
-        return new ClientManager();
+    protected ClientContext createClientManager(){
+        return new ClientContext();
     }
 
-    protected Login getLogin(int type, ClientManager clientManager){
+    protected Login getLogin(int type, ClientContext clientContext){
         return LogSignFactory.getInstance(
                 daoFactory.getUserDao(),
                 daoFactory.getAdminDao(),
                 daoFactory.getBrgyDao()
-        ).createLoginInsType(type, clientManager);
+        ).createLoginInsType(type, clientContext);
     }
 
     protected Signup getSignup(int type){

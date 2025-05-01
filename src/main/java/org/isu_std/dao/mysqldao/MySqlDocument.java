@@ -1,6 +1,6 @@
 package org.isu_std.dao.mysqldao;
 
-import org.isu_std.admin.admin_doc_manage.adminDoc_func.modify.ModifyDocManager;
+import org.isu_std.admin.admin_doc_manage.adminDoc_func.modify.ModifyDocumentContext;
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.database.MySQLDBConnection;
@@ -99,16 +99,16 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
     }
 
     @Override
-    public boolean modify(ModifyDocManager modifyDocManager) {
+    public boolean modify(ModifyDocumentContext modifyDocumentContext) {
         try(Connection connection = MySQLDBConnection.getConnection()) {
             //If the document file is modify
-            File documentFile = modifyDocManager.getDocumentBuilder().getDocumentFile();
+            File documentFile = modifyDocumentContext.getDocumentBuilder().getDocumentFile();
             if(documentFile != null){
-                return modifyDocumentFile(connection, modifyDocManager);
+                return modifyDocumentFile(connection, modifyDocumentContext);
             }
 
             //Rest of Information
-            return modifyDocumentInfo(connection, modifyDocManager);
+            return modifyDocumentInfo(connection, modifyDocumentContext);
         }catch (SQLException e){
             SystemLogger.logWarning(MySqlDocument.class, e.getMessage());
         }
@@ -116,25 +116,25 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
         return false;
     }
 
-    private boolean modifyDocumentInfo(Connection connection, ModifyDocManager modifyDocManager)
+    private boolean modifyDocumentInfo(Connection connection, ModifyDocumentContext modifyDocumentContext)
             throws SQLException, IllegalStateException
     {
         String query = "UPDATE document SET %s = ? WHERE barangay_id = ? AND document_id = ?"
-                .formatted(modifyDocManager.getDocumentDetail());
+                .formatted(modifyDocumentContext.getDocumentDetail());
 
         try(PreparedStatement preStatement = connection.prepareStatement(query)){
-            setModifyPreStatement(1, preStatement, modifyDocManager);
-            preStatement.setInt(2, modifyDocManager.getBarangayId());
-            preStatement.setInt(3, modifyDocManager.getDocumentId());
+            setModifyPreStatement(1, preStatement, modifyDocumentContext);
+            preStatement.setInt(2, modifyDocumentContext.getBarangayId());
+            preStatement.setInt(3, modifyDocumentContext.getDocumentId());
 
             return preStatement.executeUpdate() == 1;
         }
     }
 
     private void setModifyPreStatement(
-            int parameterIndex, PreparedStatement preStatement, ModifyDocManager modifyDocManager
+            int parameterIndex, PreparedStatement preStatement, ModifyDocumentContext modifyDocumentContext
     ) throws SQLException {
-        Document document = modifyDocManager.getDocumentBuilder().build();
+        Document document = modifyDocumentContext.getDocumentBuilder().build();
 
         if(document.documentName() != null){
             preStatement.setString(parameterIndex, document.documentName());
@@ -154,19 +154,19 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
         throw new IllegalStateException("Unexpected error -> The document argument contains no value.");
     }
 
-    private boolean modifyDocumentFile(Connection connection, ModifyDocManager modifyDocManager) throws SQLException{
+    private boolean modifyDocumentFile(Connection connection, ModifyDocumentContext modifyDocumentContext) throws SQLException{
         String query = "UPDATE document SET doc_file_name = ?, document_file = ? " +
                 "WHERE barangay_id = ? AND document_id = ?";
 
-        File docFile = modifyDocManager.getDocumentBuilder().getDocumentFile();
+        File docFile = modifyDocumentContext.getDocumentBuilder().getDocumentFile();
 
         try(PreparedStatement preStatement = connection.prepareStatement(query);
             FileInputStream fileInputStream = new FileInputStream(docFile);
         ){
             preStatement.setString(1, docFile.getName());
             preStatement.setBinaryStream(2, fileInputStream, docFile.length());
-            preStatement.setInt(3, modifyDocManager.getBarangayId());
-            preStatement.setInt(4, modifyDocManager.getDocumentId());
+            preStatement.setInt(3, modifyDocumentContext.getBarangayId());
+            preStatement.setInt(4, modifyDocumentContext.getDocumentId());
 
             return preStatement.executeUpdate() == 1;
         }catch (IOException e){

@@ -150,9 +150,7 @@ public class MySqlUser implements UserDao, UserPersonalDao {
         try(Connection connection = MySQLDBConnection.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
-            setModifyValues(1, preStatement, userPersonal);
-            preStatement.setInt(2, userId);
-
+            setModifyValues(preStatement, userId, userPersonal);
             return preStatement.executeUpdate() == 1;
         }catch(SQLException e){
             SystemLogger.logWarning(MySqlUser.class, e.getMessage());
@@ -166,7 +164,9 @@ public class MySqlUser implements UserDao, UserPersonalDao {
                 .formatted(chosenDetail);
     }
 
-    private void setModifyValues(int columnIndex, PreparedStatement preStatement, UserPersonal userPersonal) throws SQLException{
+    private void setModifyValues(
+            PreparedStatement preStatement, int userId, UserPersonal userPersonal
+    ) throws SQLException{
         Object[] values = {
                 userPersonal.name(), String.valueOf(userPersonal.sex()),
                 userPersonal.age(), userPersonal.birthDate(),
@@ -176,9 +176,11 @@ public class MySqlUser implements UserDao, UserPersonalDao {
 
         for(Object value : values){
             if(value != null){
-                preStatement.setObject(columnIndex, value);
-                return;
+                preStatement.setObject(1, value);
+                break;
             }
         }
+
+        preStatement.setInt(2, userId);
     }
 }

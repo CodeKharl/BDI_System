@@ -1,6 +1,6 @@
 package org.isu_std.admin.admin_main.requested_documents.req_approve;
 
-import org.isu_std.admin.admin_main.ReqDocsManager;
+import org.isu_std.admin.admin_main.RequestDocumentContext;
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.io.Util;
 import org.isu_std.io.exception.OperationFailedException;
@@ -21,36 +21,36 @@ public class RequestApproveService {
         this.documentRequestDao = documentRequestDao;
     }
 
-    protected void requestApprovePerformed(ReqDocsManager reqDocsManager) throws IOException, OperationFailedException{
-        if (!createOutputDocumentFile(reqDocsManager)) {
+    protected void requestApprovePerformed(RequestDocumentContext requestDocumentContext) throws IOException, OperationFailedException{
+        if (!createOutputDocumentFile(requestDocumentContext)) {
             throw new OperationFailedException("Failed to Create Document Output File! Please try again.");
         }
 
-        String referenceId = reqDocsManager.documentRequest().referenceId();
+        String referenceId = requestDocumentContext.documentRequest().referenceId();
         if (!documentRequestDao.setRequestApprove(referenceId)) {
             throw new OperationFailedException("Failed to Approve the Requested Document! Please try again.");
         }
     }
 
-    protected boolean createOutputDocumentFile(ReqDocsManager reqDocsManager) throws IOException, OperationFailedException {
+    protected boolean createOutputDocumentFile(RequestDocumentContext requestDocumentContext) throws IOException, OperationFailedException {
         String filePath = FolderConfig.DOC_APPROVE_PATH.getPath();
         Folder.setFileFolder(filePath);
 
-        File outputFile = copyDefaultFile(reqDocsManager, filePath);
+        File outputFile = copyDefaultFile(requestDocumentContext, filePath);
         if (outputFile == null) {
             return false;
         }
 
-        UserPersonal userPersonal = reqDocsManager.userPersonal();
+        UserPersonal userPersonal = requestDocumentContext.userPersonal();
         Map<String, String> informations = getInformationsMap(userPersonal);
         DocxFileHandler.editDocxPlaceHolders(outputFile, informations);
 
         return true;
     }
 
-    protected File copyDefaultFile(ReqDocsManager reqDocsManager, String filePath){
-        File defaultFile = reqDocsManager.document().documentFile();
-        String fileName = reqDocsManager.documentRequest().referenceId() + defaultFile.getName();
+    protected File copyDefaultFile(RequestDocumentContext requestDocumentContext, String filePath){
+        File defaultFile = requestDocumentContext.document().documentFile();
+        String fileName = requestDocumentContext.documentRequest().referenceId() + defaultFile.getName();
 
         File newFile = new File("%s_%s".formatted(filePath, fileName));
 

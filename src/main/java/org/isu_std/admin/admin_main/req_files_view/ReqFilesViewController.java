@@ -11,7 +11,7 @@ public class ReqFilesViewController {
     private final ReqFilesViewService reqFilesViewService;
     private final List<File> requirementFileList;
 
-    public ReqFilesViewController(ReqFilesViewService reqFilesViewService, List<File> requirementFileList){
+    protected ReqFilesViewController(ReqFilesViewService reqFilesViewService, List<File> requirementFileList){
         this.reqFilesViewService = reqFilesViewService;
         this.requirementFileList = requirementFileList;
     }

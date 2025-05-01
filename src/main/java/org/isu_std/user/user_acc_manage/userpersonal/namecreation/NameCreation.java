@@ -13,7 +13,7 @@ public class NameCreation {
 
     private final NameCreationController nameCreationController;
 
-    public NameCreation(NameCreationController nameCreationController){
+    protected NameCreation(NameCreationController nameCreationController){
         this.nameCreationController = nameCreationController;
     }
 

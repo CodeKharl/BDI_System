@@ -1,6 +1,6 @@
 package org.isu_std.admin.admin_main.requested_documents;
 
-import org.isu_std.admin.admin_main.ReqDocsManager;
+import org.isu_std.admin.admin_main.RequestDocumentContext;
 import org.isu_std.admin.admin_main.requested_documents.req_approve.RequestApprove;
 import org.isu_std.admin.admin_main.req_files_view.RequirementFilesView;
 import org.isu_std.admin.admin_main.requested_documents.req_decline.RequestDecline;
@@ -16,7 +16,7 @@ public class RequestedDocumentController {
     private final RequestedDocumentService reqDocService;
     private final Barangay barangay;
     private List<DocumentRequest> documentRequestList;
-    private ReqDocsManager reqDocsManager;
+    private RequestDocumentContext requestDocumentContext;
 
     protected RequestedDocumentController(RequestedDocumentService reqDocService, Barangay barangay){
         this.reqDocService = reqDocService;
@@ -43,7 +43,7 @@ public class RequestedDocumentController {
     protected boolean setDocumentReqChoice(int docChoice){
         try{
             DocumentRequest documentRequest = documentRequestList.get(docChoice - 1);
-            this.reqDocsManager = reqDocService.getReqDocsManager(documentRequest);
+            this.requestDocumentContext = reqDocService.getReqDocsManager(documentRequest);
 
             return true;
         }catch (OperationFailedException e){
@@ -55,7 +55,7 @@ public class RequestedDocumentController {
 
     protected String getDocReqSectionTitle(){
         return "Document Request View -> (User ID - %d | Document ID - %d)"
-                .formatted(reqDocsManager.getUserId(), reqDocsManager.getDocumentId());
+                .formatted(requestDocumentContext.getUserId(), requestDocumentContext.getDocumentId());
     }
 
     protected boolean isReqValidationFinish(int choice){
@@ -67,8 +67,8 @@ public class RequestedDocumentController {
                 return requestDecline();
             }
 
-            case 3 -> reqDocsManager.document().printDetailsWithDocumentFile();
-            case 4 -> reqDocsManager.userPersonal().printPersonalStats();
+            case 3 -> requestDocumentContext.document().printDetailsWithDocumentFile();
+            case 4 -> requestDocumentContext.userPersonal().printPersonalStats();
             case 5 -> requirementFileView();
         }
 
@@ -77,21 +77,21 @@ public class RequestedDocumentController {
 
     protected void requirementFileView(){
         RequirementFilesView requirementFilesView = reqDocService
-                .getReqFilesView(reqDocsManager.documentRequest().requirementDocList());
+                .getReqFilesView(requestDocumentContext.documentRequest().requirementDocList());
 
         requirementFilesView.viewProcess();
     }
 
     protected boolean requestApprove(){
         RequestApprove requestApprove = reqDocService
-                .createRequestApprove(reqDocsManager);
+                .createRequestApprove(requestDocumentContext);
 
         return requestApprove.requestApprovePerformed();
     }
 
     protected boolean requestDecline(){
         RequestDecline requestDecline = reqDocService
-                .createRequestDecline(reqDocsManager.documentRequest());
+                .createRequestDecline(requestDocumentContext.documentRequest());
 
         return requestDecline.requestDeclinePerformed();
     }

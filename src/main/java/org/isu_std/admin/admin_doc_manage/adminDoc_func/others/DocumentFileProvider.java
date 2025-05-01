@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 import java.util.Optional;
 import java.util.Set;
 
-public class DocumentFileHandler {
+public class DocumentFileProvider {
     public static Optional<File> getOptionalDocFile(){
         while(true) {
             Util.printSubSectionTitle("Choosing File Document");

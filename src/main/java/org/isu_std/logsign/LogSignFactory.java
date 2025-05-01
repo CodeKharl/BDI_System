@@ -1,6 +1,6 @@
 package org.isu_std.logsign;
 
-import org.isu_std.ClientManager;
+import org.isu_std.ClientContext;
 import org.isu_std.ClientManage;
 import org.isu_std.dao.AdminDao;
 import org.isu_std.dao.BarangayDao;
@@ -41,18 +41,18 @@ public final class LogSignFactory {
         return Holder.instance;
     }
 
-    public Login createLoginInsType(int type, ClientManager clientManager){
+    public Login createLoginInsType(int type, ClientContext clientContext){
         return type == ClientManage.ADMIN_VAL ?
                 new AdminLogin(
                         new AdminLoginController(
                                 AdminLoginService.getInstance(adminDao),
-                                clientManager
+                                clientContext
                         )
                 ) :
                 new UserLogin(
                         new UserLoginController(
                                 UserLoginService.getInstance(userDao),
-                                clientManager
+                                clientContext
                         )
                 );
     }

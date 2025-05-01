@@ -6,7 +6,7 @@ import org.isu_std.io.Util;
 public class RequirementFilesView {
     private final ReqFilesViewController reqFilesViewController;
 
-    public RequirementFilesView(ReqFilesViewController reqFilesViewController){
+    protected RequirementFilesView(ReqFilesViewController reqFilesViewController){
         this.reqFilesViewController = reqFilesViewController;
     }
 

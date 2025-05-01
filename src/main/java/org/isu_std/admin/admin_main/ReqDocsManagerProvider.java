@@ -5,14 +5,13 @@ import org.isu_std.dao.PaymentDao;
 import org.isu_std.dao.UserPersonalDao;
 import org.isu_std.io.exception.OperationFailedException;
 import org.isu_std.models.Document;
-import org.isu_std.models.DocumentRequest;
 import org.isu_std.models.Payment;
 import org.isu_std.models.UserPersonal;
 
 import java.util.Optional;
 
-public class ReqDocsManagerFactory {
-    private ReqDocsManagerFactory(){}
+public class ReqDocsManagerProvider {
+    private ReqDocsManagerProvider(){}
 
     public static UserPersonal getUserPersonal(UserPersonalDao userPersonalDao, int userId){
         Optional<UserPersonal> optionalUserPersonal = userPersonalDao.getOptionalUserPersonal(userId);

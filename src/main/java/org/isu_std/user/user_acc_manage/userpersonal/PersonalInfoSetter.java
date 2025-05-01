@@ -15,7 +15,7 @@ public class PersonalInfoSetter {
 
     public boolean setName(){
         Optional<String> fullName = managePersonalService
-                .createNameCreation().getOptionalCreatedName();
+                .getNameCreation().getOptionalCreatedName();
 
         if(fullName.isPresent()){
             this.userPersonalBuilder.name(fullName.get());

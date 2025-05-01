@@ -1,6 +1,6 @@
 package org.isu_std.admin.admin_main.approved_documents;
 
-import org.isu_std.admin.admin_main.ReqDocsManager;
+import org.isu_std.admin.admin_main.RequestDocumentContext;
 import org.isu_std.admin.admin_main.approved_documents.approved_documents_export.ApprovedDocExport;
 import org.isu_std.admin.admin_main.req_files_view.RequirementFilesView;
 import org.isu_std.io.Util;
@@ -18,7 +18,7 @@ public class ApprovedDocumentController {
     private final Barangay barangay;
 
     private List<DocumentRequest> approvedDocList;
-    private ReqDocsManager reqDocsManager;
+    private RequestDocumentContext requestDocumentContext;
     private File outputDocFile;
 
     protected ApprovedDocumentController(ApprovedDocumentService approvedDocumentService, Barangay barangay){
@@ -55,7 +55,7 @@ public class ApprovedDocumentController {
     protected boolean isDocumentRequestSet(int docsChoice){
         try{
             DocumentRequest documentRequest = approvedDocList.get(docsChoice - 1);
-            this.reqDocsManager = approvedDocumentService.getReqDocsManager(documentRequest);
+            this.requestDocumentContext = approvedDocumentService.getReqDocsManager(documentRequest);
 
             return true;
         }catch (OperationFailedException e){
@@ -66,7 +66,7 @@ public class ApprovedDocumentController {
     }
 
     protected String getApprovedSectionTitle(){
-        DocumentRequest documentRequest = reqDocsManager.documentRequest();
+        DocumentRequest documentRequest = requestDocumentContext.documentRequest();
         return "Approved Document View -> (Reference ID -> %s : User ID - %d | Document ID - %d)"
                 .formatted(documentRequest.referenceId(), documentRequest.userId(), documentRequest.documentId());
     }
@@ -79,8 +79,8 @@ public class ApprovedDocumentController {
 
             case 2 -> viewApprovedFile();
             case 3 -> viewApprovedPayment();
-            case 4 -> reqDocsManager.document().printDetails();
-            case 5 -> reqDocsManager.userPersonal().printPersonalStats();
+            case 4 -> requestDocumentContext.document().printDetails();
+            case 5 -> requestDocumentContext.userPersonal().printPersonalStats();
             case 6 -> requirementFilesView();
         }
 
@@ -89,7 +89,7 @@ public class ApprovedDocumentController {
 
     protected void requirementFilesView(){
         RequirementFilesView requirementFilesView = approvedDocumentService.getReqFilesView(
-                reqDocsManager.documentRequest().requirementDocList()
+                requestDocumentContext.documentRequest().requirementDocList()
         );
 
         requirementFilesView.viewProcess();
@@ -101,7 +101,7 @@ public class ApprovedDocumentController {
         }
 
         ApprovedDocExport approvedDocExport = approvedDocumentService
-                .createApprovedDocExport(this.reqDocsManager, this.outputDocFile);
+                .createApprovedDocExport(this.requestDocumentContext, this.outputDocFile);
 
         if(!approvedDocExport.isExported()) {
             return false;
@@ -112,7 +112,7 @@ public class ApprovedDocumentController {
 
     private boolean deleteApprovedReqPerformed(){
         try{
-            DocumentRequest documentRequest = reqDocsManager.documentRequest();
+            DocumentRequest documentRequest = requestDocumentContext.documentRequest();
             approvedDocumentService.deleteApprovedRequestDocs(documentRequest);
 
             return true;
@@ -126,7 +126,7 @@ public class ApprovedDocumentController {
     private void viewApprovedFile(){
         try{
             if(this.outputDocFile == null){
-                this.outputDocFile = approvedDocumentService.getApprovedDocFile(reqDocsManager);
+                this.outputDocFile = approvedDocumentService.getApprovedDocFile(requestDocumentContext);
             }
 
             Util.printMessage("Opening the user document file...");
@@ -139,7 +139,7 @@ public class ApprovedDocumentController {
 
     private boolean isPaymentPresent(){
         try{
-            approvedDocumentService.checkPayment(reqDocsManager.payment());
+            approvedDocumentService.checkPayment(requestDocumentContext.payment());
             return true;
         }catch (NotFoundException e){
             Util.printException(e.getMessage());
@@ -151,7 +151,7 @@ public class ApprovedDocumentController {
 
     private void viewApprovedPayment(){
         if(isPaymentPresent()){
-            Payment payment = reqDocsManager.payment();
+            Payment payment = requestDocumentContext.payment();
             payment.printPaymentDetails();
         }
     }

@@ -3,7 +3,7 @@ package org.isu_std;
 import org.isu_std.models.Admin;
 import org.isu_std.models.User;
 
-public class ClientManager {
+public class ClientContext {
     private User user;
     private Admin admin;
 

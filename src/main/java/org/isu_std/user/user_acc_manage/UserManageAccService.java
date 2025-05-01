@@ -12,12 +12,9 @@ public class UserManageAccService {
         this.userPersonalDao = userPersonalDao;
     }
 
-    protected ManagePersonal createManagePersonal(int usedId){
-        return new ManagePersonal(
-                new ManagePersonalController(
-                        new ManagePersonalService(userPersonalDao),
-                        usedId
-                )
-        );
+    protected ManagePersonal createManagePersonal(int userId){
+        var managePersonalService = new ManagePersonalService(userPersonalDao);
+        var managePersonalController = new ManagePersonalController(managePersonalService, userId);
+        return new ManagePersonal(managePersonalController);
     }
 }

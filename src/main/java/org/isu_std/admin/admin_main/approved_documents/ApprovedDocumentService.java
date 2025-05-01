@@ -1,8 +1,8 @@
 package org.isu_std.admin.admin_main.approved_documents;
 
-import org.isu_std.admin.admin_main.ReqDocsManager;
+import org.isu_std.admin.admin_main.RequestDocumentContext;
 import org.isu_std.admin.admin_main.ReqDocsManagerBuilder;
-import org.isu_std.admin.admin_main.ReqDocsManagerFactory;
+import org.isu_std.admin.admin_main.ReqDocsManagerProvider;
 import org.isu_std.admin.admin_main.approved_documents.approved_documents_export.ApprovedDocExport;
 import org.isu_std.admin.admin_main.approved_documents.approved_documents_export.ApprovedDocExportController;
 import org.isu_std.admin.admin_main.approved_documents.approved_documents_export.ApprovedDocExportService;
@@ -23,7 +23,6 @@ import org.isu_std.models.UserPersonal;
 
 import java.io.File;
 import java.util.List;
-import java.util.Optional;
 
 public class ApprovedDocumentService {
     private final DocumentRequestDao documentRequestDao;
@@ -48,14 +47,14 @@ public class ApprovedDocumentService {
         return approvedDodList;
     }
 
-    protected ReqDocsManager getReqDocsManager(DocumentRequest documentRequest) throws OperationFailedException {
+    protected RequestDocumentContext getReqDocsManager(DocumentRequest documentRequest) throws OperationFailedException {
         ReqDocsManagerBuilder reqDocsManagerBuilder = new ReqDocsManagerBuilder(documentRequest);
-        UserPersonal userPersonal = ReqDocsManagerFactory.getUserPersonal(userPersonalDao, documentRequest.userId());
-        Document document = ReqDocsManagerFactory.getDocument(
+        UserPersonal userPersonal = ReqDocsManagerProvider.getUserPersonal(userPersonalDao, documentRequest.userId());
+        Document document = ReqDocsManagerProvider.getDocument(
                 documentDao, documentRequest.barangayId(), documentRequest.documentId()
         );
 
-        Payment payment = ReqDocsManagerFactory.getPayment(paymentDao, documentRequest.referenceId());
+        Payment payment = ReqDocsManagerProvider.getPayment(paymentDao, documentRequest.referenceId());
 
         reqDocsManagerBuilder
                 .userPersonal(userPersonal)
@@ -69,10 +68,10 @@ public class ApprovedDocumentService {
         return ReqFilesViewFactory.createReqFilesView(requirementFiles);
     }
 
-    protected File getApprovedDocFile(ReqDocsManager reqDocsManager){
+    protected File getApprovedDocFile(RequestDocumentContext requestDocumentContext){
         String filePath = FolderConfig.DOC_APPROVE_PATH.getPath();
-        String fileName = reqDocsManager.documentRequest().referenceId() +
-                reqDocsManager.document().documentFile().getName();
+        String fileName = requestDocumentContext.documentRequest().referenceId() +
+                requestDocumentContext.document().documentFile().getName();
 
         File outputFile = new File("%s_%s".formatted(filePath, fileName));
 
@@ -89,10 +88,10 @@ public class ApprovedDocumentService {
         }
     }
 
-    protected ApprovedDocExport createApprovedDocExport(ReqDocsManager reqDocsManager, File outputDocumentFile){
+    protected ApprovedDocExport createApprovedDocExport(RequestDocumentContext requestDocumentContext, File outputDocumentFile){
         ApprovedDocExportService approvedDocExportService = new ApprovedDocExportService();
         ApprovedDocExportController approvedDocExportController = new ApprovedDocExportController(
-                approvedDocExportService, reqDocsManager, outputDocumentFile
+                approvedDocExportService, requestDocumentContext, outputDocumentFile
         );
 
         return new ApprovedDocExport(approvedDocExportController);

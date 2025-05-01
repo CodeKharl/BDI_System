@@ -2,13 +2,13 @@ package org.isu_std.admin.admin_doc_manage.adminDoc_func.modify;
 
 import org.isu_std.models.modelbuilders.DocumentBuilder;
 
-public class ModifyDocManager {
+public class ModifyDocumentContext {
     private final int barangayId;
     private int documentId;
     private String documentDetail;
     private final DocumentBuilder documentBuilder;
 
-    protected ModifyDocManager(int barangayId, DocumentBuilder documentBuilder){
+    protected ModifyDocumentContext(int barangayId, DocumentBuilder documentBuilder){
         this.barangayId = barangayId;
         this.documentBuilder = documentBuilder;
     }

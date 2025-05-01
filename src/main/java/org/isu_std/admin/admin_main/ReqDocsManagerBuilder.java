@@ -31,7 +31,7 @@ public class ReqDocsManagerBuilder {
         return this;
     }
 
-    public ReqDocsManager build(){
-        return new ReqDocsManager(this.documentRequest, this.userPersonal, this.document, this.payment);
+    public RequestDocumentContext build(){
+        return new RequestDocumentContext(this.documentRequest, this.userPersonal, this.document, this.payment);
     }
 }

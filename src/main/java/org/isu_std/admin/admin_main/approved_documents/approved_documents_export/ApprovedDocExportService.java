@@ -1,9 +1,8 @@
 package org.isu_std.admin.admin_main.approved_documents.approved_documents_export;
 
-import org.isu_std.admin.admin_main.ReqDocsManager;
+import org.isu_std.admin.admin_main.RequestDocumentContext;
 import org.isu_std.io.exception.OperationFailedException;
 import org.isu_std.io.folder_setup.FolderChooser;
-import org.isu_std.models.Payment;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,9 +27,9 @@ public class ApprovedDocExportService {
         }
     }
 
-    protected void addReceipt(Path targetPath, ReqDocsManager reqDocsManager){
+    protected void addReceipt(Path targetPath, RequestDocumentContext requestDocumentContext){
         try {
-            ReceiptHandler.createReceiptFile("Receipt!", targetPath, reqDocsManager);
+            ReceiptCreator.createReceiptFile("Receipt!", targetPath, requestDocumentContext);
         }catch (IOException e){
             throw new OperationFailedException(
                     "Failed to add receipt file to the target path! Reason : " + e.getMessage()

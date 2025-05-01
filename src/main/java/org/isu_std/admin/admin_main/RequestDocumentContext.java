@@ -5,8 +5,8 @@ import org.isu_std.models.DocumentRequest;
 import org.isu_std.models.Payment;
 import org.isu_std.models.UserPersonal;
 
-public record ReqDocsManager(DocumentRequest documentRequest, UserPersonal userPersonal, Document document,
-                             Payment payment) {
+public record RequestDocumentContext(DocumentRequest documentRequest, UserPersonal userPersonal, Document document,
+                                     Payment payment) {
 
     public String getReferenceId(){
         return this.documentRequest.referenceId();

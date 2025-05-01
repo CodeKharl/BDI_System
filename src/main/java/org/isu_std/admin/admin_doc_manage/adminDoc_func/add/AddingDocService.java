@@ -1,10 +1,9 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.add;
 
-import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentFileHandler;
+import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentFileProvider;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentConfig;
-import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.RequirementHandler;
+import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.RequirementProvider;
 import org.isu_std.io.exception.OperationFailedException;
-import org.isu_std.io.file_setup.DocxFileHandler;
 import org.isu_std.models.Document;
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.io.collections.InputMessageCollection;
@@ -51,10 +50,10 @@ public class AddingDocService {
     }
 
     protected Optional<String> getOptionalRequirement(){
-        return RequirementHandler.getRequirements();
+        return RequirementProvider.getRequirements();
     }
 
     protected Optional<File> getOptionalDocumentFile() throws IllegalArgumentException{
-        return DocumentFileHandler.getOptionalDocFile();
+        return DocumentFileProvider.getOptionalDocFile();
     }
 }

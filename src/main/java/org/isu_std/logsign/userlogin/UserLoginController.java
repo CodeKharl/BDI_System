@@ -1,26 +1,26 @@
 package org.isu_std.logsign.userlogin;
 
-import org.isu_std.ClientManager;
+import org.isu_std.ClientContext;
 import org.isu_std.io.Util;
 import org.isu_std.io.exception.NotFoundException;
 
 public class UserLoginController {
     private final UserLoginService userLoginService;
-    private final ClientManager clientManager;
-    public UserLoginController(UserLoginService userLoginService, ClientManager clientManager){
+    private final ClientContext clientContext;
+    public UserLoginController(UserLoginService userLoginService, ClientContext clientContext){
         this.userLoginService = userLoginService;
-        this.clientManager = clientManager;
+        this.clientContext = clientContext;
     }
 
     protected boolean isInputAccepted(int count, String input){
         try {
             switch (count) {
-                case 0 -> clientManager.setUser(
+                case 0 -> clientContext.setUser(
                         userLoginService.getUser(input)
                 );
 
                 case 1 -> userLoginService.checkUserPassword(
-                        clientManager.getUser().password(),
+                        clientContext.getUser().password(),
                         input
                 );
 

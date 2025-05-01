@@ -1,15 +1,14 @@
 package org.isu_std;
 
-import org.isu_std.io.WindowsCLIClear;
 import org.isu_std.io.Util;
 
 public class SystemController {
     private final SystemService systemService;
-    private final ClientManager clientManager;
+    private final ClientContext clientContext;
 
     public SystemController(SystemService systemService){
         this.systemService = systemService;
-        this.clientManager = systemService.createClientManager();
+        this.clientContext = systemService.createClientManager();
     }
 
     protected boolean isSystemRunning(int choice){
@@ -29,13 +28,13 @@ public class SystemController {
 
     private void startLogin(int type){
         if(systemService
-                .getLogin(type, clientManager)
+                .getLogin(type, clientContext)
                 .setLoginInformation()
         ){
             systemService.getPostLoginNav(
                     type,
-                    clientManager.getUser(),
-                    clientManager.getAdmin()
+                    clientContext.getUser(),
+                    clientContext.getAdmin()
             ).navigateToSection();
         }
     }

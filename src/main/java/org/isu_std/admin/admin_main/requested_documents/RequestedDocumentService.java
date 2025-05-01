@@ -3,9 +3,9 @@ package org.isu_std.admin.admin_main.requested_documents;
 import java.io.File;
 import java.util.List;
 
-import org.isu_std.admin.admin_main.ReqDocsManager;
+import org.isu_std.admin.admin_main.RequestDocumentContext;
 import org.isu_std.admin.admin_main.ReqDocsManagerBuilder;
-import org.isu_std.admin.admin_main.ReqDocsManagerFactory;
+import org.isu_std.admin.admin_main.ReqDocsManagerProvider;
 import org.isu_std.admin.admin_main.req_files_view.ReqFilesViewFactory;
 import org.isu_std.admin.admin_main.requested_documents.req_approve.RequestApprove;
 import org.isu_std.admin.admin_main.requested_documents.req_approve.RequestApproveController;
@@ -44,10 +44,10 @@ public class RequestedDocumentService {
         return documentReqList;
     }
 
-    protected ReqDocsManager getReqDocsManager(DocumentRequest documentRequest) throws OperationFailedException{
+    protected RequestDocumentContext getReqDocsManager(DocumentRequest documentRequest) throws OperationFailedException{
         ReqDocsManagerBuilder reqDocsManagerBuilder = new ReqDocsManagerBuilder(documentRequest);
-        UserPersonal userPersonal = ReqDocsManagerFactory.getUserPersonal(userPersonalDao, documentRequest.userId());
-        Document document = ReqDocsManagerFactory.getDocument(
+        UserPersonal userPersonal = ReqDocsManagerProvider.getUserPersonal(userPersonalDao, documentRequest.userId());
+        Document document = ReqDocsManagerProvider.getDocument(
                 documentDao, documentRequest.barangayId(), documentRequest.documentId()
         );
 
@@ -59,10 +59,10 @@ public class RequestedDocumentService {
         return ReqFilesViewFactory.createReqFilesView(requirmentFileList);
     }
 
-    protected RequestApprove createRequestApprove(ReqDocsManager reqDocsManager){
+    protected RequestApprove createRequestApprove(RequestDocumentContext requestDocumentContext){
         RequestApproveService requestApproveService = new RequestApproveService(documentRequestDao);
         RequestApproveController requestApproveController = new RequestApproveController(
-                requestApproveService, reqDocsManager
+                requestApproveService, requestDocumentContext
         );
 
         return new RequestApprove(requestApproveController);

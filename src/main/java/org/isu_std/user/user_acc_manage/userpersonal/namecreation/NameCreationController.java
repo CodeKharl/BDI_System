@@ -8,7 +8,7 @@ public class NameCreationController {
     private final NameCreationService nameCreationService;
     private final StringBuilder nameBuilder;
 
-    public NameCreationController(NameCreationService nameCreationService){
+    protected NameCreationController(NameCreationService nameCreationService){
         this.nameCreationService = nameCreationService;
         this.nameBuilder = nameCreationService.createNameBuilderIns();
     }

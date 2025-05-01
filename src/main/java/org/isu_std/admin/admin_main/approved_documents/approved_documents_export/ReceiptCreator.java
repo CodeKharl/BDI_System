@@ -1,14 +1,16 @@
 package org.isu_std.admin.admin_main.approved_documents.approved_documents_export;
 
-import org.isu_std.admin.admin_main.ReqDocsManager;
+import org.isu_std.admin.admin_main.RequestDocumentContext;
 import org.isu_std.models.Payment;
 
 import java.io.*;
 import java.lang.reflect.RecordComponent;
 import java.nio.file.Path;
 
-public class ReceiptHandler {
-    protected static void createReceiptFile(String fileName, Path targetPath, ReqDocsManager reqDocsManager) throws IOException{
+public class ReceiptCreator {
+    protected static void createReceiptFile(
+            String fileName, Path targetPath, RequestDocumentContext requestDocumentContext
+    ) throws IOException{
         File receiptFile = new File(targetPath.toString() + File.separator + fileName);
 
         try(FileWriter fileWriter = new FileWriter(receiptFile);
@@ -17,17 +19,17 @@ public class ReceiptHandler {
             bufferedWriter.write(fileName);
             bufferedWriter.newLine();
 
-            String referenceId = reqDocsManager.documentRequest().referenceId();
+            String referenceId = requestDocumentContext.documentRequest().referenceId();
             bufferedWriter
                     .append("Reference ID -> ")
                     .append(referenceId);
 
-            addReceiptContents(bufferedWriter, reqDocsManager);
+            addReceiptContents(bufferedWriter, requestDocumentContext);
         }
     }
 
-    private static void addReceiptContents(BufferedWriter bufferedWriter, ReqDocsManager reqDocsManager) throws IOException{
-        Payment payment = reqDocsManager.payment();
+    private static void addReceiptContents(BufferedWriter bufferedWriter, RequestDocumentContext requestDocumentContext) throws IOException{
+        Payment payment = requestDocumentContext.payment();
         String labels = getReceiptLabelStr(payment);
 
         bufferedWriter.append(labels);

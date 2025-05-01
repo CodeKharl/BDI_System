@@ -10,19 +10,19 @@ import java.util.Optional;
 public class ModifyingDocController {
     private final String[] document_info;
     private final ModifyingDocService modifyingDocService;
-    private final ModifyDocManager modifyDocManager;
+    private final ModifyDocumentContext modifyDocumentContext;
 
     public ModifyingDocController(ModifyingDocService modifyingDocService, int barangayId){
         this.modifyingDocService = modifyingDocService;
         this.document_info = modifyingDocService.getDocumentArrInfo();
-        this.modifyDocManager = modifyingDocService.createModDocModel(barangayId);
+        this.modifyDocumentContext = modifyingDocService.createModDocModel(barangayId);
     }
 
     protected final boolean setValidDocumentId(){
-        int documentId = modifyingDocService.getValidDocID(modifyDocManager.getBarangayId());
+        int documentId = modifyingDocService.getValidDocID(modifyDocumentContext.getBarangayId());
 
         if(documentId != 0){
-            modifyDocManager.setDocumentId(documentId);
+            modifyDocumentContext.setDocumentId(documentId);
             return true;
         }
 
@@ -30,7 +30,7 @@ public class ModifyingDocController {
     }
 
     protected final void setDocumentDetail(int inputChoice){
-        modifyDocManager.setDocumentDetail(
+        modifyDocumentContext.setDocumentDetail(
                 document_info[inputChoice - 1]
         );
     }
@@ -40,7 +40,7 @@ public class ModifyingDocController {
     }
 
     protected String getDocumentDetail(){
-        return modifyDocManager.getDocumentDetail();
+        return modifyDocumentContext.getDocumentDetail();
     }
 
     protected final boolean isDocDetailAccepted(int detailChoice){
@@ -77,7 +77,7 @@ public class ModifyingDocController {
 
         try {
             modifyingDocService.checkDocumentName(documentName);
-            modifyDocManager
+            modifyDocumentContext
                     .getDocumentBuilder()
                     .documentName(documentName);
 
@@ -96,7 +96,7 @@ public class ModifyingDocController {
 
         try {
             int price = modifyingDocService.checkDocumentPrice(strPrice);
-            modifyDocManager.getDocumentBuilder().price(price);
+            modifyDocumentContext.getDocumentBuilder().price(price);
 
             return true;
         }catch (IllegalArgumentException e){
@@ -110,7 +110,7 @@ public class ModifyingDocController {
         Optional<String> requirementInfo = modifyingDocService.getOptionalRequirements();
 
         if(requirementInfo.isPresent()){
-            this.modifyDocManager
+            this.modifyDocumentContext
                     .getDocumentBuilder()
                     .requirements(requirementInfo.get());
 
@@ -129,7 +129,7 @@ public class ModifyingDocController {
             if (optionalDocFile.isPresent()) {
                 File file = optionalDocFile.get();
                 modifyingDocService.openDocumentFile(file);
-                this.modifyDocManager.getDocumentBuilder().documentFile(file);
+                this.modifyDocumentContext.getDocumentBuilder().documentFile(file);
 
                 return true;
             }
@@ -148,7 +148,7 @@ public class ModifyingDocController {
 
     public final void modifyProcess(){
         try{
-            if(modifyingDocService.modifyPerformed(modifyDocManager)){
+            if(modifyingDocService.modifyPerformed(modifyDocumentContext)){
                 Util.printMessage("Modify Success!");
             }
         }catch (OperationFailedException e){
@@ -157,6 +157,6 @@ public class ModifyingDocController {
     }
 
     protected void printDocDetail(){
-        Util.printMessage("Detail to Modify -> %s".formatted(modifyDocManager.getDocumentDetail()));
+        Util.printMessage("Detail to Modify -> %s".formatted(modifyDocumentContext.getDocumentDetail()));
     }
 }

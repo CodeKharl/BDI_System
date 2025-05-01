@@ -9,8 +9,7 @@ import org.isu_std.models.UserPersonal;
 import org.isu_std.models.modelbuilders.BuilderFactory;
 import org.isu_std.models.modelbuilders.UserPersonalBuilder;
 import org.isu_std.user.user_acc_manage.userpersonal.namecreation.NameCreation;
-import org.isu_std.user.user_acc_manage.userpersonal.namecreation.NameCreationController;
-import org.isu_std.user.user_acc_manage.userpersonal.namecreation.NameCreationService;
+import org.isu_std.user.user_acc_manage.userpersonal.namecreation.NameCreationFactory;
 import org.isu_std.user.user_acc_manage.userpersonal.personalcreation.CreatePersonal;
 import org.isu_std.user.user_acc_manage.userpersonal.personalcreation.CreatePersonalController;
 import org.isu_std.user.user_acc_manage.userpersonal.personalmodify.ModifyPersonal;
@@ -50,12 +49,8 @@ public class ManagePersonalService {
         return BuilderFactory.createUserPersonalBuilder();
     }
 
-    public NameCreation createNameCreation(){
-        return new NameCreation(
-                new NameCreationController(
-                        new NameCreationService()
-                )
-        );
+    public NameCreation getNameCreation(){
+        return NameCreationFactory.createNameCreation();
     }
 
     public ModifyPersonalManager createPersonalModifierManager(int userId){

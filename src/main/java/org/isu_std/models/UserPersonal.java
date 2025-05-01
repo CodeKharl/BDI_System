@@ -2,9 +2,10 @@ package org.isu_std.models;
 
 import org.isu_std.io.Util;
 
-public record UserPersonal(String name, char sex, int age, String birthDate, String civilStatus, String nationality,
-                           String phoneNumber) {
-
+public record UserPersonal(
+        String name, char sex, int age, String birthDate,
+        String civilStatus, String nationality, String phoneNumber
+){
     public void printPersonalStats() {
         String[] infos = {
                 "Name [FN, MN, LN]: " + name,
@@ -15,7 +16,6 @@ public record UserPersonal(String name, char sex, int age, String birthDate, Str
                 "Nationality : " + nationality,
                 "Contact Number : " + phoneNumber
         };
-
 
         Util.printSubSectionTitle("Personal Information");
         for (String info : infos) {
