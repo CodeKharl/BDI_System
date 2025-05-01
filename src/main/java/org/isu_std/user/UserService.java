@@ -75,9 +75,8 @@ public class UserService {
     }
 
     private UserManageAcc getUserManageAcc(int userId){
-        return UserManageAccFactory
-                .getInstance(userPersonalDao)
-                .createUserManageAcc(userId);
+        UserManageAccFactory userManageAccFactory = new UserManageAccFactory(userPersonalDao);
+        return userManageAccFactory.createUserManageAcc(userId);
     }
 
     private CheckRequest getCheckRequest(int barangayId, int userId){
