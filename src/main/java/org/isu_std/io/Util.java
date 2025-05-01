@@ -2,7 +2,6 @@ package org.isu_std.io;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -25,7 +24,7 @@ public final class Util{
         System.out.printf("%s%s\n", Symbols.MESSAGE.getType(), str);
     }
 
-    public static void printChoices(String str){
+    public static void printChoice(String str){
         System.out.printf("%s%s\n", Symbols.CHOICES.getType(), str);
     }
 
@@ -66,7 +65,7 @@ public final class Util{
 
     public static void printChoices(String[] contents){
         for(int i = 0; i < contents.length; i++){
-            Util.printChoices("%d. %s".formatted(i + 1, contents[i]));
+            Util.printChoice("%d. %s".formatted(i + 1, contents[i]));
         }
     }
 
@@ -79,11 +78,10 @@ public final class Util{
     }
 
     public static void printListWithCount(List<?> objectList){
-        AtomicInteger count = new AtomicInteger();
-        objectList.forEach((object) -> Util.printChoices(
-                        "%d. %s".formatted(count.getAndIncrement() + 1, object.toString())
-                )
-        );
+        for(int i = 0; i < objectList.size(); i++){
+            String value = objectList.get(i).toString();
+            Util.printChoice("%d. %s".formatted(i + 1, value));
+        }
     }
 }
 

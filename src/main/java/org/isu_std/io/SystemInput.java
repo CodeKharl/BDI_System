@@ -65,7 +65,7 @@ public class SystemInput {
     }
 
     public static boolean isPerformConfirmed(String message, char choice1, char choice2){
-        Util.printChoices(
+        Util.printChoice(
                 "%s : (TYPE -> '%c' == Continue, '%c' == Cancel)"
                         .formatted(message, choice1, choice2)
         );

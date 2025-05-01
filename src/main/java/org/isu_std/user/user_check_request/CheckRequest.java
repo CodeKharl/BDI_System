@@ -35,7 +35,7 @@ public class CheckRequest implements UserProcess {
 
     private boolean setDocumentChoice(){
         int cancellationValue = checkRequestController.docRequestListLength() + 1;
-        Util.printChoices("%d. Back to User Menu".formatted(cancellationValue));
+        Util.printChoice("%d. Back to User Menu".formatted(cancellationValue));
 
         int choice = SystemInput.getIntChoice(
                 "Enter the chosen document : ",

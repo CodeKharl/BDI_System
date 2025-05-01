@@ -22,4 +22,8 @@ public class BuilderFactory {
     public static PaymentBuilder createPaymentBuilder(){
         return new PaymentBuilder();
     }
+
+    public static UserPersonalBuilder createUserPersonalBuilder(){
+        return new UserPersonalBuilder();
+    }
 }

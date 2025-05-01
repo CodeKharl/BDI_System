@@ -3,7 +3,6 @@ package org.isu_std.user.user_acc_manage;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 import org.isu_std.user.UserProcess;
-import org.isu_std.user.UserUI;
 
 public class UserManageAcc implements UserProcess{
     private static final String[] MANAGE_CHOICES = {

@@ -44,7 +44,7 @@ public class UserDocumentRequestController {
         AtomicInteger count = new AtomicInteger();
         docInfoManager.getBarangayDocumentsMap()
                 .forEach((_,document) -> {
-                    Util.printChoices(
+                    Util.printChoice(
                             "%d. %s".formatted(count.get() + 1, document.getDetails())
                     );
 

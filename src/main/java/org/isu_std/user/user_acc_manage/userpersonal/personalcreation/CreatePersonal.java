@@ -13,10 +13,7 @@ public class CreatePersonal {
     }
 
     public void createPerformed(){
-        Util.printSectionTitle(
-                "Personal Information Creation (%c == cancel)"
-                        .formatted(ChoiceCollection.EXIT_CODE.getValue())
-        );
+        Util.printSectionTitle("Personal Information Creation");
 
         if(!setInformations()){
             return;
@@ -28,6 +25,7 @@ public class CreatePersonal {
     }
 
     private boolean setInformations(){
+        // Setting up the name.
         if(!createPersonalController.isNameSet()){
             return false;
         }
@@ -36,17 +34,19 @@ public class CreatePersonal {
     }
 
     private boolean setOtherInformations(){
-        String[] informations = PersonalInfoConfig.PERSONAL_NEEDS.getValues();
-        String[] specifications = PersonalInfoConfig.PERSONAL_SPECIFICATION.getValues();
+        String[] informations = (String[]) PersonalInfoConfig.PERSONAL_INFORMATIONS.getValue();
+        String[] specifications = (String[]) PersonalInfoConfig.PERSONAL_SPECIFICATION.getValue();
+
+        char cancellationValue = ChoiceCollection.EXIT_CODE.getValue();
 
         int count = 1; // start at one since name is already set.
         while(count < informations.length){
             String input = SystemInput.getStringInput(
-                    "Enter your %s %s : "
-                            .formatted(informations[count], specifications[count])
+                    "Enter your %s%s (Cancel == %c) : "
+                            .formatted(informations[count], specifications[count], cancellationValue)
             );
 
-            if(input.charAt(0) == ChoiceCollection.EXIT_CODE.getValue()){
+            if(input.charAt(0) == cancellationValue){
                 return false;
             }
 

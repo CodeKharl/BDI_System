@@ -13,7 +13,7 @@ public class RequirementFilesView {
     public void viewProcess(){
         int backLengthValue = reqFilesViewController.getFileListLength() + 1;
         reqFilesViewController.printChoiceReqDocFiles();
-        Util.printChoices(
+        Util.printChoice(
                 "%d. Back to Document Request View".formatted(backLengthValue)
         );
 

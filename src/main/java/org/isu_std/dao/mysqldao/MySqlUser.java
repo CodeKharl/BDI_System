@@ -6,6 +6,7 @@ import org.isu_std.database.MySQLDBConnection;
 import org.isu_std.io.SystemLogger;
 import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
+import org.isu_std.user.user_acc_manage.userpersonal.personalmodify.ModifyPersonalManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -85,7 +86,7 @@ public class MySqlUser implements UserDao, UserPersonalDao {
 
     @Override
     public Optional<UserPersonal> getOptionalUserPersonal(int userId) {
-        String query = "SELECT name, sex, age, birth_date, civil_status, nationality, phone_number " +
+        String query = "SELECT name, sex, age, birth_date, civil_status, nationality, contact_number " +
                 "FROM user_personal WHERE user_id = ? LIMIT 1";
 
         try(Connection connection = MySQLDBConnection.getConnection();
@@ -119,20 +120,20 @@ public class MySqlUser implements UserDao, UserPersonalDao {
     @Override
     public boolean addUserPersonal(int userId, UserPersonal userPersonal) {
         String query = "INSERT INTO user_personal(user_id, name, sex, age, " +
-                "birth_date, civil_status, nationality, phone_number) " +
+                "birth_date, civil_status, nationality, contact_number) " +
                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
         try(Connection connection = MySQLDBConnection.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setInt(1, userId);
-            preStatement.setString(2, userPersonal.getName());
-            preStatement.setString(3, String.valueOf(userPersonal.getSex()));
-            preStatement.setInt(4, userPersonal.getAge());
-            preStatement.setString(5, userPersonal.getBirthDate());
-            preStatement.setString(6, userPersonal.getCivilStatus());
-            preStatement.setString(7, userPersonal.getNationality());
-            preStatement.setString(8, userPersonal.getPhoneNumber());
+            preStatement.setString(2, userPersonal.name());
+            preStatement.setString(3, String.valueOf(userPersonal.sex()));
+            preStatement.setInt(4, userPersonal.age());
+            preStatement.setString(5, userPersonal.birthDate());
+            preStatement.setString(6, userPersonal.civilStatus());
+            preStatement.setString(7, userPersonal.nationality());
+            preStatement.setString(8, userPersonal.phoneNumber());
 
             return preStatement.executeUpdate() == 1;
         }catch (SQLException e){
@@ -140,5 +141,44 @@ public class MySqlUser implements UserDao, UserPersonalDao {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean modifyUserPersonal(int userId, String chosenDetail, UserPersonal userPersonal){
+        String query = getModifyQuery(chosenDetail);
+
+        try(Connection connection = MySQLDBConnection.getConnection();
+            PreparedStatement preStatement = connection.prepareStatement(query);
+        ){
+            setModifyValues(1, preStatement, userPersonal);
+            preStatement.setInt(2, userId);
+
+            return preStatement.executeUpdate() == 1;
+        }catch(SQLException e){
+            SystemLogger.logWarning(MySqlUser.class, e.getMessage());
+        }
+
+        return false;
+    }
+
+    private String getModifyQuery(String chosenDetail){
+        return "UPDATE user_personal SET %s = ? WHERE user_id = ?"
+                .formatted(chosenDetail);
+    }
+
+    private void setModifyValues(int columnIndex, PreparedStatement preStatement, UserPersonal userPersonal) throws SQLException{
+        Object[] values = {
+                userPersonal.name(), String.valueOf(userPersonal.sex()),
+                userPersonal.age(), userPersonal.birthDate(),
+                userPersonal.civilStatus(), userPersonal.nationality(),
+                userPersonal.phoneNumber()
+        };
+
+        for(Object value : values){
+            if(value != null){
+                preStatement.setObject(columnIndex, value);
+                return;
+            }
+        }
     }
 }

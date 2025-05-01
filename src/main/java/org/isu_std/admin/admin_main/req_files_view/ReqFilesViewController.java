@@ -21,7 +21,7 @@ public class ReqFilesViewController {
 
         AtomicInteger count = new AtomicInteger();
         requirementFileList.forEach(
-                (file) -> Util.printChoices(
+                (file) -> Util.printChoice(
                         "%d. %s".formatted(count.getAndIncrement() + 1, file.getName())
                 )
         );

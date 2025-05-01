@@ -33,4 +33,8 @@ public class ManagePersonalController {
     protected void userPersonalCreation(){
         managePersonalService.createPersonal(userId).createPerformed();
     }
+
+    protected void userPersonalModification(){
+        managePersonalService.createModifyPersonal(userId).modifyPerformed();
+    }
 }

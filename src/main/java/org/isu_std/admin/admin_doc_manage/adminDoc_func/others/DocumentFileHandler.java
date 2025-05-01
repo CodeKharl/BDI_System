@@ -1,7 +1,5 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.others;
 
-import org.apache.poi.sl.draw.geom.GuideIf;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 import org.isu_std.io.collections.ChoiceCollection;
@@ -11,9 +9,7 @@ import org.isu_std.io.file_setup.DocxMessage;
 import org.isu_std.models.UserPersonal;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.Optional;
 import java.util.Set;
@@ -101,7 +97,7 @@ public class DocumentFileHandler {
         Util.printMessage("This place holders can only be use on paragraphs!");
 
         for(String holder: userPerPlaceHolders){
-            Util.printChoices(holder);
+            Util.printChoice(holder);
         }
     }
 

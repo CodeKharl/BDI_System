@@ -101,10 +101,13 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
     @Override
     public boolean modify(ModifyDocManager modifyDocManager) {
         try(Connection connection = MySQLDBConnection.getConnection()) {
-            if(modifyDocManager.getDocumentBuilder().getDocumentFile() != null){
+            //If the document file is modify
+            File documentFile = modifyDocManager.getDocumentBuilder().getDocumentFile();
+            if(documentFile != null){
                 return modifyDocumentFile(connection, modifyDocManager);
             }
 
+            //Rest of Information
             return modifyDocumentInfo(connection, modifyDocManager);
         }catch (SQLException e){
             SystemLogger.logWarning(MySqlDocument.class, e.getMessage());

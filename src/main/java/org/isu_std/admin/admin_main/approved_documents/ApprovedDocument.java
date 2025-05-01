@@ -34,7 +34,7 @@ public class ApprovedDocument {
         int backValue = approvedDocumentController.getApprovedDocsCount() + 1;
 
         approvedDocumentController.printApprovedDocuments();
-        Util.printChoices("%d. Back to Admin Menu".formatted(backValue));
+        Util.printChoice("%d. Back to Admin Menu".formatted(backValue));
 
         while(true){
             int docsChoice = SystemInput.getIntChoice("Enter approved document choice : ", backValue);

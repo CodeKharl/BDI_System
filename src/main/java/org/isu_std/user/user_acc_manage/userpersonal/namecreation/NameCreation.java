@@ -3,6 +3,8 @@ package org.isu_std.user.user_acc_manage.userpersonal.namecreation;
 import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.SystemInput;
 
+import java.util.Optional;
+
 // Class that handle the name create of the user.
 // Functional paradigm. No controller and service class.
 
@@ -15,15 +17,17 @@ public class NameCreation {
         this.nameCreationController = nameCreationController;
     }
 
-    public String getCreatedName(){
+    public Optional<String> getOptionalCreatedName(){
+        char cancellationValue = ChoiceCollection.EXIT_CODE.getValue();
+
         int count = 0;
         while(count < NAME_INFO.length){
             String input = SystemInput.getStringInput(
-                    "Enter your %s : ".formatted(NAME_INFO[count])
+                    "Enter your %s (Cancel == %c): ".formatted(NAME_INFO[count], cancellationValue)
             );
 
-            if(input.charAt(0) == ChoiceCollection.EXIT_CODE.getValue()){
-                return null;
+            if(input.charAt(0) == cancellationValue){
+                return Optional.empty();
             }
 
             if(nameCreationController.isInputAccepted(NAME_INFO[count], input)){
@@ -31,6 +35,6 @@ public class NameCreation {
             }
         }
 
-        return nameCreationController.getNameBuilder();
+        return Optional.of(nameCreationController.getName());
     }
 }

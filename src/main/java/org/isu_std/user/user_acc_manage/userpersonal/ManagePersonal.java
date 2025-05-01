@@ -29,7 +29,7 @@ public class ManagePersonal {
     protected void modifyInfoPerformed(){
         managePersonalController.printExistingInfos();
         if(isModifyConfirm()){
-
+            managePersonalController.userPersonalModification();
         }
     }
 

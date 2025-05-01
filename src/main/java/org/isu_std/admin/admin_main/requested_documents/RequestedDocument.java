@@ -31,7 +31,7 @@ public class RequestedDocument {
     private boolean setRequestedDocChoice(){
         int backLengthValue = reqDocController.getReqDocListLength() + 1;
         reqDocController.printRequestedDocs();
-        Util.printChoices("%d. Back to Menu.".formatted(backLengthValue));
+        Util.printChoice("%d. Back to Menu.".formatted(backLengthValue));
 
         while(true){
             int docChoice = SystemInput.getIntChoice("Enter Document No. you want to view : ", backLengthValue);
