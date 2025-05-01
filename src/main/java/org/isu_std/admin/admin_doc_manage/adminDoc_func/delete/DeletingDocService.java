@@ -2,7 +2,7 @@ package org.isu_std.admin.admin_doc_manage.adminDoc_func.delete;
 
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.docIdValidation.DocIDValidation;
 import org.isu_std.dao.DocManageDao;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 
 public class DeletingDocService {
     private final DocManageDao docManageRepository;

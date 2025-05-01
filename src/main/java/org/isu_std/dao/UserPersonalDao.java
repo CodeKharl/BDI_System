@@ -1,7 +1,6 @@
 package org.isu_std.dao;
 
 import org.isu_std.models.UserPersonal;
-import org.isu_std.user.user_acc_manage.userpersonal.personalmodify.ModifyPersonalManager;
 
 import java.util.Optional;
 

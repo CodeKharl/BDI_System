@@ -4,7 +4,7 @@ import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.file_setup.FileChooser;
-import org.isu_std.io.file_setup.DocxFileHandler;
+import org.isu_std.io.file_setup.DocxFileManager;
 import org.isu_std.io.file_setup.DocxMessage;
 import org.isu_std.models.UserPersonal;
 
@@ -26,7 +26,7 @@ public class DocumentFileProvider {
             }
 
             File file = optionalFile.get();
-            if(!DocxFileHandler.isDocxFile(file)){
+            if(!DocxFileManager.isDocxFile(file)){
                 Util.printMessage(DocxMessage.NOT_DOCX_FILE_MESSAGE.getMessage());
                 continue;
             }
@@ -68,7 +68,7 @@ public class DocumentFileProvider {
 
     private static boolean modificationDocumentProcess(File documentFile){
         Field[] userPersonalFields = UserPersonal.class.getDeclaredFields();
-        Set<String> placeHolders = DocxFileHandler.convertFieldsToPlaceHoldersSet(userPersonalFields);
+        Set<String> placeHolders = DocxFileManager.convertFieldsToPlaceHoldersSet(userPersonalFields);
 
         printAvailableTextPlaceHolders(placeHolders);
         FileChooser.openFile(documentFile);
@@ -82,7 +82,7 @@ public class DocumentFileProvider {
 
     private static boolean isDocumentFileAccepted(File documentFile, Set<String> placeHolders){
         try{
-            if(!DocxFileHandler.containsPlaceHoldersInParagraphs(documentFile, placeHolders)){
+            if(!DocxFileManager.containsPlaceHoldersInParagraphs(documentFile, placeHolders)){
                 Util.printMessage("File has no placeholders!");
                 return false;
             }

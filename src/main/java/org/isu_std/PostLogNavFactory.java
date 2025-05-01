@@ -26,7 +26,7 @@ public class PostLogNavFactory {
     }
 
     protected PostLoginNavigator getPostLogNav(int type, User user, Admin admin){
-        return type == ClientManage.ADMIN_VAL ?
+        return type == ClientManager.ADMIN_VAL ?
                 AdminBrgyAccFactory
                         .getInstance(daoFactory)
                         .createAdminBrgyAcc(admin) :

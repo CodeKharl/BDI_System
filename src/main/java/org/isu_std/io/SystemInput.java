@@ -12,10 +12,7 @@ public class SystemInput {
     public static void setScan(Scanner scan){
         if(SystemInput.scan == null){
             SystemInput.scan = scan;
-            return;
         }
-
-        SystemUnit.printSystemUnitMessage("The scanner is already set!");
     }
 
     public static int getIntInput(String prompt){

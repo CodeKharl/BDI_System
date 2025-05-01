@@ -4,7 +4,7 @@ import org.isu_std.dao.BarangayDao;
 import org.isu_std.dao.UserDao;
 import org.isu_std.io.collections.InputMessageCollection;
 import org.isu_std.io.Validation;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.logsign.usersignup.brgyselection.BrgySelectController;
 import org.isu_std.logsign.usersignup.brgyselection.BrgySelectService;
 import org.isu_std.logsign.usersignup.brgyselection.BrgySelection;

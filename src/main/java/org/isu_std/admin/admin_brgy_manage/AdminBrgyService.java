@@ -9,7 +9,7 @@ import org.isu_std.admin.admin_brgy_manage.registeracc.RegisterBrgyService;
 import org.isu_std.admin.admin_main.AdminUI;
 import org.isu_std.admin.admin_main.AdminUIFactory;
 import org.isu_std.dao.*;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Admin;
 import org.isu_std.models.Barangay;
 

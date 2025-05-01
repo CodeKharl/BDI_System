@@ -1,7 +1,5 @@
 package org.isu_std.user;
 
-import org.isu_std.io.Util;
-import org.isu_std.io.exception.NotFoundException;
 import org.isu_std.models.User;
 
 public class UserController {

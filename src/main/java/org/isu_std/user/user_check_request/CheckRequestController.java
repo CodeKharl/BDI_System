@@ -3,8 +3,8 @@ package org.isu_std.user.user_check_request;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 import org.isu_std.io.collections.ChoiceCollection;
-import org.isu_std.io.exception.NotFoundException;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
 import org.isu_std.user.user_check_request.user_payment_manage.PaymentManage;
@@ -14,20 +14,20 @@ import java.util.Map;
 
 public class CheckRequestController {
     private final CheckRequestService checkRequestService;
-    private final ReqInfoManager reqInfoManager;
-    private final ReqSelectManager reqSelectManager;
+    private final RequestInfoContext requestInfoContext;
+    private final RequestSelectContext requestSelectContext;
 
     public CheckRequestController(CheckRequestService checkRequestService, int barangayId, int userId){
         this.checkRequestService = checkRequestService;
-        this.reqInfoManager = checkRequestService.createReqInfoManager(barangayId, userId);
-        this.reqSelectManager = checkRequestService.createReqSelectManager();
+        this.requestInfoContext = checkRequestService.createReqInfoManager(barangayId, userId);
+        this.requestSelectContext = checkRequestService.createReqSelectManager();
     }
 
     protected boolean isExistingDocMapSet(){
         try{
             List<DocumentRequest> userDocReqList = checkRequestService
-                    .getUserDocReqMap(reqInfoManager.getUserId(), reqInfoManager.getBarangayId());
-            this.reqInfoManager.setRefWithDocIDMap(userDocReqList);
+                    .getUserDocReqMap(requestInfoContext.getUserId(), requestInfoContext.getBarangayId());
+            this.requestInfoContext.setRefWithDocIDMap(userDocReqList);
 
             setDocumentDetailMap(userDocReqList);
             return true;
@@ -40,18 +40,18 @@ public class CheckRequestController {
 
     protected void setDocumentDetailMap(List<DocumentRequest> userReqList) throws NotFoundException{
         Map<Integer, Document> documentDetailList = checkRequestService.getDocumentDetailMap(
-                reqInfoManager.getBarangayId(), userReqList
+                requestInfoContext.getBarangayId(), userReqList
         );
 
-        reqInfoManager.setDocumentDetailMap(documentDetailList);
+        requestInfoContext.setDocumentDetailMap(documentDetailList);
     }
 
     protected void printDocumentDetails(){
         Util.printSubSectionTitle("Existing Request (Document Name - Price - Requirements");
         Util.printMessage("Note! Requested document cannot be found once the admin reject it.");
 
-        List<DocumentRequest> documentRequestList = reqInfoManager.getUserDocRequestList();
-        Map<Integer, Document> documentDetailsMap = reqInfoManager.getDocumentDetailMap();
+        List<DocumentRequest> documentRequestList = requestInfoContext.getUserDocRequestList();
+        Map<Integer, Document> documentDetailsMap = requestInfoContext.getDocumentDetailMap();
 
         for(int i = 0; i < documentDetailsMap.size(); i++){
             int documentId = documentRequestList.get(i).documentId();
@@ -63,20 +63,20 @@ public class CheckRequestController {
 
     protected void setChosenDocument(int documentChoice){
         int index = documentChoice - 1;
-        DocumentRequest selectedDocRequest = reqInfoManager.getUserDocRequestList().get(index);
-        reqSelectManager.setSelectedDocRequest(selectedDocRequest);
+        DocumentRequest selectedDocRequest = requestInfoContext.getUserDocRequestList().get(index);
+        requestSelectContext.setSelectedDocRequest(selectedDocRequest);
 
         int documentId = selectedDocRequest.documentId();
         setSelectedDocument(documentId);
     }
 
     private void setSelectedDocument(int documentId){
-        Document selectedDocument = reqInfoManager.getDocumentDetailMap().get(documentId);
-        reqSelectManager.setSelectedDocument(selectedDocument);
+        Document selectedDocument = requestInfoContext.getDocumentDetailMap().get(documentId);
+        requestSelectContext.setSelectedDocument(selectedDocument);
     }
 
     protected boolean isRequestProcessFinished(int choice){
-        String referenceId = reqSelectManager.getSelectedDocRequest().referenceId();
+        String referenceId = requestSelectContext.getSelectedDocRequest().referenceId();
 
         switch (choice){
             case 1 -> checkRequestStatus(referenceId);
@@ -106,7 +106,7 @@ public class CheckRequestController {
 
         try{
             checkRequestService.deleteRequestPerformed(
-                    reqSelectManager.getSelectedDocRequest()
+                    requestSelectContext.getSelectedDocRequest()
             );
 
             return true;
@@ -132,15 +132,15 @@ public class CheckRequestController {
             return;
         }
 
-        PaymentManage paymentManage = checkRequestService.createPaymentManage(reqSelectManager);
+        PaymentManage paymentManage = checkRequestService.createPaymentManage(requestSelectContext);
         paymentManage.sectionPerformed();
     }
 
     protected String selectedDocName(){
-        return reqSelectManager.getSelectedDocument().documentName();
+        return requestSelectContext.getSelectedDocument().documentName();
     }
 
     protected int docRequestListLength(){
-        return reqInfoManager.getUserDocRequestList().size();
+        return requestInfoContext.getUserDocRequestList().size();
     }
 }

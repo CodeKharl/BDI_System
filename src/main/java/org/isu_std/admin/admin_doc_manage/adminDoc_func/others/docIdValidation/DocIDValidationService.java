@@ -2,7 +2,7 @@ package org.isu_std.admin.admin_doc_manage.adminDoc_func.others.docIdValidation;
 
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.io.collections.InputMessageCollection;
-import org.isu_std.io.exception.NotFoundException;
+import org.isu_std.io.custom_exception.NotFoundException;
 
 import java.util.Optional;
 

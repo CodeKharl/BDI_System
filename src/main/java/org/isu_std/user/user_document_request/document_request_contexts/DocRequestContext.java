@@ -1,11 +1,11 @@
-package org.isu_std.user.user_document_request.docReqManager;
+package org.isu_std.user.user_document_request.document_request_contexts;
 
 import org.isu_std.models.Document;
 
 import java.io.File;
 import java.util.List;
 
-public class DocRequestManager {
+public class DocRequestContext {
     private int documentId;
     private Document selectedDocument;
     private List<File> docRequirementFiles;

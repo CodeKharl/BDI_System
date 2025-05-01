@@ -1,6 +1,6 @@
 package org.isu_std.user.user_acc_manage.userpersonal;
 
-import org.isu_std.io.exception.NotFoundException;
+import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.models.UserPersonal;
 import org.isu_std.io.Util;
 

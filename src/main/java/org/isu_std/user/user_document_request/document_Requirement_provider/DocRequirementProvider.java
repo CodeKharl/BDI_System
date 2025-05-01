@@ -1,4 +1,4 @@
-package org.isu_std.user.user_document_request.docRequirementHandler;
+package org.isu_std.user.user_document_request.document_Requirement_provider;
 
 import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.SystemInput;
@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DocRequirement {
+public class DocRequirementProvider {
     private final DocRequirementController docRequirementController;
 
-    public DocRequirement(DocRequirementController docRequirementController){
+    public DocRequirementProvider(DocRequirementController docRequirementController){
         this.docRequirementController = docRequirementController;
     }
 

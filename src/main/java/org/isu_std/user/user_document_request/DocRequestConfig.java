@@ -3,8 +3,6 @@ package org.isu_std.user.user_document_request;
 public enum DocRequestConfig {
     DOC_REQUIREMENT_PATH_DIVIDER("::"),
 
-    NO_REQUIREMENT_VALUE("No Requirement"),
-
     CONFIRM_VALUE('R'), CANCEL_VALUE('X');
 
     private char cValue;

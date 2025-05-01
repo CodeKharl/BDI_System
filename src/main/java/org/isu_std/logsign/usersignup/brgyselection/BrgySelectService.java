@@ -1,7 +1,7 @@
 package org.isu_std.logsign.usersignup.brgyselection;
 
 import org.isu_std.dao.BarangayDao;
-import org.isu_std.io.exception.NotFoundException;
+import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.models.Barangay;
 import org.isu_std.models.modelbuilders.BarangayBuilder;
 import org.isu_std.models.modelbuilders.BuilderFactory;

@@ -5,8 +5,8 @@ import org.isu_std.admin.admin_main.requested_documents.req_approve.RequestAppro
 import org.isu_std.admin.admin_main.req_files_view.RequirementFilesView;
 import org.isu_std.admin.admin_main.requested_documents.req_decline.RequestDecline;
 import org.isu_std.io.Util;
-import org.isu_std.io.exception.NotFoundException;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Barangay;
 import org.isu_std.models.DocumentRequest;
 

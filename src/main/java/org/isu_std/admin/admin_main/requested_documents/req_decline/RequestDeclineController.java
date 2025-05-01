@@ -1,7 +1,7 @@
 package org.isu_std.admin.admin_main.requested_documents.req_decline;
 
 import org.isu_std.io.Util;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.DocumentRequest;
 
 public class RequestDeclineController {

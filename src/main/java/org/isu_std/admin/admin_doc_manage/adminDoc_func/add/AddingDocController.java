@@ -1,7 +1,7 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.add;
 
 import org.isu_std.io.Util;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.modelbuilders.DocumentBuilder;
 
 import java.io.File;

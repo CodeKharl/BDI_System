@@ -3,9 +3,8 @@ package org.isu_std.user.user_check_request;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.dao.PaymentDao;
-import org.isu_std.io.collections.InputMessageCollection;
-import org.isu_std.io.exception.NotFoundException;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
 import org.isu_std.user.user_check_request.user_payment_manage.PaymentManage;
@@ -25,12 +24,12 @@ public class CheckRequestService {
         this.paymentDao = paymentDao;
     }
 
-    protected ReqInfoManager createReqInfoManager(int barangayId, int userId){
-        return new ReqInfoManager(barangayId, userId);
+    protected RequestInfoContext createReqInfoManager(int barangayId, int userId){
+        return new RequestInfoContext(barangayId, userId);
     }
 
-    protected ReqSelectManager createReqSelectManager(){
-        return new ReqSelectManager();
+    protected RequestSelectContext createReqSelectManager(){
+        return new RequestSelectContext();
     }
 
     protected List<DocumentRequest> getUserDocReqMap(int userId, int barangayId){
@@ -73,10 +72,10 @@ public class CheckRequestService {
         }
     }
 
-    protected PaymentManage createPaymentManage(ReqSelectManager reqSelectManager){
+    protected PaymentManage createPaymentManage(RequestSelectContext requestSelectContext){
         PaymentManageService paymentManageService = new PaymentManageService(paymentDao, documentDao);
         PaymentManageController paymentManageController = new PaymentManageController(
-                paymentManageService, reqSelectManager
+                paymentManageService, requestSelectContext
         );
 
         return new PaymentManage(paymentManageController);

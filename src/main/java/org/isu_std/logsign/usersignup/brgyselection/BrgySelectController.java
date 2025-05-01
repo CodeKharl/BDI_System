@@ -1,7 +1,7 @@
 package org.isu_std.logsign.usersignup.brgyselection;
 
 import org.isu_std.io.Util;
-import org.isu_std.io.exception.NotFoundException;
+import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.models.modelbuilders.BarangayBuilder;
 
 public class BrgySelectController {

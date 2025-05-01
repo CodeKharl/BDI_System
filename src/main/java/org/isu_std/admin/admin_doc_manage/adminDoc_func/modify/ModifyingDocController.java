@@ -1,7 +1,7 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.modify;
 
 import org.isu_std.io.Util;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.file_setup.DocxMessage;
 
 import java.io.File;

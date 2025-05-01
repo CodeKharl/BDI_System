@@ -1,7 +1,7 @@
 package org.isu_std.logsign;
 
 import org.isu_std.ClientContext;
-import org.isu_std.ClientManage;
+import org.isu_std.ClientManager;
 import org.isu_std.dao.AdminDao;
 import org.isu_std.dao.BarangayDao;
 import org.isu_std.dao.UserDao;
@@ -42,7 +42,7 @@ public final class LogSignFactory {
     }
 
     public Login createLoginInsType(int type, ClientContext clientContext){
-        return type == ClientManage.ADMIN_VAL ?
+        return type == ClientManager.ADMIN_VAL ?
                 new AdminLogin(
                         new AdminLoginController(
                                 AdminLoginService.getInstance(adminDao),
@@ -58,7 +58,7 @@ public final class LogSignFactory {
     }
 
     public Signup createSignupInsType(int type){
-        return type == ClientManage.ADMIN_VAL ?
+        return type == ClientManager.ADMIN_VAL ?
                 new AdminSignup(
                         new AdminSignController(
                                 AdminSignService.getInstance(adminDao)

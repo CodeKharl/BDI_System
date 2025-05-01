@@ -1,27 +1,27 @@
 package org.isu_std.user.user_check_request.user_payment_manage;
 
 import org.isu_std.io.Util;
-import org.isu_std.io.exception.NotFoundException;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Payment;
 import org.isu_std.models.modelbuilders.PaymentBuilder;
-import org.isu_std.user.user_check_request.ReqSelectManager;
+import org.isu_std.user.user_check_request.RequestSelectContext;
 
 import java.util.Optional;
 
 public class PaymentManageController {
     private final PaymentManageService paymentManageService;
-    private final ReqSelectManager reqSelectManager;
+    private final RequestSelectContext requestSelectContext;
 
     private final PaymentBuilder paymentBuilder;
-    public PaymentManageController(PaymentManageService paymentManageService, ReqSelectManager reqSelectManager){
+    public PaymentManageController(PaymentManageService paymentManageService, RequestSelectContext requestSelectContext){
         this.paymentManageService = paymentManageService;
-        this.reqSelectManager = reqSelectManager;
+        this.requestSelectContext = requestSelectContext;
         this.paymentBuilder = paymentManageService.getPaymentBuilder();
     }
 
     protected boolean isPaymentAlreadyExist(){
-        String referenceId = reqSelectManager.getSelectedDocRequest().referenceId();
+        String referenceId = requestSelectContext.getSelectedDocRequest().referenceId();
         Optional<Payment> optionalPayment = paymentManageService.getOptionalPaymentInfo(referenceId);
 
         if(optionalPayment.isPresent()){
@@ -34,8 +34,8 @@ public class PaymentManageController {
 
     protected boolean settingUpPayment(String input){
         try{
-            int barangayId = reqSelectManager.getSelectedDocRequest().barangayId();
-            int documentId = reqSelectManager.getSelectedDocRequest().documentId();
+            int barangayId = requestSelectContext.getSelectedDocRequest().barangayId();
+            int documentId = requestSelectContext.getSelectedDocRequest().documentId();
 
             double documentCost = paymentManageService.getResultedDocumentPrice(barangayId, documentId);
             String paymentDateTime = paymentManageService.getPaymentTime();
@@ -56,7 +56,7 @@ public class PaymentManageController {
 
     protected boolean isAddPaymentSuccess(){
         try{
-            String referenceId = reqSelectManager.getSelectedDocRequest().referenceId();
+            String referenceId = requestSelectContext.getSelectedDocRequest().referenceId();
             Payment payment = paymentBuilder.build();
             paymentManageService.addPaymentPerformed(referenceId, payment);
 
@@ -69,7 +69,7 @@ public class PaymentManageController {
     }
 
     private String getReferenceId(){
-        return "REFERENCE ID : " + reqSelectManager.getSelectedDocRequest().referenceId();
+        return "REFERENCE ID : " + requestSelectContext.getSelectedDocRequest().referenceId();
     }
 
     protected void printPaymentDetails(){

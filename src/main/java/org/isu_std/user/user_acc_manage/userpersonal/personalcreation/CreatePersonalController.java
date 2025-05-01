@@ -1,13 +1,11 @@
 package org.isu_std.user.user_acc_manage.userpersonal.personalcreation;
 
 import org.isu_std.io.Util;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.UserPersonal;
 import org.isu_std.models.modelbuilders.UserPersonalBuilder;
 import org.isu_std.user.user_acc_manage.userpersonal.ManagePersonalService;
 import org.isu_std.user.user_acc_manage.userpersonal.PersonalInfoSetter;
-
-import java.util.Optional;
 
 public class CreatePersonalController {
     private final ManagePersonalService managePersonalService;

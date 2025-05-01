@@ -1,21 +1,20 @@
 package org.isu_std.user.user_acc_manage.userpersonal.personalmodify;
 
 import org.isu_std.io.Util;
-import org.isu_std.io.exception.OperationFailedException;
-import org.isu_std.models.UserPersonal;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.user.user_acc_manage.userpersonal.ManagePersonalService;
 import org.isu_std.user.user_acc_manage.userpersonal.PersonalInfoSetter;
 
 public class ModifyPersonalController {
     private final ManagePersonalService managePersonalService;
-    private final ModifyPersonalManager modifyPersonalManager;
+    private final ModifyPersonalContext modifyPersonalContext;
     private final PersonalInfoSetter personalInfoSetter;
 
     public ModifyPersonalController(ManagePersonalService managePersonalService, int userId){
         this.managePersonalService = managePersonalService;
-        this.modifyPersonalManager = managePersonalService.createPersonalModifierManager(userId);
+        this.modifyPersonalContext = managePersonalService.createPersonalModifierManager(userId);
         this.personalInfoSetter = managePersonalService.createPersonalChecker(
-                this.modifyPersonalManager.getUserPersonalBuilder()
+                this.modifyPersonalContext.getUserPersonalBuilder()
         );
     }
 
@@ -29,11 +28,11 @@ public class ModifyPersonalController {
 
     protected void setDetailToModify(int choice){
         String personalDetail = personalDetails()[choice - 1];
-        modifyPersonalManager.setChosenDetail(personalDetail);
+        modifyPersonalContext.setChosenDetail(personalDetail);
     }
 
     protected String getChosenDetail(){
-        return modifyPersonalManager.getChosenDetail();
+        return modifyPersonalContext.getChosenDetail();
     }
 
     protected boolean isNameSet(){
@@ -62,7 +61,7 @@ public class ModifyPersonalController {
     protected boolean modifyPerformed(){
         try {
             managePersonalService
-                    .saveModifiedPersonalInfo(this.modifyPersonalManager);
+                    .saveModifiedPersonalInfo(this.modifyPersonalContext);
 
             return true;
         }catch (OperationFailedException e){

@@ -3,8 +3,8 @@ package org.isu_std.user.user_acc_manage.userpersonal;
 import org.isu_std.dao.UserPersonalDao;
 import org.isu_std.io.Validation;
 import org.isu_std.io.collections.InputMessageCollection;
-import org.isu_std.io.exception.NotFoundException;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.UserPersonal;
 import org.isu_std.models.modelbuilders.BuilderFactory;
 import org.isu_std.models.modelbuilders.UserPersonalBuilder;
@@ -14,7 +14,7 @@ import org.isu_std.user.user_acc_manage.userpersonal.personalcreation.CreatePers
 import org.isu_std.user.user_acc_manage.userpersonal.personalcreation.CreatePersonalController;
 import org.isu_std.user.user_acc_manage.userpersonal.personalmodify.ModifyPersonal;
 import org.isu_std.user.user_acc_manage.userpersonal.personalmodify.ModifyPersonalController;
-import org.isu_std.user.user_acc_manage.userpersonal.personalmodify.ModifyPersonalManager;
+import org.isu_std.user.user_acc_manage.userpersonal.personalmodify.ModifyPersonalContext;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -53,8 +53,8 @@ public class ManagePersonalService {
         return NameCreationFactory.createNameCreation();
     }
 
-    public ModifyPersonalManager createPersonalModifierManager(int userId){
-        return new ModifyPersonalManager(
+    public ModifyPersonalContext createPersonalModifierManager(int userId){
+        return new ModifyPersonalContext(
                 userId, BuilderFactory.createUserPersonalBuilder()
         );
     }
@@ -147,10 +147,10 @@ public class ManagePersonalService {
         }
     }
 
-    public void saveModifiedPersonalInfo(ModifyPersonalManager modifyPersonalManager){
-        int userId  = modifyPersonalManager.getUserId();
-        String chosenDetail = modifyPersonalManager.getChosenDetail();
-        UserPersonal userPersonal = modifyPersonalManager.getUserPersonalBuilder().build();
+    public void saveModifiedPersonalInfo(ModifyPersonalContext modifyPersonalContext){
+        int userId  = modifyPersonalContext.getUserId();
+        String chosenDetail = modifyPersonalContext.getChosenDetail();
+        UserPersonal userPersonal = modifyPersonalContext.getUserPersonalBuilder().build();
 
         if(!userPersonalDao.modifyUserPersonal(userId, chosenDetail, userPersonal)){
             throw new OperationFailedException(

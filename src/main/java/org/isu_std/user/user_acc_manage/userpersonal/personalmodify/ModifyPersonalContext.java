@@ -2,13 +2,13 @@ package org.isu_std.user.user_acc_manage.userpersonal.personalmodify;
 
 import org.isu_std.models.modelbuilders.UserPersonalBuilder;
 
-public class ModifyPersonalManager {
+public class ModifyPersonalContext {
     private final int userId;
     private final UserPersonalBuilder userPersonalBuilder;
 
     private String chosenDetail;
 
-    public ModifyPersonalManager(int userId, UserPersonalBuilder userPersonalBuilder){
+    public ModifyPersonalContext(int userId, UserPersonalBuilder userPersonalBuilder){
         this.userId = userId;
         this.userPersonalBuilder = userPersonalBuilder;
     }

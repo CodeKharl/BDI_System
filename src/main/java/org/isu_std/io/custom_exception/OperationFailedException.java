@@ -1,4 +1,4 @@
-package org.isu_std.io.exception;
+package org.isu_std.io.custom_exception;
 
 public class OperationFailedException extends RuntimeException {
     public OperationFailedException(String message) {

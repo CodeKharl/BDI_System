@@ -4,7 +4,7 @@ import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.dao.PaymentDao;
 import org.isu_std.dao.UserPersonalDao;
 import org.isu_std.io.Symbols;
-import org.isu_std.io.exception.NotFoundException;
+import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.models.User;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.models.UserPersonal;
@@ -13,7 +13,7 @@ import org.isu_std.user.user_acc_manage.UserManageAccFactory;
 import org.isu_std.user.user_check_request.CheckRequest;
 import org.isu_std.user.user_check_request.CheckRequestFactory;
 import org.isu_std.user.user_document_request.UserDocumentRequest;
-import org.isu_std.user.user_document_request.UserDocReqFactory;
+import org.isu_std.user.user_document_request.UserDocumentReqFactory;
 
 import java.util.Optional;
 
@@ -56,8 +56,8 @@ public class UserService {
     }
 
     private UserDocumentRequest getUserDocReq(User user) throws NotFoundException{
-        UserDocReqFactory userDocReqFactory = UserDocReqFactory.getInstance(documentDao, documentRequestDao);
-        return userDocReqFactory.createUserDocReq(user, getUserPersonal(user.userId()));
+        UserDocumentReqFactory userDocumentReqFactory = UserDocumentReqFactory.getInstance(documentDao, documentRequestDao);
+        return userDocumentReqFactory.createUserDocReq(user, getUserPersonal(user.userId()));
     }
 
     private UserPersonal getUserPersonal(int userId){

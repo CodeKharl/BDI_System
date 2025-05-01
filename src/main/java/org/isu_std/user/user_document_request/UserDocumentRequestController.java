@@ -1,12 +1,12 @@
 package org.isu_std.user.user_document_request;
 
 import org.isu_std.io.Util;
-import org.isu_std.io.exception.NotFoundException;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.DocumentRequest;
-import org.isu_std.user.user_document_request.docReqManager.DocInfoManager;
-import org.isu_std.user.user_document_request.docReqManager.DocRequestManager;
-import org.isu_std.user.user_document_request.docReqManager.UserInfoManager;
+import org.isu_std.user.user_document_request.document_request_contexts.DocInfoContext;
+import org.isu_std.user.user_document_request.document_request_contexts.DocRequestContext;
+import org.isu_std.user.user_document_request.document_request_contexts.UserInfoContext;
 
 import java.io.File;
 import java.util.List;
@@ -14,21 +14,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class UserDocumentRequestController {
     private final UserDocumentRequestService userDocumentRequestService;
-    private final UserInfoManager userInfoManager;
+    private final UserInfoContext userInfoContext;
 
-    private final DocRequestManager docRequestManager;
-    private DocInfoManager docInfoManager;
+    private final DocRequestContext docRequestContext;
+    private DocInfoContext docInfoContext;
 
-    protected UserDocumentRequestController(UserDocumentRequestService userDocumentRequestService, UserInfoManager userInfoManager){
+    protected UserDocumentRequestController(UserDocumentRequestService userDocumentRequestService, UserInfoContext userInfoContext){
         this.userDocumentRequestService = userDocumentRequestService;
-        this.userInfoManager = userInfoManager;
-        this.docRequestManager = userDocumentRequestService.createDocRequestMod();
+        this.userInfoContext = userInfoContext;
+        this.docRequestContext = userDocumentRequestService.createDocRequestMod();
     }
 
     protected boolean setBrgyDocs(){
         try {
-            docInfoManager = userDocumentRequestService
-                    .createUserReqModel(userInfoManager.user().barangayId());
+            docInfoContext = userDocumentRequestService
+                    .createUserReqModel(userInfoContext.user().barangayId());
 
             return true;
         } catch (NotFoundException e){
@@ -42,7 +42,7 @@ public class UserDocumentRequestController {
         Util.printMessage("Available Documents : Document Name - Price - Requirements");
 
         AtomicInteger count = new AtomicInteger();
-        docInfoManager.getBarangayDocumentsMap()
+        docInfoContext.getBarangayDocumentsMap()
                 .forEach((_,document) -> {
                     Util.printChoice(
                             "%d. %s".formatted(count.get() + 1, document.getDetails())
@@ -53,22 +53,22 @@ public class UserDocumentRequestController {
     }
 
     protected void setChoiceDocument(int choice){
-        Integer[] documentKeys = docInfoManager.getDocumentKeys();
+        Integer[] documentKeys = docInfoContext.getDocumentKeys();
         int documentId = documentKeys[choice - 1];
 
-        docRequestManager.setDocRequest(
+        docRequestContext.setDocRequest(
                 documentId,
-                docInfoManager.getBarangayDocumentsMap().get(documentId)
+                docInfoContext.getBarangayDocumentsMap().get(documentId)
         );
     }
 
     protected String getDocumentName(){
-        return docRequestManager.getDocument().documentName();
+        return docRequestContext.getDocument().documentName();
     }
 
     protected boolean isDocumentChoiceAccepted(int choice){
         try{
-            int brgyDocMapLength = docInfoManager.getBarangayDocumentsMap().size();
+            int brgyDocMapLength = docInfoContext.getBarangayDocumentsMap().size();
             userDocumentRequestService.checkDocumentChoice(brgyDocMapLength, choice);
 
             return true;
@@ -80,13 +80,13 @@ public class UserDocumentRequestController {
     }
 
     protected boolean setDocUserRequirements(){
-        String[] requirementsInfo = docRequestManager.getDocument().getRequirementsArr();
+        String[] requirementsInfo = docRequestContext.getDocument().getRequirementsArr();
         List<File> requirementFiles = userDocumentRequestService
                 .createDocRequirement(requirementsInfo)
                 .getUserDocReqList();
 
         if(!requirementFiles.isEmpty()){
-            docRequestManager.setRequirements(requirementFiles);
+            docRequestContext.setRequirements(requirementFiles);
             return true;
         }
 
@@ -94,7 +94,7 @@ public class UserDocumentRequestController {
     }
 
     protected void printDocRequirementsPath(){
-        List<File> docFileList = docRequestManager.getDocRequirementFiles();
+        List<File> docFileList = docRequestContext.getDocRequirementFiles();
 
         Util.printSubSectionTitle("Selected Requirement Files");
         docFileList.forEach(file -> Util.printInformation(file.getName()));
@@ -102,19 +102,19 @@ public class UserDocumentRequestController {
 
     protected void printAllInformations(){
         Util.printSectionTitle("Information Confirmation");
-        docRequestManager.getDocument().printDetails();
-        userInfoManager.userPersonal().printPersonalStats();
+        docRequestContext.getDocument().printDetails();
+        userInfoContext.userPersonal().printPersonalStats();
         printDocRequirementsPath();
     }
 
     protected boolean isAddDocRequestSuccess(){
         try{
             DocumentRequest documentRequest = userDocumentRequestService.createDocReq(
-                    userDocumentRequestService.createReferenceId(docRequestManager.getDocumentId()),
-                    userInfoManager.user().userId(),
-                    userInfoManager.user().barangayId(),
-                    docRequestManager.getDocumentId(),
-                    docRequestManager.getDocRequirementFiles()
+                    userDocumentRequestService.createReferenceId(docRequestContext.getDocumentId()),
+                    userInfoContext.user().userId(),
+                    userInfoContext.user().barangayId(),
+                    docRequestContext.getDocumentId(),
+                    docRequestContext.getDocRequirementFiles()
             );
 
             userDocumentRequestService.checkDocRequestIfUnique(documentRequest);

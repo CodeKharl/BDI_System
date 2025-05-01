@@ -1,7 +1,7 @@
 package org.isu_std.admin.admin_main.approved_documents.approved_documents_export;
 
 import org.isu_std.admin.admin_main.RequestDocumentContext;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.folder_setup.FolderChooser;
 
 import java.io.File;

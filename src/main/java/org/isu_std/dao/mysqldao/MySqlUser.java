@@ -6,7 +6,6 @@ import org.isu_std.database.MySQLDBConnection;
 import org.isu_std.io.SystemLogger;
 import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
-import org.isu_std.user.user_acc_manage.userpersonal.personalmodify.ModifyPersonalManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -14,8 +14,8 @@ public class SystemController {
     protected boolean isSystemRunning(int choice){
         // Handles the condition based on the given input by the client.
         switch (choice) {
-            case 1 -> startLogin(ClientManage.getClientType());
-            case 2 -> startSignup(ClientManage.getClientType());
+            case 1 -> startLogin(ClientManager.getClientType());
+            case 2 -> startSignup(ClientManager.getClientType());
             case 3 -> {} // About the system
             case 4 -> {
                 Util.printMessage("System exits...");

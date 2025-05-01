@@ -3,7 +3,7 @@ package org.isu_std.admin.admin_doc_manage.adminDoc_func.add;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentFileProvider;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentConfig;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.RequirementProvider;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.io.collections.InputMessageCollection;

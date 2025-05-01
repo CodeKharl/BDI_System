@@ -6,14 +6,14 @@ import org.isu_std.models.DocumentRequest;
 import java.util.List;
 import java.util.Map;
 
-public class ReqInfoManager {
+public class RequestInfoContext {
     private final int barangayId;
     private final int userId;
 
     private List<DocumentRequest> userDocRequestMap;
     private Map<Integer, Document> documentDetailMap;
 
-    public ReqInfoManager(int barangayId, int userId){
+    public RequestInfoContext(int barangayId, int userId){
         this.barangayId = barangayId;
         this.userId = userId;
     }

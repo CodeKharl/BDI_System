@@ -12,6 +12,7 @@ public final class Validation {
         Regex(String regexType){
             this.regexType = regexType;
         }
+
         private String getRegexType(){
             return this.regexType;
         }

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FolderChooserTest {
+class FolderManagerChooserTest {
     @Test
     void pathMustBeCorrect(){
         Optional<Path> optionalPath = FolderChooser.getPath("Choose Document File Path");

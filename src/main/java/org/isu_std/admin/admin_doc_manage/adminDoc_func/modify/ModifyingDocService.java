@@ -7,9 +7,9 @@ import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentConfig;
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.io.collections.InputMessageCollection;
 import org.isu_std.io.Validation;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.file_setup.FileChooser;
-import org.isu_std.io.file_setup.DocxFileHandler;
+import org.isu_std.io.file_setup.DocxFileManager;
 import org.isu_std.models.modelbuilders.BuilderFactory;
 
 import java.io.File;
@@ -93,7 +93,7 @@ public class ModifyingDocService {
 
     protected Optional<File> getOptionalDocumentFile(){
         Optional<File> optionalFile = FileChooser.getOptionalDocFile("Document File");
-        optionalFile.ifPresent(DocxFileHandler::docxFileOrThrow);
+        optionalFile.ifPresent(DocxFileManager::docxFileOrThrow);
 
         return optionalFile;
     }

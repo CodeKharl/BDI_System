@@ -3,7 +3,7 @@ package org.isu_std.io.file_setup;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -11,7 +11,7 @@ import java.util.*;
 
 // Class that deals the docx files.
 
-public class DocxFileHandler {
+public class DocxFileManager {
     private final static String FILE_FORMAT = ".docx";
 
     public static boolean isDocxFile(File file){

@@ -1,10 +1,7 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.others.docIdValidation;
 
 import org.isu_std.io.Util;
-import org.isu_std.io.collections.ChoiceCollection;
-import org.isu_std.io.exception.NotFoundException;
-
-import java.util.concurrent.CancellationException;
+import org.isu_std.io.custom_exception.NotFoundException;
 
 public class DocIDValidationController {
     private final DocIDValidationService docIdValidService;

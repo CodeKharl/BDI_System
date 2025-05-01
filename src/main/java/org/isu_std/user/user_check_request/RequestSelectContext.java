@@ -3,11 +3,11 @@ package org.isu_std.user.user_check_request;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
 
-public class ReqSelectManager {
+public class RequestSelectContext {
     private DocumentRequest selectedDocRequest;
     private Document selectedDocument;
 
-    protected ReqSelectManager(){}
+    protected RequestSelectContext(){}
 
     public void setSelectedDocRequest(DocumentRequest selectedDocRequest){
         this.selectedDocRequest = selectedDocRequest;

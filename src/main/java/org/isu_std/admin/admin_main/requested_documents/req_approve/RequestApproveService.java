@@ -3,9 +3,9 @@ package org.isu_std.admin.admin_main.requested_documents.req_approve;
 import org.isu_std.admin.admin_main.RequestDocumentContext;
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.io.Util;
-import org.isu_std.io.exception.OperationFailedException;
-import org.isu_std.io.file_setup.DocxFileHandler;
-import org.isu_std.io.folder_setup.Folder;
+import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.file_setup.DocxFileManager;
+import org.isu_std.io.folder_setup.FolderManager;
 import org.isu_std.io.folder_setup.FolderConfig;
 import org.isu_std.models.UserPersonal;
 
@@ -34,7 +34,7 @@ public class RequestApproveService {
 
     protected boolean createOutputDocumentFile(RequestDocumentContext requestDocumentContext) throws IOException, OperationFailedException {
         String filePath = FolderConfig.DOC_APPROVE_PATH.getPath();
-        Folder.setFileFolder(filePath);
+        FolderManager.setFileFolder(filePath);
 
         File outputFile = copyDefaultFile(requestDocumentContext, filePath);
         if (outputFile == null) {
@@ -43,7 +43,7 @@ public class RequestApproveService {
 
         UserPersonal userPersonal = requestDocumentContext.userPersonal();
         Map<String, String> informations = getInformationsMap(userPersonal);
-        DocxFileHandler.editDocxPlaceHolders(outputFile, informations);
+        DocxFileManager.editDocxPlaceHolders(outputFile, informations);
 
         return true;
     }

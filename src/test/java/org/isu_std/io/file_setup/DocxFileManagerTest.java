@@ -12,7 +12,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DocxFileHandlerTest {
+class DocxFileManagerTest {
     @Test
     void editDocxPlaceHolders() throws IOException {
         HashMap<String, String> hashMap = new HashMap<>();
@@ -20,7 +20,7 @@ class DocxFileHandlerTest {
         hashMap.put("{{sex}}", "Male");
         hashMap.put("{{civilStatus}}", "Single");
         File file = new File("D:\\Downloads\\Barangay_Clearance_Form_V2.docx");
-        DocxFileHandler.editDocxPlaceHolders(file, hashMap);
+        DocxFileManager.editDocxPlaceHolders(file, hashMap);
     }
 
     @Test
@@ -34,7 +34,7 @@ class DocxFileHandlerTest {
             placeHolders.add("{{%s}}".formatted(holder.getName()));
         }
 
-        boolean isValid = DocxFileHandler.containsPlaceHoldersInParagraphs(file, placeHolders);
+        boolean isValid = DocxFileManager.containsPlaceHoldersInParagraphs(file, placeHolders);
         assertTrue(isValid);
     }
 }

@@ -6,7 +6,7 @@ import org.isu_std.io.Util;
 // Functional Paradigm. No structure.
 // Use for getting the type of client.
 
-public class ClientManage {
+public class ClientManager {
     public final static int ADMIN_VAL = 1;
     public final static int USER_VAL = 2;
 

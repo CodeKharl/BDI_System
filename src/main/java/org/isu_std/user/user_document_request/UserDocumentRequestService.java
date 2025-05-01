@@ -2,16 +2,16 @@ package org.isu_std.user.user_document_request;
 
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.DocumentRequestDao;
-import org.isu_std.io.exception.NotFoundException;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.io.collections.InputMessageCollection;
 import org.isu_std.models.DocumentRequest;
-import org.isu_std.user.user_document_request.docReqManager.DocInfoManager;
-import org.isu_std.user.user_document_request.docReqManager.DocRequestManager;
-import org.isu_std.user.user_document_request.docRequirementHandler.DocRequirement;
-import org.isu_std.user.user_document_request.docRequirementHandler.DocRequirementController;
-import org.isu_std.user.user_document_request.docRequirementHandler.DocRequirementService;
+import org.isu_std.user.user_document_request.document_request_contexts.DocInfoContext;
+import org.isu_std.user.user_document_request.document_request_contexts.DocRequestContext;
+import org.isu_std.user.user_document_request.document_Requirement_provider.DocRequirementProvider;
+import org.isu_std.user.user_document_request.document_Requirement_provider.DocRequirementController;
+import org.isu_std.user.user_document_request.document_Requirement_provider.DocRequirementService;
 import org.isu_std.user.user_document_request.reference_generator.ReferenceConfig;
 import org.isu_std.user.user_document_request.reference_generator.ReferenceGenerator;
 
@@ -28,8 +28,8 @@ public class UserDocumentRequestService {
         this.documentRequestDao = documentRequestDao;
     }
 
-    protected DocInfoManager createUserReqModel(int barangayId) throws NotFoundException{
-        return new DocInfoManager(getBrgyDocsMap(barangayId));
+    protected DocInfoContext createUserReqModel(int barangayId) throws NotFoundException{
+        return new DocInfoContext(getBrgyDocsMap(barangayId));
     }
 
     private Map<Integer, Document> getBrgyDocsMap(int barangayId){
@@ -44,8 +44,8 @@ public class UserDocumentRequestService {
         return docsHolder;
     }
 
-    protected DocRequestManager createDocRequestMod(){
-        return new DocRequestManager();
+    protected DocRequestContext createDocRequestMod(){
+        return new DocRequestContext();
     }
 
     protected void checkDocumentChoice(int brgyDocMapLength, int choice){
@@ -56,8 +56,8 @@ public class UserDocumentRequestService {
         }
     }
 
-    protected DocRequirement createDocRequirement(String[] requirementsInfo){
-        return new DocRequirement(
+    protected DocRequirementProvider createDocRequirement(String[] requirementsInfo){
+        return new DocRequirementProvider(
                 new DocRequirementController(
                         new DocRequirementService(),
                         requirementsInfo

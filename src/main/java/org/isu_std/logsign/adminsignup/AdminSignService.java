@@ -3,7 +3,7 @@ package org.isu_std.logsign.adminsignup;
 import org.isu_std.dao.AdminDao;
 import org.isu_std.io.collections.InputMessageCollection;
 import org.isu_std.io.Validation;
-import org.isu_std.io.exception.OperationFailedException;
+import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Admin;
 import org.isu_std.models.modelbuilders.AdminBuilder;
 import org.isu_std.models.modelbuilders.BuilderFactory;

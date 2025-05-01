@@ -2,7 +2,7 @@ package org.isu_std.dao.mysqldao;
 
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.database.MySQLDBConnection;
-import org.isu_std.io.folder_setup.Folder;
+import org.isu_std.io.folder_setup.FolderManager;
 import org.isu_std.io.folder_setup.FolderConfig;
 import org.isu_std.io.SystemLogger;
 import org.isu_std.models.DocumentRequest;
@@ -138,7 +138,7 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
         String path = FolderConfig.DOC_REQUEST_PATH.getPath();
 
         // Setting the folder that stores the requirement files.
-        Folder.setFileFolder(path);
+        FolderManager.setFileFolder(path);
 
         try(PreparedStatement preStatement = connection.prepareStatement(query)){
             preStatement.setString(1, referenceId);

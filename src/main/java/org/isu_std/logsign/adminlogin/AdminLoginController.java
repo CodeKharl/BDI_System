@@ -2,7 +2,7 @@ package org.isu_std.logsign.adminlogin;
 
 import org.isu_std.ClientContext;
 import org.isu_std.io.Util;
-import org.isu_std.io.exception.NotFoundException;
+import org.isu_std.io.custom_exception.NotFoundException;
 
 public class AdminLoginController {
     private final AdminLoginService adminLoginService;

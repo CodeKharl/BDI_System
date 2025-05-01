@@ -5,7 +5,7 @@ import org.isu_std.dao.DocManageDao;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.database.MySQLDBConnection;
 import org.isu_std.io.SystemLogger;
-import org.isu_std.io.folder_setup.Folder;
+import org.isu_std.io.folder_setup.FolderManager;
 import org.isu_std.io.folder_setup.FolderConfig;
 import org.isu_std.models.Document;
 import org.isu_std.models.modelbuilders.DocumentBuilder;
@@ -219,7 +219,7 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
 
     private File getResultedFile(String fileName, InputStream inputStream){
         String path = FolderConfig.DOC_DOCUMENT_PATH.getPath();
-        Folder.setFileFolder(path);
+        FolderManager.setFileFolder(path);
 
         File file = new File(path + File.separator + fileName);
         if(file.exists()){
