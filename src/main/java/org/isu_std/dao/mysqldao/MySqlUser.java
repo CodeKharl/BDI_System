@@ -4,6 +4,7 @@ import org.isu_std.dao.UserDao;
 import org.isu_std.dao.UserPersonalDao;
 import org.isu_std.database.MySQLDBConnection;
 import org.isu_std.io.SystemLogger;
+import org.isu_std.io.dynamic_enum_handler.CharValue;
 import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
 
@@ -78,8 +79,7 @@ public class MySqlUser implements UserDao, UserPersonalDao {
                 resultSet.getInt(1),
                 resultSet.getString(2),
                 resultSet.getString(3),
-                resultSet.getInt(4),
-                resultSet.getDouble(5)
+                resultSet.getInt(4)
         );
     }
 
@@ -167,16 +167,20 @@ public class MySqlUser implements UserDao, UserPersonalDao {
             PreparedStatement preStatement, int userId, UserPersonal userPersonal
     ) throws SQLException{
         Object[] values = {
-                userPersonal.name(), String.valueOf(userPersonal.sex()),
+                userPersonal.name(), userPersonal.sex(),
                 userPersonal.age(), userPersonal.birthDate(),
                 userPersonal.civilStatus(), userPersonal.nationality(),
                 userPersonal.phoneNumber()
         };
 
         for(Object value : values){
-            if(value != null){
-                preStatement.setObject(1, value);
-                break;
+            if(value == null){
+                continue;
+            }
+
+            String strValue = value.toString().trim();
+            if(!strValue.isBlank() && !strValue.equals("0")){
+                preStatement.setString(1, strValue);
             }
         }
 

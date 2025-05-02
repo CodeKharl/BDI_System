@@ -3,6 +3,8 @@ package org.isu_std.models.modelbuilders;
 import org.isu_std.io.Util;
 import org.isu_std.models.UserPersonal;
 
+import java.lang.reflect.Field;
+
 public class UserPersonalBuilder {
     private String name;
     private char sex;
@@ -103,5 +105,15 @@ public class UserPersonalBuilder {
         for (String info : infos) {
             Util.printInformation(info);
         }
+    }
+
+    public void resetValues(){
+        this.name = null;
+        this.sex = '\u0000';
+        this.age = 0;
+        this.birthDate = null;
+        this.civilStatus = null;
+        this.nationality = null;
+        this.phoneNumber = null;
     }
 }

@@ -34,8 +34,8 @@ public class CreatePersonal {
     }
 
     private boolean setOtherInformations(){
-        String[] informations = (String[]) PersonalInfoConfig.PERSONAL_INFORMATIONS.getValue();
-        String[] specifications = (String[]) PersonalInfoConfig.PERSONAL_SPECIFICATION.getValue();
+        String[] informations = createPersonalController.getPersonalDetails();
+        String[] specifications = createPersonalController.getPersonalDetailSpecs();
 
         char cancellationValue = ChoiceCollection.EXIT_CODE.getValue();
 

@@ -8,6 +8,7 @@ public enum InputMessageCollection {
     INPUT_LETTERS_ONLY("Letters are only allowed to input! Please try again."),
     INPUT_INVALID("Invalid %s! Please enter again.");
 
+    private final static String SPECIFIER_VALUE = "%s";
     private final String message;
 
     InputMessageCollection(String message){
@@ -19,6 +20,12 @@ public enum InputMessageCollection {
     }
 
     public String getFormattedMessage(String str){
-        return this.message.formatted(str);
+        if(message.contains(SPECIFIER_VALUE)){
+            return this.message.formatted(str);
+        }
+
+        throw new IllegalStateException(
+                "Method invocation failed: no string specifier defined for the enum constant."
+        );
     }
 }

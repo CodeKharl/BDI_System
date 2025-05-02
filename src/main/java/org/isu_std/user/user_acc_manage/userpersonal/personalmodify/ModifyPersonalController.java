@@ -6,14 +6,23 @@ import org.isu_std.user.user_acc_manage.userpersonal.ManagePersonalService;
 import org.isu_std.user.user_acc_manage.userpersonal.PersonalInfoSetter;
 
 public class ModifyPersonalController {
+    private final ModifyPersonalService modifyPersonalService;
     private final ManagePersonalService managePersonalService;
+
     private final ModifyPersonalContext modifyPersonalContext;
     private final PersonalInfoSetter personalInfoSetter;
 
-    public ModifyPersonalController(ManagePersonalService managePersonalService, int userId){
+    public ModifyPersonalController(
+            ModifyPersonalService modifyPersonalService, ManagePersonalService managePersonalService, int userId
+    ){
+        this.modifyPersonalService = modifyPersonalService;
         this.managePersonalService = managePersonalService;
-        this.modifyPersonalContext = managePersonalService.createPersonalModifierManager(userId);
-        this.personalInfoSetter = managePersonalService.createPersonalChecker(
+
+        this.modifyPersonalContext = modifyPersonalService.createPersonalModifierManager(
+                userId, managePersonalService.createUserPersonalBuilder()
+        );
+
+        this.personalInfoSetter = managePersonalService.createPersonalInfoSetter(
                 this.modifyPersonalContext.getUserPersonalBuilder()
         );
     }
@@ -60,9 +69,8 @@ public class ModifyPersonalController {
 
     protected boolean modifyPerformed(){
         try {
-            managePersonalService
-                    .saveModifiedPersonalInfo(this.modifyPersonalContext);
-
+            modifyPersonalService.saveModifiedPersonalInfo(this.modifyPersonalContext);
+            modifyPersonalContext.getUserPersonalBuilder().resetValues();
             return true;
         }catch (OperationFailedException e){
             Util.printException(e.getMessage());

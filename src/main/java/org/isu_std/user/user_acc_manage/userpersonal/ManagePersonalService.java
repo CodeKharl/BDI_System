@@ -5,6 +5,7 @@ import org.isu_std.io.Validation;
 import org.isu_std.io.collections.InputMessageCollection;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.dynamic_enum_handler.*;
 import org.isu_std.models.UserPersonal;
 import org.isu_std.models.modelbuilders.BuilderFactory;
 import org.isu_std.models.modelbuilders.UserPersonalBuilder;
@@ -12,9 +13,11 @@ import org.isu_std.user.user_acc_manage.userpersonal.namecreation.NameCreation;
 import org.isu_std.user.user_acc_manage.userpersonal.namecreation.NameCreationFactory;
 import org.isu_std.user.user_acc_manage.userpersonal.personalcreation.CreatePersonal;
 import org.isu_std.user.user_acc_manage.userpersonal.personalcreation.CreatePersonalController;
+import org.isu_std.user.user_acc_manage.userpersonal.personalcreation.CreatePersonalService;
 import org.isu_std.user.user_acc_manage.userpersonal.personalmodify.ModifyPersonal;
 import org.isu_std.user.user_acc_manage.userpersonal.personalmodify.ModifyPersonalController;
 import org.isu_std.user.user_acc_manage.userpersonal.personalmodify.ModifyPersonalContext;
+import org.isu_std.user.user_acc_manage.userpersonal.personalmodify.ModifyPersonalService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -36,12 +39,20 @@ public class ManagePersonalService {
     }
 
     protected CreatePersonal createPersonal(int userId){
-        var createPersonalController = new CreatePersonalController(this, userId);
+        var createPersonalService = new CreatePersonalService(userPersonalDao);
+        var createPersonalController = new CreatePersonalController(
+                createPersonalService, this, userId
+        );
+
         return new CreatePersonal(createPersonalController);
     }
 
     protected ModifyPersonal createModifyPersonal(int userId){
-        var modifyPersonalController = new ModifyPersonalController(this, userId);
+        var modifyPersonalService = new ModifyPersonalService(userPersonalDao);
+        var modifyPersonalController = new ModifyPersonalController(
+                modifyPersonalService, this, userId
+        );
+
         return new ModifyPersonal(modifyPersonalController);
     }
 
@@ -53,35 +64,32 @@ public class ManagePersonalService {
         return NameCreationFactory.createNameCreation();
     }
 
-    public ModifyPersonalContext createPersonalModifierManager(int userId){
-        return new ModifyPersonalContext(
-                userId, BuilderFactory.createUserPersonalBuilder()
-        );
-    }
-
     public String[] getPersonalDetails(){
-        return (String[]) PersonalInfoConfig.PERSONAL_INFORMATIONS.getValue();
+        ConfigValue arrValue = PersonalInfoConfig.PERSONAL_INFORMATIONS.getValue();
+        return EnumValueProvider.getStringArrValue(arrValue);
     }
 
     public String[] getPersonalDetailSpecs(){
-        return (String[]) PersonalInfoConfig.PERSONAL_SPECIFICATION.getValue();
+        ConfigValue arrValue = PersonalInfoConfig.PERSONAL_SPECIFICATION.getValue();
+        return EnumValueProvider.getStringArrValue(arrValue);
     }
 
-    public PersonalInfoSetter createPersonalChecker(UserPersonalBuilder userPersonalBuilder){
+    public PersonalInfoSetter createPersonalInfoSetter(UserPersonalBuilder userPersonalBuilder){
         return new PersonalInfoSetter(this, userPersonalBuilder);
     }
 
     public void checkSex(char sex){
-        char maleValue = (char) PersonalInfoConfig.MALE.getValue();
-        char femaleValue = (char) PersonalInfoConfig.FEMALE.getValue();
+        char maleValue = EnumValueProvider.getCharValue(PersonalInfoConfig.MALE.getValue());
+        char femaleValue = EnumValueProvider.getCharValue(PersonalInfoConfig.FEMALE.getValue());
 
-        if(sex == maleValue || sex == femaleValue){
+        if (sex == maleValue || sex == femaleValue) {
             return;
         }
 
         throw new IllegalArgumentException(
                 "The input is not a valid sex! Please enter a choice from the question guide"
         );
+
     }
 
     public int getCheckedAge(String strAge){
@@ -91,7 +99,7 @@ public class ManagePersonalService {
             );
         }
 
-        int minimumAge = (int) PersonalInfoConfig.MINIMUM_AGE.getValue();
+        int minimumAge = EnumValueProvider.getIntValue(PersonalInfoConfig.MINIMUM_AGE.getValue());
         int age = Integer.parseInt(strAge);
 
         if(age < minimumAge){
@@ -105,7 +113,7 @@ public class ManagePersonalService {
 
     public String getCheckedBirthDate(String strBirthDate){
         try{
-            String birthDateFormat = (String) PersonalInfoConfig.BIRTHDATE_FORMAT.getValue();
+            String birthDateFormat = EnumValueProvider.getStringValue(PersonalInfoConfig.BIRTHDATE_FORMAT.getValue());
             LocalDate date = LocalDate.parse(
                     strBirthDate,
                     DateTimeFormatter.ofPattern(birthDateFormat)
@@ -129,7 +137,7 @@ public class ManagePersonalService {
     }
 
     public void checkPhoneNum(String phoneNumber){
-        String phoneNumFormat = (String) PersonalInfoConfig.PHONE_NUMBER.getValue();
+        String phoneNumFormat = EnumValueProvider.getStringValue(PersonalInfoConfig.PHONE_NUMBER.getValue());
         if(phoneNumber.matches(phoneNumFormat)){
             return;
         }
@@ -137,25 +145,5 @@ public class ManagePersonalService {
         throw new IllegalArgumentException(
                 InputMessageCollection.INPUT_INVALID.getFormattedMessage("phone number")
         );
-    }
-
-    public void savePersonalInfo(int userId, UserPersonal userPersonal){
-        if(!userPersonalDao.addUserPersonal(userId, userPersonal)){
-            throw new OperationFailedException(
-                    "Failed to save your personal information! Please try again!"
-            );
-        }
-    }
-
-    public void saveModifiedPersonalInfo(ModifyPersonalContext modifyPersonalContext){
-        int userId  = modifyPersonalContext.getUserId();
-        String chosenDetail = modifyPersonalContext.getChosenDetail();
-        UserPersonal userPersonal = modifyPersonalContext.getUserPersonalBuilder().build();
-
-        if(!userPersonalDao.modifyUserPersonal(userId, chosenDetail, userPersonal)){
-            throw new OperationFailedException(
-                    "Failed to modify personal information. Please try again."
-            );
-        }
     }
 }

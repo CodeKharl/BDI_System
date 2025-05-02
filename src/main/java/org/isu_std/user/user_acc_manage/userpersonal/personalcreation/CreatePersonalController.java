@@ -8,17 +8,30 @@ import org.isu_std.user.user_acc_manage.userpersonal.ManagePersonalService;
 import org.isu_std.user.user_acc_manage.userpersonal.PersonalInfoSetter;
 
 public class CreatePersonalController {
+    private final CreatePersonalService createPersonalService;
     private final ManagePersonalService managePersonalService;
     private final int userId;
+
     private final UserPersonalBuilder userPersonalBuilder;
     private final PersonalInfoSetter personalInfoSetter;
 
-    public CreatePersonalController(ManagePersonalService managePersonalService, int userId){
+    public CreatePersonalController(
+            CreatePersonalService createPersonalService, ManagePersonalService managePersonalService, int userId
+    ){
+        this.createPersonalService = createPersonalService;
         this.managePersonalService = managePersonalService;
         this.userId = userId;
+
         this.userPersonalBuilder = managePersonalService.createUserPersonalBuilder();
-        this.personalInfoSetter = managePersonalService
-                .createPersonalChecker(this.userPersonalBuilder);
+        this.personalInfoSetter = managePersonalService.createPersonalInfoSetter(this.userPersonalBuilder);
+    }
+
+    protected String[] getPersonalDetails(){
+        return managePersonalService.getPersonalDetails();
+    }
+
+    protected String[] getPersonalDetailSpecs(){
+        return managePersonalService.getPersonalDetailSpecs();
     }
 
     protected boolean isNameSet(){
@@ -47,7 +60,7 @@ public class CreatePersonalController {
     protected boolean createPerformed(){
         try{
             UserPersonal userPersonal = userPersonalBuilder.build();
-            managePersonalService.savePersonalInfo(userId, userPersonal);
+            createPersonalService.savePersonalInfo(userId, userPersonal);
 
             return true;
         }catch (OperationFailedException e){

@@ -7,7 +7,6 @@ public class UserBuilder {
     private String username;
     private String password;
     private int barangayId;
-    private double cash;
 
     public UserBuilder userId(int userId){
         this.userId = userId;
@@ -29,18 +28,12 @@ public class UserBuilder {
         return this;
     }
 
-    public UserBuilder cash(double cash){
-        this.cash = cash;
-        return this;
-    }
-
     public User build(){
         return new User(
                 this.userId,
                 this.username,
                 this.password,
-                this.barangayId,
-                this.cash
+                this.barangayId
         );
     }
 }
