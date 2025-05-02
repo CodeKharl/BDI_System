@@ -1,12 +1,9 @@
 package org.isu_std.user;
 
-import org.isu_std.dao.DocumentRequestDao;
-import org.isu_std.dao.PaymentDao;
-import org.isu_std.dao.UserPersonalDao;
+import org.isu_std.dao.*;
 import org.isu_std.io.Symbols;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.models.User;
-import org.isu_std.dao.DocumentDao;
 import org.isu_std.models.UserPersonal;
 import org.isu_std.user.user_acc_manage.UserManageAcc;
 import org.isu_std.user.user_acc_manage.UserManageAccFactory;
@@ -22,24 +19,18 @@ public class UserService {
     private final UserPersonalDao userPersonalDao;
     private final DocumentRequestDao documentRequestDao;
     private final PaymentDao paymentDao;
+    private final BarangayDao barangayDao;
 
-    private UserService(DocumentDao documentDao, UserPersonalDao userPersonalDao, DocumentRequestDao documentRequestDao, PaymentDao paymentDao){
+    public UserService(
+            DocumentDao documentDao, UserPersonalDao userPersonalDao,
+            DocumentRequestDao documentRequestDao, PaymentDao paymentDao,
+            BarangayDao barangayDao
+    ){
         this.documentDao = documentDao;
         this.userPersonalDao = userPersonalDao;
         this.documentRequestDao = documentRequestDao;
         this.paymentDao = paymentDao;
-    }
-
-    private final static class Holder{
-        private static UserService userService;
-    }
-
-    protected static UserService getInstance(DocumentDao documentDao, UserPersonalDao userPersonalDao, DocumentRequestDao documentRequestDao, PaymentDao paymentDao){
-        if(Holder.userService == null){
-            Holder.userService = new UserService(documentDao, userPersonalDao, documentRequestDao, paymentDao);
-        }
-
-        return Holder.userService;
+        this.barangayDao = barangayDao;
     }
 
     protected UserProcess[] createUserProcesses(User user) throws NotFoundException{
@@ -75,7 +66,7 @@ public class UserService {
     }
 
     private UserManageAcc getUserManageAcc(int userId){
-        UserManageAccFactory userManageAccFactory = new UserManageAccFactory(userPersonalDao);
+        UserManageAccFactory userManageAccFactory = new UserManageAccFactory(userPersonalDao, barangayDao);
         return userManageAccFactory.createUserManageAcc(userId);
     }
 

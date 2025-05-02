@@ -4,18 +4,20 @@ public class UserManageAccController {
     private final UserManageAccService userManageAccService;
     private final int userId;
 
+    private UserManageProcess[] userManageProcesses;
+
     protected UserManageAccController(UserManageAccService userManageAccService, int userId){
         this.userManageAccService = userManageAccService;
         this.userId = userId;
     }
 
-    protected void personalProcess(){
-        userManageAccService
-                .createManagePersonal(userId)
-                .manageUserPersonal();
-    }
+    protected void managerPerformed(String[] manageChoices, int choice){
+        if(this.userManageProcesses == null){
+            this.userManageProcesses = userManageAccService.createUserManageProcesses(userId);
+        }
 
-    protected void accInfoProcess(){
-
+        int index = choice - 1;
+        UserManageProcess userManageProcess = userManageProcesses[index];
+        userManageProcess.managePerformed(manageChoices[index]);
     }
 }

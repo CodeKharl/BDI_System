@@ -3,16 +3,19 @@ package org.isu_std.user.user_acc_manage.userpersonal;
 import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
+import org.isu_std.user.user_acc_manage.UserManageProcess;
 
-public class ManagePersonal {
+public class ManagePersonal implements UserManageProcess {
     private final ManagePersonalController managePersonalController;
 
     public ManagePersonal(ManagePersonalController managePersonalController){
         this.managePersonalController = managePersonalController;
     }
 
-    public void manageUserPersonal(){
-        Util.printSectionTitle("Manage Personal Information");
+    @Override
+    public void managePerformed(String manageTitle){
+        Util.printSectionTitle(manageTitle);
+
 
         // Info Exist -> Modify
         if(managePersonalController.setUserPersonal()){

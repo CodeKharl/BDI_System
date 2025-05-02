@@ -26,11 +26,12 @@ public final class UserFactory {
     }
 
     public UserUI createUserUI(User user){
-        UserService userService = UserService.getInstance(
+        UserService userService = new UserService(
                 daoFactory.getDocumentDao(),
                 daoFactory.getPersonalDao(),
                 daoFactory.getDocumentRequestDao(),
-                daoFactory.paymentDao()
+                daoFactory.paymentDao(),
+                daoFactory.getBrgyDao()
         );
 
         UserController userController = new UserController(userService, user);

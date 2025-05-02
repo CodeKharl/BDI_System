@@ -6,9 +6,9 @@ import org.isu_std.user.UserProcess;
 
 public class UserManageAcc implements UserProcess{
     private static final String[] MANAGE_CHOICES = {
-            "Personal Information",
-            "Account Information",
-            "Barangay Information",
+            "Personal Info",
+            "Account Info",
+            "Barangay Info",
             "Back to User Menu"
     };
 
@@ -20,27 +20,20 @@ public class UserManageAcc implements UserProcess{
 
     @Override
     public void processPerformed(String processTitle){
+        int backValue = MANAGE_CHOICES.length;
+
         while(true){
             Util.printSectionTitle(processTitle);
             Util.printChoices(MANAGE_CHOICES);
 
-            int choice = SystemInput.getIntChoice(
-                    "Enter choice : ",
-                    MANAGE_CHOICES.length
-            );
+            int choice = SystemInput.getIntChoice("Enter choice : ", backValue);
 
-            switch (choice){
-                case 1 -> userAccController.personalProcess();
-                case 2 -> userAccController.accInfoProcess();
-                case 3 -> {}
-                case 4 -> {
-                    return;
-                }
+            if(choice == backValue){
+                return;
             }
-        }
-    }
-    public void manageMenu(){
 
+            userAccController.managerPerformed(MANAGE_CHOICES, choice);
+        }
     }
 }
 
