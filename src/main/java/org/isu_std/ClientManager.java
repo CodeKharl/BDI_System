@@ -15,7 +15,7 @@ public class ClientManager {
 
         Util.printSectionTitle("TYPE SELECTION");
         Util.printQuestion(
-                "Are you an (%d)Admin or (%d)User ?\n"
+                "Are you an (%d)Admin or (%d)User?\n"
                         .formatted(ADMIN_VAL, USER_VAL)
         );
 

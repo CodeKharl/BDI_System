@@ -13,5 +13,7 @@ public class ManageBarangay implements UserManageProcess {
     @Override
     public void managePerformed(String manageTitle){
         Util.printSectionTitle(manageTitle);
+
+        manageBarangayController.printBarangayInfo();
     }
 }

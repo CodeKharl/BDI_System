@@ -2,6 +2,7 @@ package org.isu_std.user.user_acc_manage.userpersonal.personalcreation;
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
 import org.isu_std.models.modelbuilders.UserPersonalBuilder;
 import org.isu_std.user.user_acc_manage.userpersonal.ManagePersonalService;
@@ -10,17 +11,17 @@ import org.isu_std.user.user_acc_manage.userpersonal.PersonalInfoSetter;
 public class CreatePersonalController {
     private final CreatePersonalService createPersonalService;
     private final ManagePersonalService managePersonalService;
-    private final int userId;
+    private final User user;
 
     private final UserPersonalBuilder userPersonalBuilder;
     private final PersonalInfoSetter personalInfoSetter;
 
     public CreatePersonalController(
-            CreatePersonalService createPersonalService, ManagePersonalService managePersonalService, int userId
+            CreatePersonalService createPersonalService, ManagePersonalService managePersonalService, User user
     ){
         this.createPersonalService = createPersonalService;
         this.managePersonalService = managePersonalService;
-        this.userId = userId;
+        this.user = user;
 
         this.userPersonalBuilder = managePersonalService.createUserPersonalBuilder();
         this.personalInfoSetter = managePersonalService.createPersonalInfoSetter(this.userPersonalBuilder);
@@ -60,7 +61,7 @@ public class CreatePersonalController {
     protected boolean createPerformed(){
         try{
             UserPersonal userPersonal = userPersonalBuilder.build();
-            createPersonalService.savePersonalInfo(userId, userPersonal);
+            createPersonalService.savePersonalInfo(user.userId(), userPersonal);
 
             return true;
         }catch (OperationFailedException e){

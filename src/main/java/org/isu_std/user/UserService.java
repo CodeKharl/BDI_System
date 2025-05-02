@@ -37,7 +37,7 @@ public class UserService {
         int userId = user.userId();
         UserDocumentRequest userDocumentRequest = getUserDocReq(user);
         CheckRequest checkRequest = getCheckRequest(user.barangayId(), userId);
-        UserManageAcc userManageAcc = getUserManageAcc(userId);
+        UserManageAcc userManageAcc = getUserManageAcc(user);
 
         return new UserProcess[]{
                 userDocumentRequest,
@@ -65,9 +65,9 @@ public class UserService {
         );
     }
 
-    private UserManageAcc getUserManageAcc(int userId){
+    private UserManageAcc getUserManageAcc(User user){
         UserManageAccFactory userManageAccFactory = new UserManageAccFactory(userPersonalDao, barangayDao);
-        return userManageAccFactory.createUserManageAcc(userId);
+        return userManageAccFactory.createUserManageAcc(user);
     }
 
     private CheckRequest getCheckRequest(int barangayId, int userId){

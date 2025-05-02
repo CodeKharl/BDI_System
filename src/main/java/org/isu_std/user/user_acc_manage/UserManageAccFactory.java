@@ -2,6 +2,7 @@ package org.isu_std.user.user_acc_manage;
 
 import org.isu_std.dao.BarangayDao;
 import org.isu_std.dao.UserPersonalDao;
+import org.isu_std.models.User;
 
 public class UserManageAccFactory{
     private final UserPersonalDao userPersonalDao;
@@ -12,9 +13,9 @@ public class UserManageAccFactory{
         this.barangayDao = barangayDao;
     }
 
-    public UserManageAcc createUserManageAcc(int userId){
+    public UserManageAcc createUserManageAcc(User user){
         var userManageAccService = new UserManageAccService(userPersonalDao, barangayDao);
-        var userManageAccController = new UserManageAccController(userManageAccService, userId);
+        var userManageAccController = new UserManageAccController(userManageAccService, user);
 
         return new UserManageAcc(userManageAccController);
     }

@@ -6,6 +6,7 @@ import org.isu_std.io.collections.InputMessageCollection;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.dynamic_enum_handler.*;
+import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
 import org.isu_std.models.modelbuilders.BuilderFactory;
 import org.isu_std.models.modelbuilders.UserPersonalBuilder;
@@ -38,19 +39,19 @@ public class ManagePersonalService {
         );
     }
 
-    protected CreatePersonal createPersonal(int userId){
+    protected CreatePersonal createPersonal(User user){
         var createPersonalService = new CreatePersonalService(userPersonalDao);
         var createPersonalController = new CreatePersonalController(
-                createPersonalService, this, userId
+                createPersonalService, this, user
         );
 
         return new CreatePersonal(createPersonalController);
     }
 
-    protected ModifyPersonal createModifyPersonal(int userId){
+    protected ModifyPersonal createModifyPersonal(User user){
         var modifyPersonalService = new ModifyPersonalService(userPersonalDao);
         var modifyPersonalController = new ModifyPersonalController(
-                modifyPersonalService, this, userId
+                modifyPersonalService, this, user
         );
 
         return new ModifyPersonal(modifyPersonalController);

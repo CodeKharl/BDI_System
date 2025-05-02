@@ -1,22 +1,21 @@
 package org.isu_std.user.user_acc_manage.userpersonal.personalmodify;
 
+import org.isu_std.models.User;
 import org.isu_std.models.modelbuilders.UserPersonalBuilder;
 
-import java.lang.reflect.Field;
-
 public class ModifyPersonalContext {
-    private final int userId;
+    private final User user;
     private final UserPersonalBuilder userPersonalBuilder;
 
     private String chosenDetail;
 
-    public ModifyPersonalContext(int userId, UserPersonalBuilder userPersonalBuilder){
-        this.userId = userId;
+    public ModifyPersonalContext(User user, UserPersonalBuilder userPersonalBuilder){
+        this.user = user;
         this.userPersonalBuilder = userPersonalBuilder;
     }
 
-    protected int getUserId() {
-        return userId;
+    protected User getUser() {
+        return user;
     }
 
     protected void setChosenDetail(String chosenDetail){
