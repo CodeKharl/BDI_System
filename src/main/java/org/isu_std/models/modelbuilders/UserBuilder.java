@@ -36,4 +36,20 @@ public class UserBuilder {
                 this.barangayId
         );
     }
+
+    public int getBarangayId(){
+        return this.barangayId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }

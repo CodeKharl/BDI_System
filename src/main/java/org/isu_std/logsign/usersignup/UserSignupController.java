@@ -2,7 +2,7 @@ package org.isu_std.logsign.usersignup;
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
-import org.isu_std.logsign.usersignup.brgyselection.BrgySelection;
+import org.isu_std.user_brgy_select.BrgySelect;
 import org.isu_std.models.modelbuilders.UserBuilder;
 
 public class UserSignupController {
@@ -42,20 +42,15 @@ public class UserSignupController {
     }
 
     protected boolean setBarangayId(){
-        while(true) {
-            BrgySelection brgySelection = userSignupService.createBrgySelection();
-            int barangayId = brgySelection.getBarangayID();
+        BrgySelect brgySelect = userSignupService.createBrgySelection();
+        int barangayId = brgySelect.getBarangayID();
 
-            // -1 == cancellation
-            if(barangayId == - 1){
-                return false;
-            }
-
-            if(barangayId != 0){
-                userBuilder.barangayId(barangayId);
-                return true;
-            }
+        if(barangayId != 0){
+            userBuilder.barangayId(barangayId);
+            return true;
         }
+
+        return false;
     }
 
     protected boolean isAddUserSuccess(){

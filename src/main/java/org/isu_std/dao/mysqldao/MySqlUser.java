@@ -5,6 +5,7 @@ import org.isu_std.dao.UserPersonalDao;
 import org.isu_std.database.MySQLDBConnection;
 import org.isu_std.io.SystemLogger;
 import org.isu_std.io.dynamic_enum_handler.CharValue;
+import org.isu_std.models.Barangay;
 import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
 
@@ -185,5 +186,23 @@ public class MySqlUser implements UserDao, UserPersonalDao {
         }
 
         preStatement.setInt(2, userId);
+    }
+
+    @Override
+    public boolean updateUserBarangay(User user, Barangay barangay){
+        String query = "UPDATE user SET barangay_id = ? WHERE user_id = ?";
+
+        try(Connection connection = MySQLDBConnection.getConnection();
+            PreparedStatement preStatement = connection.prepareStatement(query);
+        ){
+            preStatement.setInt(1, barangay.barangayId());
+            preStatement.setInt(2, user.userId());
+
+            return preStatement.executeUpdate() == 1;
+        }catch (SQLException e){
+            SystemLogger.logWarning(MySqlUser.class, e.getMessage());
+        }
+
+        return false;
     }
 }

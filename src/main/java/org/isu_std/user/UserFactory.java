@@ -31,7 +31,8 @@ public final class UserFactory {
                 daoFactory.getPersonalDao(),
                 daoFactory.getDocumentRequestDao(),
                 daoFactory.paymentDao(),
-                daoFactory.getBrgyDao()
+                daoFactory.getBrgyDao(),
+                daoFactory.getUserDao()
         );
 
         UserController userController = new UserController(userService, user);

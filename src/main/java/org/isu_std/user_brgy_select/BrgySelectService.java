@@ -1,4 +1,4 @@
-package org.isu_std.logsign.usersignup.brgyselection;
+package org.isu_std.user_brgy_select;
 
 import org.isu_std.dao.BarangayDao;
 import org.isu_std.io.custom_exception.NotFoundException;
@@ -9,7 +9,7 @@ import org.isu_std.models.modelbuilders.BuilderFactory;
 public class BrgySelectService {
     private final BarangayDao barangayDao;
 
-    public BrgySelectService(BarangayDao barangayDao){
+    protected BrgySelectService(BarangayDao barangayDao){
         this.barangayDao = barangayDao;
     }
 

@@ -1,4 +1,4 @@
-package org.isu_std.logsign.usersignup.brgyselection;
+package org.isu_std.user_brgy_select;
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
@@ -8,19 +8,17 @@ public class BrgySelectController {
     private final BrgySelectService brgySelectService;
     private final BarangayBuilder barangayBuilder;
 
-    public BrgySelectController(BrgySelectService brgySelectService){
+    protected BrgySelectController(BrgySelectService brgySelectService){
         this.barangayBuilder = brgySelectService.getBarangayBuilder();
         this.brgySelectService = brgySelectService;
     }
 
-    protected boolean isBrgyInputsAccepted(int count, String input){
+    protected void setBrgyInfo(int count, String input){
         switch (count){
-            case 1 -> barangayBuilder.barangayName(input);
-            case 2 -> barangayBuilder.municipality(input);
-            case 3 -> barangayBuilder.province(input);
+            case 0 -> barangayBuilder.barangayName(input);
+            case 1 -> barangayBuilder.municipality(input);
+            case 2 -> barangayBuilder.province(input);
         }
-
-        return true;
     }
 
     protected int getBarangayID(){

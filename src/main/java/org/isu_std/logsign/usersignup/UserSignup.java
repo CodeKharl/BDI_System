@@ -14,32 +14,30 @@ public class UserSignup implements Signup {
 
     @Override
     public void setSignupInformation() {
-        while(true){
+        do {
             Util.printSectionTitle("User Signup");
 
-            if(!setUserInformation(userSignupController.getSignupInfAttributes())){
+            if (!setUserInformation(userSignupController.getSignupInfAttributes())) {
                 return;
             }
 
-            if(!userSignupController.setBarangayId()){
-                continue;
+            if (!userSignupController.setBarangayId()) {
+                return;
             }
 
-            if(userSignupController.isAddUserSuccess()){
-                break;
-            }
-        }
+        } while(!userSignupController.isAddUserSuccess());
     }
 
     public boolean setUserInformation(String[] userInfoContents){
+        char backValue = ChoiceCollection.EXIT_CODE.getValue();
+
         int count = 0;
         while (count < userInfoContents.length) {
             String input = SystemInput.getStringInput(
-                    "Enter a %s (%c == Cancel) : "
-                            .formatted(userInfoContents[count], ChoiceCollection.EXIT_CODE.getValue())
+                    "Enter a %s (%c == Cancel) : ".formatted(userInfoContents[count], backValue)
             );
 
-            if(input.charAt(0) == ChoiceCollection.EXIT_CODE.getValue()){
+            if(input.charAt(0) == backValue){
                 return false;
             }
 

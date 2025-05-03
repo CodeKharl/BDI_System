@@ -20,17 +20,19 @@ public class UserService {
     private final DocumentRequestDao documentRequestDao;
     private final PaymentDao paymentDao;
     private final BarangayDao barangayDao;
+    private final UserDao userDao;
 
     public UserService(
             DocumentDao documentDao, UserPersonalDao userPersonalDao,
             DocumentRequestDao documentRequestDao, PaymentDao paymentDao,
-            BarangayDao barangayDao
+            BarangayDao barangayDao, UserDao userDao
     ){
         this.documentDao = documentDao;
         this.userPersonalDao = userPersonalDao;
         this.documentRequestDao = documentRequestDao;
         this.paymentDao = paymentDao;
         this.barangayDao = barangayDao;
+        this.userDao = userDao;
     }
 
     protected UserProcess[] createUserProcesses(User user) throws NotFoundException{
@@ -66,7 +68,7 @@ public class UserService {
     }
 
     private UserManageAcc getUserManageAcc(User user){
-        UserManageAccFactory userManageAccFactory = new UserManageAccFactory(userPersonalDao, barangayDao);
+        UserManageAccFactory userManageAccFactory = new UserManageAccFactory(userPersonalDao, barangayDao, userDao);
         return userManageAccFactory.createUserManageAcc(user);
     }
 

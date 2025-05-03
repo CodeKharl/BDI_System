@@ -5,14 +5,13 @@ import org.isu_std.io.Util;
 public record Barangay(
         int barangayId, String barangayName, String municipality, String province, int barangayPin
 ){
-    public void printStats(){
+    public void printFullBrgyNameOnly(){
         String fullName = getBrgyFullName();
-        String brgyPinAsterisk = getBrgyPinAsterisk();
 
         Util.printSubSectionTitle(
-                "Barangay Info (Barangay ID - Barangay Full Name - Barangay Pin(*))"
+                "Barangay Info (Barangay Full Name)"
         );
-        Util.printInformation("%d - %s - %s".formatted(barangayId, fullName, brgyPinAsterisk));
+        Util.printInformation("%s".formatted(fullName));
     }
 
     public String getBrgyFullName(){

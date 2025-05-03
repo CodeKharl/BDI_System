@@ -5,9 +5,10 @@ import org.isu_std.dao.UserDao;
 import org.isu_std.io.collections.InputMessageCollection;
 import org.isu_std.io.Validation;
 import org.isu_std.io.custom_exception.OperationFailedException;
-import org.isu_std.logsign.usersignup.brgyselection.BrgySelectController;
-import org.isu_std.logsign.usersignup.brgyselection.BrgySelectService;
-import org.isu_std.logsign.usersignup.brgyselection.BrgySelection;
+import org.isu_std.user_brgy_select.BrgySelectController;
+import org.isu_std.user_brgy_select.BrgySelectFactory;
+import org.isu_std.user_brgy_select.BrgySelectService;
+import org.isu_std.user_brgy_select.BrgySelect;
 import org.isu_std.models.User;
 import org.isu_std.models.modelbuilders.BuilderFactory;
 import org.isu_std.models.modelbuilders.UserBuilder;
@@ -66,12 +67,8 @@ public class UserSignupService{
         }
     }
 
-    public BrgySelection createBrgySelection(){
-        return new BrgySelection(
-                new BrgySelectController(
-                        new BrgySelectService(barangayDao)
-                )
-        );
+    public BrgySelect createBrgySelection(){
+        return BrgySelectFactory.createBrgySelect(barangayDao);
     }
 
     public void addingUser(User user){
