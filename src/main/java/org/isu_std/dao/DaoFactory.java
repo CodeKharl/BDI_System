@@ -5,19 +5,11 @@ package org.isu_std.dao;
 import org.isu_std.dao.mysqldao.*;
 
 public class DaoFactory {
-    private static final class Holder{
-        private final static DaoFactory daoFactory = new DaoFactory();
-    }
-
-    public static DaoFactory getInstance(){
-        return Holder.daoFactory;
-    }
-
-    public UserDao getUserDao(){
+    public UserDao createUserDao(){
         return new MySqlUser();
     }
 
-    public BarangayDao getBrgyDao(){
+    public BarangayDao createBrgyDao(){
         return new MySqlBarangay();
     }
 
@@ -25,7 +17,7 @@ public class DaoFactory {
         return new MySqlDocument();
     }
 
-    public AdminDao getAdminDao(){
+    public AdminDao createAdminDao(){
         return new MySqlAdmin();
     }
 

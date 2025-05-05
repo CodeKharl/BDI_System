@@ -1,11 +1,12 @@
 package org.isu_std.user.user_acc_manage.user_account;
 
+import org.isu_std.client_context.UserContext;
 import org.isu_std.dao.UserDao;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.dynamic_enum_handler.EnumValueProvider;
 import org.isu_std.models.User;
-import org.isu_std.models.modelbuilders.BuilderFactory;
-import org.isu_std.models.modelbuilders.UserBuilder;
+import org.isu_std.models.model_builders.BuilderFactory;
+import org.isu_std.models.model_builders.UserBuilder;
 import org.isu_std.user_info_manager.UserInfoConfig;
 import org.isu_std.user_info_manager.UserInfoManager;
 
@@ -16,8 +17,8 @@ public class ManageAccInfoService {
         this.userDao = userDao;
     }
 
-    protected AccountInfoContext createAccountInfoContext(User user){
-        return new AccountInfoContext(user, BuilderFactory.createUserBuilder());
+    protected AccountInfoContext createAccountInfoContext(UserContext userContext){
+        return new AccountInfoContext(userContext, BuilderFactory.createUserBuilder());
     }
 
     protected String[] getUserDetails(){

@@ -9,7 +9,7 @@ public record Barangay(
         String fullName = getBrgyFullName();
 
         Util.printSubSectionTitle(
-                "Barangay Info (Barangay Full Name)"
+                "Barangay Information (Barangay Full Name)"
         );
         Util.printInformation("%s".formatted(fullName));
     }

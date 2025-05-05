@@ -190,14 +190,14 @@ public class MySqlUser implements UserDao, UserPersonalDao {
     }
 
     @Override
-    public boolean updateUserBarangay(User user, Barangay barangay){
+    public boolean updateUserBarangay(User newUser){
         String query = "UPDATE user SET barangay_id = ? WHERE user_id = ?";
 
         try(Connection connection = MySQLDBConnection.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
-            preStatement.setInt(1, barangay.barangayId());
-            preStatement.setInt(2, user.userId());
+            preStatement.setInt(1, newUser.barangayId());
+            preStatement.setInt(2, newUser.userId());
 
             return preStatement.executeUpdate() == 1;
         }catch (SQLException e){

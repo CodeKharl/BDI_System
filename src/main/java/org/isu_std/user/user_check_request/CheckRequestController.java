@@ -1,5 +1,6 @@
 package org.isu_std.user.user_check_request;
 
+import org.isu_std.client_context.UserContext;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 import org.isu_std.io.collections.ChoiceCollection;
@@ -7,6 +8,7 @@ import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
+import org.isu_std.models.User;
 import org.isu_std.user.user_check_request.user_payment_manage.PaymentManage;
 
 import java.util.List;
@@ -17,16 +19,18 @@ public class CheckRequestController {
     private final RequestInfoContext requestInfoContext;
     private final RequestSelectContext requestSelectContext;
 
-    public CheckRequestController(CheckRequestService checkRequestService, int barangayId, int userId){
+    public CheckRequestController(CheckRequestService checkRequestService, UserContext userContext){
         this.checkRequestService = checkRequestService;
-        this.requestInfoContext = checkRequestService.createReqInfoManager(barangayId, userId);
+        this.requestInfoContext = checkRequestService.createReqInfoManager(userContext.getUser());
         this.requestSelectContext = checkRequestService.createReqSelectManager();
     }
 
     protected boolean isExistingDocMapSet(){
+       User user = requestInfoContext.getUser();
+
         try{
             List<DocumentRequest> userDocReqList = checkRequestService
-                    .getUserDocReqMap(requestInfoContext.getUserId(), requestInfoContext.getBarangayId());
+                    .getUserDocReqMap(user.userId(), user.barangayId());
             this.requestInfoContext.setRefWithDocIDMap(userDocReqList);
 
             setDocumentDetailMap(userDocReqList);
@@ -40,7 +44,7 @@ public class CheckRequestController {
 
     protected void setDocumentDetailMap(List<DocumentRequest> userReqList) throws NotFoundException{
         Map<Integer, Document> documentDetailList = checkRequestService.getDocumentDetailMap(
-                requestInfoContext.getBarangayId(), userReqList
+                requestInfoContext.getUser().barangayId(), userReqList
         );
 
         requestInfoContext.setDocumentDetailMap(documentDetailList);

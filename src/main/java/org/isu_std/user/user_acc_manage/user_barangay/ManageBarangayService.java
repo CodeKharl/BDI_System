@@ -6,8 +6,8 @@ import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Barangay;
 import org.isu_std.models.User;
-import org.isu_std.models.modelbuilders.BarangayBuilder;
-import org.isu_std.models.modelbuilders.BuilderFactory;
+import org.isu_std.models.model_builders.BarangayBuilder;
+import org.isu_std.models.model_builders.BuilderFactory;
 import org.isu_std.user_brgy_select.BrgySelect;
 import org.isu_std.user_brgy_select.BrgySelectFactory;
 
@@ -38,8 +38,8 @@ public class ManageBarangayService {
         );
     }
 
-    protected void changeBrgyPerform(User user, Barangay newBarangay){
-        if(!userDao.updateUserBarangay(user, newBarangay)){
+    protected void changeBrgyPerform(User newUser){
+        if(!userDao.updateUserBarangay(newUser)){
             throw new OperationFailedException("Failed to change your barangay! Please try again.");
         }
     }

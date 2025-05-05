@@ -6,8 +6,8 @@ import org.isu_std.io.DateTime;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Payment;
-import org.isu_std.models.modelbuilders.BuilderFactory;
-import org.isu_std.models.modelbuilders.PaymentBuilder;
+import org.isu_std.models.model_builders.BuilderFactory;
+import org.isu_std.models.model_builders.PaymentBuilder;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;

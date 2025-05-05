@@ -4,7 +4,7 @@ import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
-import org.isu_std.models.modelbuilders.UserPersonalBuilder;
+import org.isu_std.models.model_builders.UserPersonalBuilder;
 import org.isu_std.user.user_acc_manage.user_personal.ManagePersonalService;
 import org.isu_std.user.user_acc_manage.user_personal.PersonalInfoSetter;
 

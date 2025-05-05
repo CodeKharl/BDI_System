@@ -1,5 +1,6 @@
 package org.isu_std.user.user_check_request;
 
+import org.isu_std.client_context.UserContext;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.dao.PaymentDao;
@@ -7,6 +8,7 @@ import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
+import org.isu_std.models.User;
 import org.isu_std.user.user_check_request.user_payment_manage.PaymentManage;
 import org.isu_std.user.user_check_request.user_payment_manage.PaymentManageController;
 import org.isu_std.user.user_check_request.user_payment_manage.PaymentManageService;
@@ -24,8 +26,8 @@ public class CheckRequestService {
         this.paymentDao = paymentDao;
     }
 
-    protected RequestInfoContext createReqInfoManager(int barangayId, int userId){
-        return new RequestInfoContext(barangayId, userId);
+    protected RequestInfoContext createReqInfoManager(User user){
+        return new RequestInfoContext(user);
     }
 
     protected RequestSelectContext createReqSelectManager(){

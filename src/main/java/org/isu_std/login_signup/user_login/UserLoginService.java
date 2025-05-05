@@ -12,20 +12,8 @@ import java.util.Optional;
 public class UserLoginService{
     private final UserDao userDao;
 
-    private UserLoginService(UserDao userDao){
+    public UserLoginService(UserDao userDao){
         this.userDao = userDao;
-    }
-
-    private static final class Holder{
-        private static UserLoginService instance;
-    }
-
-    public static UserLoginService getInstance(UserDao userDao){
-        if(Holder.instance == null){
-            Holder.instance = new UserLoginService(userDao);
-        }
-
-        return Holder.instance;
     }
 
     protected String[] getUserDetails(){

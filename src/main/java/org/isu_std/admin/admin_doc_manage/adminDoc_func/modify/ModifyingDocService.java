@@ -10,7 +10,7 @@ import org.isu_std.io.Validation;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.file_setup.FileChooser;
 import org.isu_std.io.file_setup.DocxFileManager;
-import org.isu_std.models.modelbuilders.BuilderFactory;
+import org.isu_std.models.model_builders.BuilderFactory;
 
 import java.io.File;
 import java.util.Optional;

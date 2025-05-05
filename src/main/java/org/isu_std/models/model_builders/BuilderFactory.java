@@ -1,4 +1,4 @@
-package org.isu_std.models.modelbuilders;
+package org.isu_std.models.model_builders;
 
 public class BuilderFactory {
     private BuilderFactory(){}

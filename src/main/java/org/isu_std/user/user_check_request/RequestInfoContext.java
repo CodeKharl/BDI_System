@@ -2,20 +2,19 @@ package org.isu_std.user.user_check_request;
 
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
+import org.isu_std.models.User;
 
 import java.util.List;
 import java.util.Map;
 
 public class RequestInfoContext {
-    private final int barangayId;
-    private final int userId;
+    private final User user;
 
     private List<DocumentRequest> userDocRequestMap;
     private Map<Integer, Document> documentDetailMap;
 
-    public RequestInfoContext(int barangayId, int userId){
-        this.barangayId = barangayId;
-        this.userId = userId;
+    public RequestInfoContext(User user){
+        this.user = user;
     }
 
     public void setRefWithDocIDMap(List<DocumentRequest> userDocRequestMap){
@@ -34,11 +33,8 @@ public class RequestInfoContext {
         return this.documentDetailMap;
     }
 
-    public int getBarangayId(){
-        return this.barangayId;
+    public User getUser(){
+        return this.user;
     }
 
-    public int getUserId(){
-        return this.userId;
-    }
 }

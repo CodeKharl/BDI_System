@@ -10,20 +10,8 @@ import java.util.Optional;
 public class AdminLoginService{
     private final AdminDao adminDao;
 
-    private AdminLoginService(AdminDao adminDao){
+    public AdminLoginService(AdminDao adminDao){
         this.adminDao = adminDao;
-    }
-
-    private static final class Holder{
-        private static AdminLoginService instance;
-    }
-
-    public static AdminLoginService getInstance(AdminDao adminDao){
-        if(Holder.instance == null){
-            Holder.instance = new AdminLoginService(adminDao);
-        }
-
-        return Holder.instance;
     }
 
     protected Admin getAdmin(int adminId){

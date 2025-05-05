@@ -1,6 +1,7 @@
 package org.isu_std;
 
 import org.isu_std.admin.admin_brgy_manage.AdminBrgyAccFactory;
+import org.isu_std.client_context.UserContext;
 import org.isu_std.dao.DaoFactory;
 import org.isu_std.models.Admin;
 import org.isu_std.models.User;
@@ -9,30 +10,23 @@ import org.isu_std.user.UserFactory;
 public class PostLogNavFactory {
     private final DaoFactory daoFactory;
 
-    private PostLogNavFactory(DaoFactory daoFactory){
+    public PostLogNavFactory(DaoFactory daoFactory){
         this.daoFactory = daoFactory;
     }
 
-    private final static class Holder{
-        private static PostLogNavFactory postLogNavFactory;
-    }
+    protected PostLoginNavigator getPostLogNav(int type, UserContext userContext, Admin admin){
+        return switch (type){
+            case ClientManager.ADMIN_VAL -> {
+                var adminBrgyAccFactory = new AdminBrgyAccFactory(daoFactory);
+                yield adminBrgyAccFactory.createAdminBrgyAcc(admin);
+            }
 
-    public static PostLogNavFactory getInstance(DaoFactory daoFactory){
-        if(Holder.postLogNavFactory == null){
-            Holder.postLogNavFactory = new PostLogNavFactory(daoFactory);
-        }
+            case ClientManager.USER_VAL -> {
+                var userFactory = new UserFactory(daoFactory);
+                yield userFactory.createUserUI(userContext);
+            }
 
-        return Holder.postLogNavFactory;
-    }
-
-    protected PostLoginNavigator getPostLogNav(int type, User user, Admin admin){
-        return type == ClientManager.ADMIN_VAL ?
-                AdminBrgyAccFactory
-                        .getInstance(daoFactory)
-                        .createAdminBrgyAcc(admin) :
-
-                UserFactory
-                        .getInstance(daoFactory)
-                        .createUserUI(user);
+            default -> throw new IllegalStateException("Unexpected Value " + type);
+        };
     }
 }

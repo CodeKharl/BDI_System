@@ -1,15 +1,16 @@
 package org.isu_std.login_signup;
 
-import org.isu_std.ClientContext;
+import org.isu_std.client_context.AdminContext;
 import org.isu_std.ClientManager;
+import org.isu_std.client_context.UserContext;
 import org.isu_std.dao.AdminDao;
 import org.isu_std.dao.BarangayDao;
 import org.isu_std.dao.UserDao;
 import org.isu_std.login_signup.admin_login.AdminLogin;
 import org.isu_std.login_signup.admin_login.AdminLoginController;
 import org.isu_std.login_signup.admin_login.AdminLoginService;
-import org.isu_std.login_signup.admin_signup.AdminSignController;
-import org.isu_std.login_signup.admin_signup.AdminSignService;
+import org.isu_std.login_signup.admin_signup.AdminSignupController;
+import org.isu_std.login_signup.admin_signup.AdminSignupService;
 import org.isu_std.login_signup.admin_signup.AdminSignup;
 import org.isu_std.login_signup.user_login.UserLogin;
 import org.isu_std.login_signup.user_login.UserLoginController;
@@ -23,51 +24,41 @@ public final class LogSignFactory {
     private final AdminDao adminDao;
     private final BarangayDao barangayDao;
 
-    private LogSignFactory(UserDao userDao, AdminDao adminDao, BarangayDao barangayDao){
+    public LogSignFactory(UserDao userDao, AdminDao adminDao, BarangayDao barangayDao){
         this.userDao = userDao;
         this.adminDao = adminDao;
         this.barangayDao = barangayDao;
     }
 
-    private static final class Holder{
-        private static LogSignFactory instance;
-    }
+    public Login createLoginInsType(int type, AdminContext adminContext, UserContext userContext){
+        if(type == ClientManager.ADMIN_VAL){
+            var adminLoginService = new AdminLoginService(adminDao);
+            var adminLoginController = new AdminLoginController(adminLoginService, adminContext);
 
-    public static LogSignFactory getInstance(UserDao userDao, AdminDao adminDao, BarangayDao barangayDao){
-        if(Holder.instance == null){
-            Holder.instance = new LogSignFactory(userDao, adminDao, barangayDao);
+            return new AdminLogin(adminLoginController);
+        } else if(type == ClientManager.USER_VAL){
+            var userLoginService = new UserLoginService(userDao);
+            var userLoginController = new UserLoginController(userLoginService, userContext);
+
+            return new UserLogin(userLoginController);
         }
 
-        return Holder.instance;
-    }
-
-    public Login createLoginInsType(int type, ClientContext clientContext){
-        return type == ClientManager.ADMIN_VAL ?
-                new AdminLogin(
-                        new AdminLoginController(
-                                AdminLoginService.getInstance(adminDao),
-                                clientContext
-                        )
-                ) :
-                new UserLogin(
-                        new UserLoginController(
-                                UserLoginService.getInstance(userDao),
-                                clientContext
-                        )
-                );
+        throw new IllegalStateException("Unexpected Value : " + type);
     }
 
     public Signup createSignupInsType(int type){
-        return type == ClientManager.ADMIN_VAL ?
-                new AdminSignup(
-                        new AdminSignController(
-                                AdminSignService.getInstance(adminDao)
-                        )
-                ) :
-                new UserSignup(
-                        new UserSignupController(
-                                UserSignupService.getInstance(userDao, barangayDao)
-                        )
-                );
+        if(type == ClientManager.ADMIN_VAL){
+            var adminSignupService = new AdminSignupService(adminDao);
+            var adminLoginController = new AdminSignupController(adminSignupService);
+
+            return new AdminSignup(adminLoginController);
+        } else if(type == ClientManager.USER_VAL){
+            var userSignupService = new UserSignupService(userDao, barangayDao);
+            var userSignupController = new UserSignupController(userSignupService);
+
+            return new UserSignup(userSignupController);
+        }
+
+        throw new IllegalStateException("Unexpected Value : " + type);
     }
 }

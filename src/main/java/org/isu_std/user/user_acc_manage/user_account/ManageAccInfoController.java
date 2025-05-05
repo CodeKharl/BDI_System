@@ -1,23 +1,27 @@
 package org.isu_std.user.user_acc_manage.user_account;
 
+import org.isu_std.client_context.UserContext;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.User;
-import org.isu_std.models.modelbuilders.UserBuilder;
+import org.isu_std.models.model_builders.UserBuilder;
 
 public class ManageAccInfoController {
     private final ManageAccInfoService manageAccInfoService;
     private final AccountInfoContext accountInfoContext;
     private final String[] userDetails;
 
-    public ManageAccInfoController(ManageAccInfoService manageAccInfoService, User user){
+    public ManageAccInfoController(ManageAccInfoService manageAccInfoService, UserContext userContext){
         this.manageAccInfoService = manageAccInfoService;
-        this.accountInfoContext = manageAccInfoService.createAccountInfoContext(user);
+        this.accountInfoContext = manageAccInfoService.createAccountInfoContext(userContext);
         this.userDetails = manageAccInfoService.getUserDetails();
     }
 
     protected void printUserInfo(){
-        accountInfoContext.getActualUser().printUserDetails();
+        accountInfoContext.
+                getUserContext()
+                .getUser()
+                .printUserDetails();
     }
 
     protected String[] getAccountInfoDetails(){
@@ -66,21 +70,31 @@ public class ManageAccInfoController {
 
     protected boolean isUpdateSuccess(){
         String chosenDetail = accountInfoContext.getChosenDetail();
-        User newUser = manageAccInfoService.createNewUser(
-                accountInfoContext.getActualUser(),
-                accountInfoContext.getUserBuilder()
-        );
-        accountInfoContext.getUserBuilder().resetAllValues();
+        UserBuilder userBuilder = accountInfoContext.getUserBuilder();
+        User actualUser = accountInfoContext.getUserContext().getUser();
 
-        return launchUserUpdate(chosenDetail, newUser);
+        if(launchUserUpdate(chosenDetail, actualUser, userBuilder)){
+            // Update on active user object
+            actualUser = manageAccInfoService.createNewUser(actualUser, userBuilder);
+
+            accountInfoContext
+                    .getUserContext()
+                    .setUser(actualUser);
+
+            return true;
+        }
+
+        return false;
     }
 
-    protected boolean launchUserUpdate(String chosenDetail, User newUser){
+    protected boolean launchUserUpdate(String chosenDetail, User actualUser, UserBuilder userBuilder){
         try{
             // Update on the database
-            this.manageAccInfoService.updateUserPerform(chosenDetail, newUser);
-            // Update on the object
-            this.accountInfoContext.setActualUser(newUser);
+            User incompletedUser = userBuilder
+                    .userId(actualUser.userId())
+                    .build();
+            
+            this.manageAccInfoService.updateUserPerform(chosenDetail, incompletedUser);
             return true;
         }catch (OperationFailedException e){
             Util.printException(e.getMessage());

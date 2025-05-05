@@ -7,8 +7,8 @@ import org.isu_std.io.Validation;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Barangay;
-import org.isu_std.models.modelbuilders.BarangayBuilder;
-import org.isu_std.models.modelbuilders.BuilderFactory;
+import org.isu_std.models.model_builders.BarangayBuilder;
+import org.isu_std.models.model_builders.BuilderFactory;
 
 public class RegisterBrgyService {
     private final BarangayDao barangayDao;

@@ -5,29 +5,17 @@ import org.isu_std.io.collections.InputMessageCollection;
 import org.isu_std.io.Validation;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Admin;
-import org.isu_std.models.modelbuilders.AdminBuilder;
-import org.isu_std.models.modelbuilders.BuilderFactory;
+import org.isu_std.models.model_builders.AdminBuilder;
+import org.isu_std.models.model_builders.BuilderFactory;
 
-public class AdminSignService{
+public class AdminSignupService {
     private final static int MIN_NAME_LENGTH = 8;
     private final static int MIN_PIN_LENGTH = 4;
 
     private final AdminDao adminRepository;
 
-    private AdminSignService(AdminDao adminRepository){
+    public AdminSignupService(AdminDao adminRepository){
         this.adminRepository = adminRepository;
-    }
-
-    private static final class Holder{
-        private static AdminSignService instance;
-    }
-
-    public static AdminSignService getInstance(AdminDao adminRepository){
-        if(Holder.instance == null){
-            Holder.instance = new AdminSignService(adminRepository);
-        }
-
-        return Holder.instance;
     }
 
     protected AdminBuilder createAdminBuilder(){

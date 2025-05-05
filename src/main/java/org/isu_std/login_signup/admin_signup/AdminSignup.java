@@ -6,10 +6,10 @@ import org.isu_std.io.Util;
 import org.isu_std.login_signup.Signup;
 
 public class AdminSignup implements Signup {
-    private final AdminSignController adminSignController;
+    private final AdminSignupController adminSignupController;
 
-    public AdminSignup(AdminSignController adminSignController){
-        this.adminSignController = adminSignController;
+    public AdminSignup(AdminSignupController adminSignupController){
+        this.adminSignupController = adminSignupController;
     }
 
     @Override
@@ -17,11 +17,11 @@ public class AdminSignup implements Signup {
         while(true) {
             Util.printSectionTitle("Admin Signup");
 
-            if(!setAdminInformations(adminSignController.getInfoAttributes())){
+            if(!setAdminInformations(adminSignupController.getInfoAttributes())){
                 return;
             }
 
-            if(adminSignController.adminSignupProcessComplete()){
+            if(adminSignupController.adminSignupProcessComplete()){
                return;
             }
         }
@@ -38,7 +38,7 @@ public class AdminSignup implements Signup {
                 return false;
             }
 
-            if(adminSignController.isInputAccepted(input, count)){
+            if(adminSignupController.isInputAccepted(input, count)){
                 count++;
             }
         }

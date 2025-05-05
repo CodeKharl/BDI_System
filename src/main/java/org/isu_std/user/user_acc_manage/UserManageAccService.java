@@ -1,5 +1,6 @@
 package org.isu_std.user.user_acc_manage;
 
+import org.isu_std.client_context.UserContext;
 import org.isu_std.dao.BarangayDao;
 import org.isu_std.dao.UserDao;
 import org.isu_std.dao.UserPersonalDao;
@@ -25,29 +26,29 @@ public class UserManageAccService {
         this.userDao = userDao;
     }
 
-    protected UserManageProcess[] createUserManageProcesses(User user){
-        ManagePersonal managePersonal = createManagePersonal(user);
-        ManageAccountInfo manageAccountInfo = createManageAccountInfo(user);
-        ManageBarangay manageBarangay = createManageBarangay(user);
+    protected UserManageProcess[] createUserManageProcesses(UserContext userContext){
+        ManagePersonal managePersonal = createManagePersonal(userContext);
+        ManageAccountInfo manageAccountInfo = createManageAccountInfo(userContext);
+        ManageBarangay manageBarangay = createManageBarangay(userContext);
 
         return new UserManageProcess[]{managePersonal, manageAccountInfo, manageBarangay};
     }
 
-    private ManagePersonal createManagePersonal(User user){
+    private ManagePersonal createManagePersonal(UserContext userContext){
         var managePersonalService = new ManagePersonalService(userPersonalDao);
-        var managePersonalController = new ManagePersonalController(managePersonalService, user);
+        var managePersonalController = new ManagePersonalController(managePersonalService, userContext);
         return new ManagePersonal(managePersonalController);
     }
 
-    private ManageAccountInfo createManageAccountInfo(User user){
+    private ManageAccountInfo createManageAccountInfo(UserContext userContext){
         var manageAccountInfoService = new ManageAccInfoService(userDao);
-        var manageAccountInfoController = new ManageAccInfoController(manageAccountInfoService, user);
+        var manageAccountInfoController = new ManageAccInfoController(manageAccountInfoService, userContext);
         return new ManageAccountInfo(manageAccountInfoController);
     }
 
-    private ManageBarangay createManageBarangay(User user){
+    private ManageBarangay createManageBarangay(UserContext userContext){
         var manageBarangayService = new ManageBarangayService(barangayDao, userDao);
-        var manageBarangayController = new ManageBarangayController(manageBarangayService, user);
+        var manageBarangayController = new ManageBarangayController(manageBarangayService, userContext);
 
         return new ManageBarangay(manageBarangayController);
     }

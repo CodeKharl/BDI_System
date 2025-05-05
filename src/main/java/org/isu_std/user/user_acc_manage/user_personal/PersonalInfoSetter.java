@@ -1,6 +1,6 @@
 package org.isu_std.user.user_acc_manage.user_personal;
 
-import org.isu_std.models.modelbuilders.UserPersonalBuilder;
+import org.isu_std.models.model_builders.UserPersonalBuilder;
 
 import java.util.Optional;
 

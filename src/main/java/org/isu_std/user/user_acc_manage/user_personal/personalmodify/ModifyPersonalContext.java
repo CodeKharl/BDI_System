@@ -1,7 +1,7 @@
 package org.isu_std.user.user_acc_manage.user_personal.personalmodify;
 
 import org.isu_std.models.User;
-import org.isu_std.models.modelbuilders.UserPersonalBuilder;
+import org.isu_std.models.model_builders.UserPersonalBuilder;
 
 public class ModifyPersonalContext {
     private final User user;

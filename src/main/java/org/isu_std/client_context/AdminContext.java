@@ -1,19 +1,10 @@
-package org.isu_std;
+package org.isu_std.client_context;
 
 import org.isu_std.models.Admin;
 import org.isu_std.models.User;
 
-public class ClientContext {
-    private User user;
+public class AdminContext {
     private Admin admin;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public Admin getAdmin() {
         return admin;

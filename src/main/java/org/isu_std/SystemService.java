@@ -1,4 +1,6 @@
 package org.isu_std;
+import org.isu_std.client_context.AdminContext;
+import org.isu_std.client_context.UserContext;
 import org.isu_std.dao.DaoFactory;
 import org.isu_std.login_signup.LogSignFactory;
 import org.isu_std.login_signup.Login;
@@ -7,35 +9,31 @@ import org.isu_std.models.Admin;
 import org.isu_std.models.User;
 
 public class SystemService {
-    private final DaoFactory daoFactory;
+    private final LogSignFactory logSignFactory;
+    private final PostLogNavFactory postLogNavFactory;
 
-    public SystemService(DaoFactory daoFactory){
-        this.daoFactory = daoFactory;
+    public SystemService(LogSignFactory logSignFactory, PostLogNavFactory postLogNavFactory){
+        this.logSignFactory = logSignFactory;
+        this.postLogNavFactory = postLogNavFactory;
     }
 
-    protected ClientContext createClientManager(){
-        return new ClientContext();
+    protected AdminContext createAdminContext(){
+        return new AdminContext();
     }
 
-    protected Login getLogin(int type, ClientContext clientContext){
-        return LogSignFactory.getInstance(
-                daoFactory.getUserDao(),
-                daoFactory.getAdminDao(),
-                daoFactory.getBrgyDao()
-        ).createLoginInsType(type, clientContext);
+    protected UserContext createUserContext(){
+        return new UserContext();
+    }
+
+    protected Login getLogin(int type, AdminContext adminContext, UserContext userContext){
+        return logSignFactory.createLoginInsType(type, adminContext, userContext);
     }
 
     protected Signup getSignup(int type){
-        return LogSignFactory.getInstance(
-                daoFactory.getUserDao(),
-                daoFactory.getAdminDao(),
-                daoFactory.getBrgyDao()
-        ).createSignupInsType(type);
+        return logSignFactory.createSignupInsType(type);
     }
 
-    protected PostLoginNavigator getPostLoginNav(int type, User user, Admin admin){
-        return PostLogNavFactory
-                .getInstance(daoFactory)
-                .getPostLogNav(type, user, admin);
+    protected PostLoginNavigator getPostLoginNav(int type, UserContext userContext, Admin admin){
+        return postLogNavFactory.getPostLogNav(type, userContext, admin);
     }
 }

@@ -1,5 +1,6 @@
 package org.isu_std.user.user_acc_manage;
 
+import org.isu_std.client_context.UserContext;
 import org.isu_std.dao.BarangayDao;
 import org.isu_std.dao.UserDao;
 import org.isu_std.dao.UserPersonalDao;
@@ -16,9 +17,9 @@ public class UserManageAccFactory{
         this.userDao = userDao;
     }
 
-    public UserManageAcc createUserManageAcc(User user){
+    public UserManageAcc createUserManageAcc(UserContext userContext){
         var userManageAccService = new UserManageAccService(userPersonalDao, barangayDao, userDao);
-        var userManageAccController = new UserManageAccController(userManageAccService, user);
+        var userManageAccController = new UserManageAccController(userManageAccService, userContext);
 
         return new UserManageAcc(userManageAccController);
     }

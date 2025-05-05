@@ -2,33 +2,33 @@ package org.isu_std.login_signup.admin_signup;
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
-import org.isu_std.models.modelbuilders.AdminBuilder;
+import org.isu_std.models.model_builders.AdminBuilder;
 
-public class AdminSignController {
+public class AdminSignupController {
     private final String[] INFORMATION_ATTRIBUTES = {
-            "Admin Name (Min. %d)".formatted(AdminSignService.getMinNameLength()),
-            "Pin (Min. %d)".formatted(AdminSignService.getMinPinLength())
+            "Admin Name (Min. %d)".formatted(AdminSignupService.getMinNameLength()),
+            "Pin (Min. %d)".formatted(AdminSignupService.getMinPinLength())
     };
 
-    private final AdminSignService adminSignService;
+    private final AdminSignupService adminSignupService;
     private final AdminBuilder adminBuilder;
 
-    public AdminSignController(AdminSignService adminSignService){
-        this.adminSignService = adminSignService;
-        this.adminBuilder = adminSignService.createAdminBuilder();
+    public AdminSignupController(AdminSignupService adminSignupService){
+        this.adminSignupService = adminSignupService;
+        this.adminBuilder = adminSignupService.createAdminBuilder();
     }
 
     protected boolean isInputAccepted(String input, int count){
         try {
             switch (count) {
                 case 0 -> {
-                    adminSignService.checkAdminName(input);
-                    adminSignService.checkAdminIdExist(input);
+                    adminSignupService.checkAdminName(input);
+                    adminSignupService.checkAdminIdExist(input);
                     adminBuilder.adminName(input);
                 }
 
                 case 1 -> {
-                    adminSignService.checkAdminPin(input);
+                    adminSignupService.checkAdminPin(input);
                     adminBuilder.adminPin(Integer.parseInt(input));
                 }
             }
@@ -43,10 +43,10 @@ public class AdminSignController {
 
     protected boolean adminSignupProcessComplete(){
         try {
-            adminSignService.insertingAdminData(adminBuilder.build());
+            adminSignupService.insertingAdminData(adminBuilder.build());
             Util.printMessage("You successfully created your admin account!");
             Util.printMessage(
-                    "Your ADMIN ID : " + adminSignService.getAdminId(adminBuilder.getAdminName())
+                    "Your ADMIN ID : " + adminSignupService.getAdminId(adminBuilder.getAdminName())
             );
 
             return true;

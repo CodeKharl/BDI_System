@@ -6,9 +6,9 @@ import org.isu_std.user.UserProcess;
 
 public class UserManageAcc implements UserProcess{
     private static final String[] MANAGE_CHOICES = {
-            "Personal Info",
-            "Account Info",
-            "Barangay Info",
+            "Manage Personal Details",
+            "Manage Account Details",
+            "Manage Barangay Details",
             "Back to User Menu"
     };
 

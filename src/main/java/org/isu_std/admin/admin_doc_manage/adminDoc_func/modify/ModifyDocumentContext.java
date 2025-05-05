@@ -1,6 +1,6 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.modify;
 
-import org.isu_std.models.modelbuilders.DocumentBuilder;
+import org.isu_std.models.model_builders.DocumentBuilder;
 
 public class ModifyDocumentContext {
     private final int barangayId;

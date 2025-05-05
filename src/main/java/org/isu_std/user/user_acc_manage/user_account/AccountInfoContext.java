@@ -1,26 +1,23 @@
 package org.isu_std.user.user_acc_manage.user_account;
 
+import org.isu_std.client_context.UserContext;
 import org.isu_std.models.User;
-import org.isu_std.models.modelbuilders.UserBuilder;
+import org.isu_std.models.model_builders.UserBuilder;
 
 public class AccountInfoContext {
     private final UserBuilder userBuilder;
+    private final UserContext userContext;
 
-    private User actualUser;
     private String chosenDetail;
     private String chosenDetailSpec;
 
-    protected AccountInfoContext(User user, UserBuilder userBuilder){
-        this.actualUser = user;
+    protected AccountInfoContext(UserContext userContext, UserBuilder userBuilder){
+        this.userContext = userContext;
         this.userBuilder = userBuilder;
     }
 
     protected UserBuilder getUserBuilder(){
         return this.userBuilder;
-    }
-
-    public String getChosenDetailSpec() {
-        return chosenDetailSpec;
     }
 
     public void setChosenDetailSpec(String chosenDetailSpec) {
@@ -35,12 +32,8 @@ public class AccountInfoContext {
         return this.chosenDetail;
     }
 
-    protected void setActualUser(User actualUser){
-        this.actualUser = actualUser;
-    }
-
-    protected User getActualUser(){
-        return this.actualUser;
+    protected UserContext getUserContext(){
+        return this.userContext;
     }
 
     protected String getUserDetailWithSpec(){

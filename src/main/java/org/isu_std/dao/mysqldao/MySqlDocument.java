@@ -8,7 +8,7 @@ import org.isu_std.io.SystemLogger;
 import org.isu_std.io.folder_setup.FolderManager;
 import org.isu_std.io.folder_setup.FolderConfig;
 import org.isu_std.models.Document;
-import org.isu_std.models.modelbuilders.DocumentBuilder;
+import org.isu_std.models.model_builders.DocumentBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;

@@ -3,8 +3,8 @@ package org.isu_std.user_brgy_select;
 import org.isu_std.dao.BarangayDao;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.models.Barangay;
-import org.isu_std.models.modelbuilders.BarangayBuilder;
-import org.isu_std.models.modelbuilders.BuilderFactory;
+import org.isu_std.models.model_builders.BarangayBuilder;
+import org.isu_std.models.model_builders.BuilderFactory;
 
 public class BrgySelectService {
     private final BarangayDao barangayDao;

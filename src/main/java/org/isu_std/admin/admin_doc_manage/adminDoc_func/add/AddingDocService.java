@@ -8,8 +8,8 @@ import org.isu_std.models.Document;
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.io.collections.InputMessageCollection;
 import org.isu_std.io.Validation;
-import org.isu_std.models.modelbuilders.BuilderFactory;
-import org.isu_std.models.modelbuilders.DocumentBuilder;
+import org.isu_std.models.model_builders.BuilderFactory;
+import org.isu_std.models.model_builders.DocumentBuilder;
 
 import java.io.File;
 import java.util.Optional;

@@ -22,6 +22,7 @@ public class ManagePersonal implements UserManageProcess {
         // Info Exist -> Modify
         if(managePersonalController.setUserPersonal()){
             modifyInfoPerformed();
+            return;
         }
 
         // Info not Exits -> fill up information needs.

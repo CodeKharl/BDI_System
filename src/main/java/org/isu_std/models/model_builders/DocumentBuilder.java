@@ -1,11 +1,10 @@
-package org.isu_std.models.modelbuilders;
+package org.isu_std.models.model_builders;
 
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentManageCodes;
 import org.isu_std.io.Util;
 import org.isu_std.models.Document;
 
 import java.io.File;
-import java.util.Arrays;
 
 public class DocumentBuilder {
     private String documentName;

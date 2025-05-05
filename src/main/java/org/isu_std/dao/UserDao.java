@@ -10,5 +10,5 @@ public interface UserDao {
     boolean addUser(User user);
     Optional<User> getOptionalUser(String username);
     boolean updateUserInfo(String chosenDetail, User user);
-    boolean updateUserBarangay(User user, Barangay barangay);
+    boolean updateUserBarangay(User newUser);
 }

@@ -1,5 +1,6 @@
 package org.isu_std.user.user_document_request;
 
+import org.isu_std.client_context.UserContext;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
@@ -19,9 +20,11 @@ public class UserDocumentRequestController {
     private final DocRequestContext docRequestContext;
     private DocInfoContext docInfoContext;
 
-    protected UserDocumentRequestController(UserDocumentRequestService userDocumentRequestService, UserInfoContext userInfoContext){
+    protected UserDocumentRequestController(
+            UserDocumentRequestService userDocumentRequestService, UserContext userContext
+    ){
         this.userDocumentRequestService = userDocumentRequestService;
-        this.userInfoContext = userInfoContext;
+        this.userInfoContext = userDocumentRequestService.createUserInfoContext(userContext.getUser());
         this.docRequestContext = userDocumentRequestService.createDocRequestMod();
     }
 

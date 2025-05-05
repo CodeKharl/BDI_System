@@ -6,8 +6,8 @@ import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.user_brgy_select.BrgySelectFactory;
 import org.isu_std.user_brgy_select.BrgySelect;
 import org.isu_std.models.User;
-import org.isu_std.models.modelbuilders.BuilderFactory;
-import org.isu_std.models.modelbuilders.UserBuilder;
+import org.isu_std.models.model_builders.BuilderFactory;
+import org.isu_std.models.model_builders.UserBuilder;
 import org.isu_std.user_info_manager.UserInfoManager;
 
 public class UserSignupService{
@@ -17,18 +17,6 @@ public class UserSignupService{
     public UserSignupService(UserDao userDao, BarangayDao barangayDao){
         this.userDao = userDao;
         this.barangayDao = barangayDao;
-    }
-
-    private static final class Holder{
-        private static UserSignupService instance;
-    }
-
-    public static UserSignupService getInstance(UserDao userDao, BarangayDao barangayDao){
-        if(Holder.instance == null){
-            Holder.instance = new UserSignupService(userDao, barangayDao);
-        }
-
-        return Holder.instance;
     }
 
     protected UserBuilder getUserBuilder(){

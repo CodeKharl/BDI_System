@@ -3,7 +3,7 @@ package org.isu_std.login_signup.user_signup;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.user_brgy_select.BrgySelect;
-import org.isu_std.models.modelbuilders.UserBuilder;
+import org.isu_std.models.model_builders.UserBuilder;
 
 public class UserSignupController {
     private final UserSignupService userSignupService;

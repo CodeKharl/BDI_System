@@ -2,7 +2,7 @@ package org.isu_std.user_brgy_select;
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
-import org.isu_std.models.modelbuilders.BarangayBuilder;
+import org.isu_std.models.model_builders.BarangayBuilder;
 
 public class BrgySelectController {
     private final BrgySelectService brgySelectService;

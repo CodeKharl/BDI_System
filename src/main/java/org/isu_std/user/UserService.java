@@ -1,5 +1,6 @@
 package org.isu_std.user;
 
+import org.isu_std.client_context.UserContext;
 import org.isu_std.dao.*;
 import org.isu_std.io.Symbols;
 import org.isu_std.io.custom_exception.NotFoundException;
@@ -35,11 +36,10 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    protected UserProcess[] createUserProcesses(User user) throws NotFoundException{
-        int userId = user.userId();
-        UserDocumentRequest userDocumentRequest = getUserDocReq(user);
-        CheckRequest checkRequest = getCheckRequest(user.barangayId(), userId);
-        UserManageAcc userManageAcc = getUserManageAcc(user);
+    protected UserProcess[] createUserProcesses(UserContext userContext) throws NotFoundException{
+        UserDocumentRequest userDocumentRequest = getUserDocReq(userContext);
+        CheckRequest checkRequest = getCheckRequest(userContext);
+        UserManageAcc userManageAcc = getUserManageAcc(userContext);
 
         return new UserProcess[]{
                 userDocumentRequest,
@@ -48,32 +48,21 @@ public class UserService {
         };
     }
 
-    private UserDocumentRequest getUserDocReq(User user) throws NotFoundException{
-        UserDocumentReqFactory userDocumentReqFactory = UserDocumentReqFactory.getInstance(documentDao, documentRequestDao);
-        return userDocumentReqFactory.createUserDocReq(user, getUserPersonal(user.userId()));
-    }
-
-    private UserPersonal getUserPersonal(int userId){
-        Optional<UserPersonal> optionalUserPersonal = userPersonalDao.getOptionalUserPersonal(userId);
-
-        //message for the user to put some personal information of his/her account if not exist.
-        String guideMessage = "Guide : User Menu -> Manage Account -> Personal Information";
-
-        return optionalUserPersonal.orElseThrow(
-                () -> new NotFoundException(
-                        "Theres no existing personal information of your account!\n%s%s"
-                                .formatted(Symbols.MESSAGE.getType(), guideMessage)
-                )
+    private UserDocumentRequest getUserDocReq(UserContext userContext) throws NotFoundException{
+        var userDocumentReqFactory = new UserDocumentReqFactory(
+                documentDao, documentRequestDao, userPersonalDao
         );
+
+        return userDocumentReqFactory.createUserDocReq(userContext);
     }
 
-    private UserManageAcc getUserManageAcc(User user){
+    private UserManageAcc getUserManageAcc(UserContext userContext){
         UserManageAccFactory userManageAccFactory = new UserManageAccFactory(userPersonalDao, barangayDao, userDao);
-        return userManageAccFactory.createUserManageAcc(user);
+        return userManageAccFactory.createUserManageAcc(userContext);
     }
 
-    private CheckRequest getCheckRequest(int barangayId, int userId){
+    private CheckRequest getCheckRequest(UserContext userContext){
         CheckRequestFactory checkRequestFactory = new CheckRequestFactory(documentDao, documentRequestDao, paymentDao);
-        return checkRequestFactory.create(barangayId, userId);
+        return checkRequestFactory.create(userContext);
     }
 }

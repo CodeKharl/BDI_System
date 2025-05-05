@@ -1,27 +1,27 @@
 package org.isu_std.login_signup.admin_login;
 
-import org.isu_std.ClientContext;
+import org.isu_std.client_context.AdminContext;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
 
 public class AdminLoginController {
     private final AdminLoginService adminLoginService;
-    private final ClientContext clientContext;
+    private final AdminContext adminContext;
 
-    public AdminLoginController(AdminLoginService adminLoginService, ClientContext clientContext){
+    public AdminLoginController(AdminLoginService adminLoginService, AdminContext adminContext){
         this.adminLoginService = adminLoginService;
-        this.clientContext = clientContext;
+        this.adminContext = adminContext;
     }
 
     protected boolean isInputAccepted(int count, int input) {
         try {
             switch (count) {
-                case 0 -> clientContext.setAdmin(
+                case 0 -> adminContext.setAdmin(
                         adminLoginService.getAdmin(input)
                 );
 
                 case 1 -> adminLoginService.checkAdminPin(
-                        clientContext.getAdmin().adminPin(),
+                        adminContext.getAdmin().adminPin(),
                         input
                 );
             }

@@ -1,14 +1,18 @@
 package org.isu_std;
 
+import org.isu_std.client_context.AdminContext;
+import org.isu_std.client_context.UserContext;
 import org.isu_std.io.Util;
 
 public class SystemController {
     private final SystemService systemService;
-    private final ClientContext clientContext;
+    private final AdminContext adminContext;
+    private final UserContext userContext;
 
     public SystemController(SystemService systemService){
         this.systemService = systemService;
-        this.clientContext = systemService.createClientManager();
+        this.adminContext = systemService.createAdminContext();
+        this.userContext = systemService.createUserContext();
     }
 
     protected boolean isSystemRunning(int choice){
@@ -28,13 +32,13 @@ public class SystemController {
 
     private void startLogin(int type){
         if(systemService
-                .getLogin(type, clientContext)
+                .getLogin(type, adminContext, userContext)
                 .setLoginInformation()
         ){
             systemService.getPostLoginNav(
                     type,
-                    clientContext.getUser(),
-                    clientContext.getAdmin()
+                    userContext,
+                    adminContext.getAdmin()
             ).navigateToSection();
         }
     }

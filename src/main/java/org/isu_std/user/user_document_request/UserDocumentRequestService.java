@@ -2,34 +2,62 @@ package org.isu_std.user.user_document_request;
 
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.DocumentRequestDao;
+import org.isu_std.dao.UserPersonalDao;
+import org.isu_std.io.Symbols;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.io.collections.InputMessageCollection;
 import org.isu_std.models.DocumentRequest;
+import org.isu_std.models.User;
+import org.isu_std.models.UserPersonal;
 import org.isu_std.user.user_document_request.document_request_contexts.DocInfoContext;
 import org.isu_std.user.user_document_request.document_request_contexts.DocRequestContext;
 import org.isu_std.user.user_document_request.document_Requirement_provider.DocRequirementProvider;
 import org.isu_std.user.user_document_request.document_Requirement_provider.DocRequirementController;
 import org.isu_std.user.user_document_request.document_Requirement_provider.DocRequirementService;
+import org.isu_std.user.user_document_request.document_request_contexts.UserInfoContext;
 import org.isu_std.user.user_document_request.reference_generator.ReferenceConfig;
 import org.isu_std.user.user_document_request.reference_generator.ReferenceGenerator;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class UserDocumentRequestService {
     private final DocumentDao documentDao;
     private final DocumentRequestDao documentRequestDao;
+    private final UserPersonalDao userPersonalDao;
 
-    public UserDocumentRequestService(DocumentDao documentDao, DocumentRequestDao documentRequestDao){
+    public UserDocumentRequestService(
+            DocumentDao documentDao, DocumentRequestDao documentRequestDao, UserPersonalDao userPersonalDao
+    ){
         this.documentDao = documentDao;
         this.documentRequestDao = documentRequestDao;
+        this.userPersonalDao = userPersonalDao;
     }
 
     protected DocInfoContext createUserReqModel(int barangayId) throws NotFoundException{
         return new DocInfoContext(getBrgyDocsMap(barangayId));
+    }
+
+    protected UserInfoContext createUserInfoContext(User user){
+        return new UserInfoContext(user, getUserPersonal(user.userId()));
+    }
+
+    private UserPersonal getUserPersonal(int userId){
+        Optional<UserPersonal> optionalUserPersonal = userPersonalDao.getOptionalUserPersonal(userId);
+
+        //message for the user to put some personal information of his/her account if not exist.
+        String guideMessage = "Guide : User Menu -> Manage Account -> Personal Information";
+
+        return optionalUserPersonal.orElseThrow(
+                () -> new NotFoundException(
+                        "Theres no existing personal information of your account!\n%s%s"
+                                .formatted(Symbols.MESSAGE.getType(), guideMessage)
+                )
+        );
     }
 
     private Map<Integer, Document> getBrgyDocsMap(int barangayId){

@@ -1,16 +1,17 @@
 package org.isu_std.login_signup.user_login;
 
-import org.isu_std.ClientContext;
+import org.isu_std.client_context.AdminContext;
+import org.isu_std.client_context.UserContext;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
 
 public class UserLoginController {
     private final UserLoginService userLoginService;
-    private final ClientContext clientContext;
+    private final UserContext userContext;
 
-    public UserLoginController(UserLoginService userLoginService, ClientContext clientContext){
+    public UserLoginController(UserLoginService userLoginService, UserContext userContext){
         this.userLoginService = userLoginService;
-        this.clientContext = clientContext;
+        this.userContext = userContext;
     }
 
     protected String[] userDetails(){
@@ -20,12 +21,12 @@ public class UserLoginController {
     protected boolean isInputAccepted(int count, String input){
         try {
             switch (count) {
-                case 0 -> clientContext.setUser(
+                case 0 -> userContext.setUser(
                         userLoginService.getUser(input)
                 );
 
                 case 1 -> userLoginService.checkUserPassword(
-                        clientContext.getUser().password(),
+                        userContext.getUser().password(),
                         input
                 );
 

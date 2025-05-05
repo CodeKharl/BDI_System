@@ -1,21 +1,22 @@
 package org.isu_std.user;
 
+import org.isu_std.client_context.UserContext;
 import org.isu_std.models.User;
 
 public class UserController {
     private final UserService userService;
-    private final User user;
+    private final UserContext userContext;
 
     private UserProcess[] userProcesses;
 
-    protected UserController(UserService userService, User user){
+    protected UserController(UserService userService, UserContext userContext){
         this.userService = userService;
-        this.user = user;
+        this.userContext = userContext;
     }
 
     protected void userOnProcess(String[] processTitles, int choice){
         if(this.userProcesses == null){
-            this.userProcesses = userService.createUserProcesses(user);
+            this.userProcesses = userService.createUserProcesses(userContext);
         }
 
         int index = choice - 1;
@@ -24,6 +25,6 @@ public class UserController {
     }
 
     protected String getUsername(){
-        return this.user.username();
+        return this.userContext.getUsername();
     }
 }

@@ -3,12 +3,12 @@ package org.isu_std.admin.admin_brgy_manage.linkacc;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Admin;
-import org.isu_std.models.modelbuilders.AdminBuilder;
+import org.isu_std.models.model_builders.AdminBuilder;
 import org.isu_std.models.Barangay;
 import org.isu_std.dao.AdminDao;
 import org.isu_std.dao.BarangayDao;
 import org.isu_std.io.collections.InputMessageCollection;
-import org.isu_std.models.modelbuilders.BuilderFactory;
+import org.isu_std.models.model_builders.BuilderFactory;
 
 import java.util.Optional;
 

@@ -4,7 +4,7 @@ import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Payment;
-import org.isu_std.models.modelbuilders.PaymentBuilder;
+import org.isu_std.models.model_builders.PaymentBuilder;
 import org.isu_std.user.user_check_request.RequestSelectContext;
 
 import java.util.Optional;
