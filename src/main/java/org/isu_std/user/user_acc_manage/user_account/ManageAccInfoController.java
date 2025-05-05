@@ -24,10 +24,6 @@ public class ManageAccInfoController {
         return this.userDetails;
     }
 
-    protected User getUser(){
-        return this.accountInfoContext.getActualUser();
-    }
-
     protected void setChosenDetail(int choice){
         int index = choice - 1;
         String spec = manageAccInfoService.getChosenDetailSpecs(index);
