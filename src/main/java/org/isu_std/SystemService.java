@@ -1,8 +1,8 @@
 package org.isu_std;
 import org.isu_std.dao.DaoFactory;
-import org.isu_std.logsign.LogSignFactory;
-import org.isu_std.logsign.Login;
-import org.isu_std.logsign.Signup;
+import org.isu_std.login_signup.LogSignFactory;
+import org.isu_std.login_signup.Login;
+import org.isu_std.login_signup.Signup;
 import org.isu_std.models.Admin;
 import org.isu_std.models.User;
 

@@ -4,6 +4,7 @@ import org.isu_std.dao.UserDao;
 import org.isu_std.dao.UserPersonalDao;
 import org.isu_std.database.MySQLDBConnection;
 import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.dynamic_enum_handler.CharValue;
 import org.isu_std.models.Barangay;
 import org.isu_std.models.User;
@@ -18,7 +19,7 @@ import java.util.Optional;
 public class MySqlUser implements UserDao, UserPersonalDao {
     @Override
     public int getUserId(String username) {
-        String query = "SELECT user_id FROM user WHERE user_name = ? LIMIT 1";
+        String query = "SELECT user_id FROM user WHERE username = ? LIMIT 1";
 
         try(Connection connection = MySQLDBConnection.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
@@ -38,7 +39,7 @@ public class MySqlUser implements UserDao, UserPersonalDao {
 
     @Override
     public boolean addUser(User user){
-        String query = "INSERT INTO user (user_name, password, barangay_id) values(?, ?, ?)";
+        String query = "INSERT INTO user (username, password, barangay_id) values(?, ?, ?)";
 
         try(Connection connection = MySQLDBConnection.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
@@ -57,7 +58,7 @@ public class MySqlUser implements UserDao, UserPersonalDao {
 
     @Override
     public Optional<User> getOptionalUser(String username){
-        String query = "SELECT * FROM user WHERE user_name = ? LIMIT 1";
+        String query = "SELECT * FROM user WHERE username = ? LIMIT 1";
 
         try(Connection connection = MySQLDBConnection.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
@@ -204,5 +205,41 @@ public class MySqlUser implements UserDao, UserPersonalDao {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean updateUserInfo(String chosenDetail, User user){
+        String query = getUpdateDetailQuery(chosenDetail);
+
+        try(Connection connection = MySQLDBConnection.getConnection();
+            PreparedStatement preStatement = connection.prepareStatement(query);
+        ){
+            preStatement.setObject(1, getUpdateUserInfo(user));
+            preStatement.setInt(2, user.userId());
+
+            return preStatement.executeUpdate() == 1;
+        }catch (SQLException e){
+            SystemLogger.logWarning(MySqlUser.class, e.getMessage());
+        }
+
+        return false;
+    }
+
+    private String getUpdateDetailQuery(String chosenDetail){
+        return "UPDATE user SET %s = ? WHERE user_id = ?".formatted(chosenDetail);
+    }
+
+    private Object getUpdateUserInfo(User user){
+        Object[] infos = {user.username(), user.password()};
+
+        for(Object info : infos){
+            if(info != null){
+                return info;
+            }
+        }
+
+        throw new IllegalStateException(
+                "All attributes of the User object are unset or contain no values."
+        );
     }
 }

@@ -9,5 +9,6 @@ public interface UserDao {
     int getUserId(String username);
     boolean addUser(User user);
     Optional<User> getOptionalUser(String username);
+    boolean updateUserInfo(String chosenDetail, User user);
     boolean updateUserBarangay(User user, Barangay barangay);
 }

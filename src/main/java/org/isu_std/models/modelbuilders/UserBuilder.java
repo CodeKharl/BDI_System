@@ -52,4 +52,11 @@ public class UserBuilder {
     public String getPassword() {
         return password;
     }
+
+    public void resetAllValues(){
+        this.userId = 0;
+        this.username = null;
+        this.password = null;
+        this.barangayId = 0;
+    }
 }
