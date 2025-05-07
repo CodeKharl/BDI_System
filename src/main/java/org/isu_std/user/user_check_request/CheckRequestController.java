@@ -9,6 +9,7 @@ import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
 import org.isu_std.models.User;
+import org.isu_std.user.user_check_request.user_delete_request.UserDeleteRequest;
 import org.isu_std.user.user_check_request.user_payment_manage.PaymentManage;
 
 import java.util.List;
@@ -51,9 +52,6 @@ public class CheckRequestController {
     }
 
     protected void printDocumentDetails(){
-        Util.printSubSectionTitle("Existing Request (Document Name - Price - Requirements");
-        Util.printMessage("Note! Requested document cannot be found once the admin reject it.");
-
         List<DocumentRequest> documentRequestList = requestInfoContext.getUserDocRequestList();
         Map<Integer, Document> documentDetailsMap = requestInfoContext.getDocumentDetailMap();
 
@@ -86,7 +84,7 @@ public class CheckRequestController {
             case 1 -> checkRequestStatus(referenceId);
             case 2 -> paymentManage(referenceId);
             case 3 -> {
-                return requestCancellationPerformed();
+                return deleteRequest();
             }
         }
 
@@ -94,50 +92,33 @@ public class CheckRequestController {
     }
 
     protected void checkRequestStatus(String referenceId){
-        if(!checkRequestService.checkRequestedStatus(referenceId)){
-            Util.printMessage("Your request is in validation state! Please wait for admin approval.");
+        if(checkRequestService.checkRequestedStatus(referenceId)){
+            Util.printMessage("Your request has been approved!");
+            Util.printMessage("You can now proceed to payment selection (Payment Manage)");
             return;
         }
 
-        Util.printMessage("Your request has been approved!");
-        Util.printMessage("You can now proceed to payment selection (Payment Manage)");
-    }
-
-    private boolean requestCancellationPerformed(){
-        if(!isRequestCancellationConfirmed()){
-            return false;
-        }
-
-        try{
-            checkRequestService.deleteRequestPerformed(
-                    requestSelectContext.getSelectedDocRequest()
-            );
-
-            return true;
-        }catch (OperationFailedException e){
-            Util.printException(e.getMessage());
-        }
-
-        return false;
-    }
-
-    private boolean isRequestCancellationConfirmed(){
-        return SystemInput.isPerformConfirmed(
-                "Cancellation Request Confirm",
-                ChoiceCollection.CONFIRM.getValue(),
-                ChoiceCollection.EXIT_CODE.getValue()
+        Util.printMessage(
+                "Your request is in validation state! Please wait for admin approval."
         );
     }
 
     private void paymentManage(String referenceId){
         if(!checkRequestService.checkRequestedStatus(referenceId)){
             Util.printMessage("You cannot proceed in this section!");
-            Util.printMessage("Please wait for the admin request approval");
+            Util.printMessage("Please wait for the admin request approval.");
             return;
         }
 
         PaymentManage paymentManage = checkRequestService.createPaymentManage(requestSelectContext);
         paymentManage.sectionPerformed();
+    }
+
+    protected boolean deleteRequest(){
+        UserDeleteRequest userDeleteRequest = checkRequestService
+                .createUserDeleteRequest(requestSelectContext.getSelectedDocRequest());
+
+        return userDeleteRequest.requestDeletePerform();
     }
 
     protected String selectedDocName(){

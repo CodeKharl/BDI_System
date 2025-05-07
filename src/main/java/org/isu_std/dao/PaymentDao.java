@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface PaymentDao {
     boolean addPayment(String referenceId, Payment payment);
     Optional<Payment> getOptionalPayment(String referenceId);
+    boolean deletePayment(String referenceId);
 }

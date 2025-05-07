@@ -70,10 +70,12 @@ public class ApprovedDocumentService {
 
     protected File getApprovedDocFile(RequestDocumentContext requestDocumentContext){
         String filePath = FolderConfig.DOC_APPROVE_PATH.getPath();
-        String fileName = requestDocumentContext.documentRequest().referenceId() +
-                requestDocumentContext.document().documentFile().getName();
 
-        File outputFile = new File("%s_%s".formatted(filePath, fileName));
+        String referenceId = requestDocumentContext.documentRequest().referenceId();
+        String requestDocFileName = requestDocumentContext.document().documentFile().getName();
+        String fileName = "%s_%s".formatted(referenceId, requestDocFileName);
+
+        File outputFile = new File(filePath + File.separator + fileName);
 
         if(!outputFile.exists()){
             throw new NotFoundException("Theres no existing approved document file!");

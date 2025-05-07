@@ -17,6 +17,7 @@ public class RequestApproveController {
 
     protected boolean isReqApproved(){
         try{
+            requestApproveService.createOutputDocumentFile(requestDocumentContext);
             requestApproveService.requestApprovePerformed(requestDocumentContext);
             return true;
         }catch (IOException | OperationFailedException e){

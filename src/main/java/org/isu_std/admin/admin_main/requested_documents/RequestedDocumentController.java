@@ -15,6 +15,7 @@ import java.util.List;
 public class RequestedDocumentController {
     private final RequestedDocumentService reqDocService;
     private final Barangay barangay;
+
     private List<DocumentRequest> documentRequestList;
     private RequestDocumentContext requestDocumentContext;
 
@@ -42,8 +43,9 @@ public class RequestedDocumentController {
 
     protected boolean setDocumentReqChoice(int docChoice){
         try{
-            DocumentRequest documentRequest = documentRequestList.get(docChoice - 1);
-            this.requestDocumentContext = reqDocService.getReqDocsManager(documentRequest);
+            int index = docChoice - 1;
+            DocumentRequest documentRequest = documentRequestList.get(index);
+            this.requestDocumentContext = reqDocService.getReqDocsContext(documentRequest);
 
             return true;
         }catch (OperationFailedException e){

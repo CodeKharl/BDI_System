@@ -9,8 +9,10 @@ import org.isu_std.io.folder_setup.FolderManager;
 import org.isu_std.io.folder_setup.FolderConfig;
 import org.isu_std.models.UserPersonal;
 
+import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.RecordComponent;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,38 +23,38 @@ public class RequestApproveService {
         this.documentRequestDao = documentRequestDao;
     }
 
-    protected void requestApprovePerformed(RequestDocumentContext requestDocumentContext) throws IOException, OperationFailedException{
-        if (!createOutputDocumentFile(requestDocumentContext)) {
-            throw new OperationFailedException("Failed to Create Document Output File! Please try again.");
-        }
-
+    protected void requestApprovePerformed(RequestDocumentContext requestDocumentContext)
+            throws OperationFailedException{
         String referenceId = requestDocumentContext.documentRequest().referenceId();
         if (!documentRequestDao.setRequestApprove(referenceId)) {
             throw new OperationFailedException("Failed to Approve the Requested Document! Please try again.");
         }
     }
 
-    protected boolean createOutputDocumentFile(RequestDocumentContext requestDocumentContext) throws IOException, OperationFailedException {
+    protected void createOutputDocumentFile(RequestDocumentContext requestDocumentContext)
+            throws IOException, OperationFailedException {
         String filePath = FolderConfig.DOC_APPROVE_PATH.getPath();
         FolderManager.setFileFolder(filePath);
 
         File outputFile = copyDefaultFile(requestDocumentContext, filePath);
-        if (outputFile == null) {
-            return false;
+        if (outputFile != null) {
+            UserPersonal userPersonal = requestDocumentContext.userPersonal();
+            Map<String, String> informations = getInformationsMap(userPersonal);
+            DocxFileManager.editDocxPlaceHolders(outputFile, informations);
+            return;
         }
 
-        UserPersonal userPersonal = requestDocumentContext.userPersonal();
-        Map<String, String> informations = getInformationsMap(userPersonal);
-        DocxFileManager.editDocxPlaceHolders(outputFile, informations);
-
-        return true;
+        throw new OperationFailedException(
+                "Failed to Create Document Output File! Please try again."
+        );
     }
 
     protected File copyDefaultFile(RequestDocumentContext requestDocumentContext, String filePath){
         File defaultFile = requestDocumentContext.document().documentFile();
-        String fileName = requestDocumentContext.documentRequest().referenceId() + defaultFile.getName();
+        String referenceId = requestDocumentContext.documentRequest().referenceId();
+        String fileName = "%s_%s".formatted(referenceId, defaultFile.getName());
 
-        File newFile = new File("%s_%s".formatted(filePath, fileName));
+        File newFile = new File(filePath + File.separator + fileName);
 
         try(InputStream inputStream = new FileInputStream(defaultFile);
             OutputStream outputStream = new FileOutputStream(newFile)
@@ -75,13 +77,17 @@ public class RequestApproveService {
     private Map<String, String> getInformationsMap(UserPersonal userPersonal){
         Map<String, String> informationsMap = new HashMap<>();
 
-        Field[] keys = UserPersonal.class.getDeclaredFields();
+        putUserPerInformationOnMap(informationsMap, userPersonal);
+
+        return informationsMap;
+    }
+
+    private void putUserPerInformationOnMap(Map<String, String> informationMap, UserPersonal userPersonal){
+        RecordComponent[] keys = UserPersonal.class.getRecordComponents();
         String[] values = userPersonal.valueToStringArr();
 
         for(int i = 0; i < keys.length; i++){
-            informationsMap.put(keys[i].getName(), values[i]);
+            informationMap.put(keys[i].getName(), values[i]);
         }
-
-        return informationsMap;
     }
 }

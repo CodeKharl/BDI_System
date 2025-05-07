@@ -7,12 +7,14 @@ import org.isu_std.io.custom_exception.OperationFailedException;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.RecordComponent;
 import java.util.*;
 
 // Class that deals the docx files.
 
 public class DocxFileManager {
     private final static String FILE_FORMAT = ".docx";
+    private final static String PLACE_HOLDER_FORMAT = "{{%s}}";
 
     public static boolean isDocxFile(File file){
         return file.getName().endsWith(FILE_FORMAT);
@@ -183,13 +185,17 @@ public class DocxFileManager {
         return indexes;
     }
 
-    public static Set<String> convertFieldsToPlaceHoldersSet(Field[] fields){
+    public static Set<String> convertRecComToPlaceHoldersSet(RecordComponent[] recordComponents){
         Set<String> fieldSet = new HashSet<>();
 
-        for(Field field : fields){
-            fieldSet.add("{{%s}}".formatted(field.getName()));
+        for(RecordComponent recordComponent : recordComponents){
+            fieldSet.add(PLACE_HOLDER_FORMAT.formatted(recordComponent.getName()));
         }
 
         return fieldSet;
+    }
+
+    public static <T> String convertToPlaceholder(T type){
+        return PLACE_HOLDER_FORMAT.formatted(type.toString());
     }
 }

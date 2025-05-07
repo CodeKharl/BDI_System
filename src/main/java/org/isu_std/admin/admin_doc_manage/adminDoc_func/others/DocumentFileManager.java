@@ -6,15 +6,17 @@ import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.file_setup.FileChooser;
 import org.isu_std.io.file_setup.DocxFileManager;
 import org.isu_std.io.file_setup.DocxMessage;
+import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.RecordComponent;
 import java.util.Optional;
 import java.util.Set;
 
-public class DocumentFileProvider {
+public class DocumentFileManager {
     public static Optional<File> getOptionalDocFile(){
         while(true) {
             Util.printSubSectionTitle("Choosing File Document");
@@ -67,8 +69,7 @@ public class DocumentFileProvider {
     }
 
     private static boolean modificationDocumentProcess(File documentFile){
-        Field[] userPersonalFields = UserPersonal.class.getDeclaredFields();
-        Set<String> placeHolders = DocxFileManager.convertFieldsToPlaceHoldersSet(userPersonalFields);
+        Set<String> placeHolders = getNeededPlaceHolders();
 
         printAvailableTextPlaceHolders(placeHolders);
         FileChooser.openFile(documentFile);
@@ -78,6 +79,18 @@ public class DocumentFileProvider {
         }
 
         return isDocumentFileAccepted(documentFile, placeHolders);
+    }
+
+    private static Set<String> getNeededPlaceHolders(){
+        // Main information for the output document file. E.g. name, age, sex, etc.
+        RecordComponent[] recordComponents = UserPersonal.class.getRecordComponents();
+        Set<String> placeHolders = DocxFileManager.convertRecComToPlaceHoldersSet(recordComponents);
+
+        // Date
+        String dateHolder = DocxFileManager.convertToPlaceholder("date");
+        placeHolders.add(dateHolder);
+
+        return placeHolders;
     }
 
     private static boolean isDocumentFileAccepted(File documentFile, Set<String> placeHolders){
@@ -95,10 +108,7 @@ public class DocumentFileProvider {
     private static void printAvailableTextPlaceHolders(Set<String> userPerPlaceHolders){
         Util.printSubSectionTitle("Available Document Text Place-Holders");
         Util.printMessage("This place holders can only be use on paragraphs!");
-
-        for(String holder: userPerPlaceHolders){
-            Util.printChoice(holder);
-        }
+        userPerPlaceHolders.forEach(Util::printChoice);
     }
 
 

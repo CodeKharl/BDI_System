@@ -24,13 +24,20 @@ public class CheckRequest implements UserProcess {
                 return;
             }
 
-            checkRequestController.printDocumentDetails();
+            printDocumentDetailsWithGuide();
+
             if(!setDocumentChoice()){
                 return;
             }
 
             checkRequestProcess();
         }
+    }
+
+    private void printDocumentDetailsWithGuide(){
+        Util.printSubSectionTitle("Existing Request (Document Name - Price - Requirements)");
+        Util.printMessage("Note! Requested document cannot be found once the admin reject it.");
+        checkRequestController.printDocumentDetails();
     }
 
     private boolean setDocumentChoice(){

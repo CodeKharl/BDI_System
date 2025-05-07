@@ -9,6 +9,9 @@ import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
 import org.isu_std.models.User;
+import org.isu_std.user.user_check_request.user_delete_request.UserDeleteReqController;
+import org.isu_std.user.user_check_request.user_delete_request.UserDeleteReqService;
+import org.isu_std.user.user_check_request.user_delete_request.UserDeleteRequest;
 import org.isu_std.user.user_check_request.user_payment_manage.PaymentManage;
 import org.isu_std.user.user_check_request.user_payment_manage.PaymentManageController;
 import org.isu_std.user.user_check_request.user_payment_manage.PaymentManageService;
@@ -63,15 +66,8 @@ public class CheckRequestService {
         return documentDetailList;
     }
 
-
     protected boolean checkRequestedStatus(String referenceId){
         return documentRequestDao.isRequestApproved(referenceId);
-    }
-
-    protected void deleteRequestPerformed(DocumentRequest documentRequest){
-        if(!documentRequestDao.deleteDocRequest(documentRequest)){
-            throw new OperationFailedException("Failed to delete the request! Please try to cancel it again.");
-        }
     }
 
     protected PaymentManage createPaymentManage(RequestSelectContext requestSelectContext){
@@ -81,5 +77,11 @@ public class CheckRequestService {
         );
 
         return new PaymentManage(paymentManageController);
+    }
+
+    protected UserDeleteRequest createUserDeleteRequest(DocumentRequest documentRequest){
+        var userDeleteReqService = new UserDeleteReqService(documentRequestDao, paymentDao);
+        var userDeleteReqController = new UserDeleteReqController(userDeleteReqService, documentRequest);
+        return new UserDeleteRequest(userDeleteReqController);
     }
 }

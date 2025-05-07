@@ -44,7 +44,7 @@ public class RequestedDocumentService {
         return documentReqList;
     }
 
-    protected RequestDocumentContext getReqDocsManager(DocumentRequest documentRequest) throws OperationFailedException{
+    protected RequestDocumentContext getReqDocsContext(DocumentRequest documentRequest) throws OperationFailedException{
         ReqDocsManagerBuilder reqDocsManagerBuilder = new ReqDocsManagerBuilder(documentRequest);
         UserPersonal userPersonal = ReqDocsManagerProvider.getUserPersonal(userPersonalDao, documentRequest.userId());
         Document document = ReqDocsManagerProvider.getDocument(
