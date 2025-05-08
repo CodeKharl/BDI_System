@@ -1,6 +1,7 @@
 package org.isu_std.user.user_check_request.user_delete_request;
 
 import org.isu_std.io.SystemInput;
+import org.isu_std.io.Util;
 import org.isu_std.io.collections.ChoiceCollection;
 
 public class UserDeleteRequest {
@@ -11,11 +12,15 @@ public class UserDeleteRequest {
     }
 
     public boolean requestDeletePerform(){
-        if(!isRequestCancellationConfirmed()){
-            return false;
+        boolean isDeleteProcessSuccess = isRequestCancellationConfirmed() &&
+                userDeleteReqController.requestCancellationProcess();
+
+        if(isDeleteProcessSuccess){
+            Util.printMessage("Request deletion completed successfully.");
+            return true;
         }
 
-        return userDeleteReqController.requestCancellationProcess();
+        return false;
     }
 
     private boolean isRequestCancellationConfirmed(){

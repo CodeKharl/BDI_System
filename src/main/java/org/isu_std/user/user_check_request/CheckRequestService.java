@@ -9,6 +9,9 @@ import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
 import org.isu_std.models.User;
+import org.isu_std.user.user_check_request.user_check_status.CheckReqStatusController;
+import org.isu_std.user.user_check_request.user_check_status.CheckReqStatusService;
+import org.isu_std.user.user_check_request.user_check_status.CheckRequestStatus;
 import org.isu_std.user.user_check_request.user_delete_request.UserDeleteReqController;
 import org.isu_std.user.user_check_request.user_delete_request.UserDeleteReqService;
 import org.isu_std.user.user_check_request.user_delete_request.UserDeleteRequest;
@@ -66,8 +69,10 @@ public class CheckRequestService {
         return documentDetailList;
     }
 
-    protected boolean checkRequestedStatus(String referenceId){
-        return documentRequestDao.isRequestApproved(referenceId);
+    protected CheckRequestStatus createCheckRequestStatus(DocumentRequest documentRequest){
+        var checkReqStatusService = new CheckReqStatusService(documentRequestDao);
+        var checkReqStatusController = new CheckReqStatusController(checkReqStatusService, documentRequest);
+        return new CheckRequestStatus(checkReqStatusController);
     }
 
     protected PaymentManage createPaymentManage(RequestSelectContext requestSelectContext){
@@ -83,5 +88,9 @@ public class CheckRequestService {
         var userDeleteReqService = new UserDeleteReqService(documentRequestDao, paymentDao);
         var userDeleteReqController = new UserDeleteReqController(userDeleteReqService, documentRequest);
         return new UserDeleteRequest(userDeleteReqController);
+    }
+
+    protected boolean isRequestApproved(String referenceId){
+        return documentRequestDao.isRequestApproved(referenceId);
     }
 }

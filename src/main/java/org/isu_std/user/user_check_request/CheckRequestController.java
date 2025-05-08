@@ -9,6 +9,7 @@ import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
 import org.isu_std.models.User;
+import org.isu_std.user.user_check_request.user_check_status.CheckRequestStatus;
 import org.isu_std.user.user_check_request.user_delete_request.UserDeleteRequest;
 import org.isu_std.user.user_check_request.user_payment_manage.PaymentManage;
 
@@ -78,11 +79,9 @@ public class CheckRequestController {
     }
 
     protected boolean isRequestProcessFinished(int choice){
-        String referenceId = requestSelectContext.getSelectedDocRequest().referenceId();
-
         switch (choice){
-            case 1 -> checkRequestStatus(referenceId);
-            case 2 -> paymentManage(referenceId);
+            case 1 -> checkRequestStatus();
+            case 2 -> paymentManage();
             case 3 -> {
                 return deleteRequest();
             }
@@ -91,20 +90,17 @@ public class CheckRequestController {
         return false;
     }
 
-    protected void checkRequestStatus(String referenceId){
-        if(checkRequestService.checkRequestedStatus(referenceId)){
-            Util.printMessage("Your request has been approved!");
-            Util.printMessage("You can now proceed to payment selection (Payment Manage)");
-            return;
-        }
-
-        Util.printMessage(
-                "Your request is in validation state! Please wait for admin approval."
+    private void checkRequestStatus(){
+        CheckRequestStatus checkRequestStatus = checkRequestService.createCheckRequestStatus(
+                requestSelectContext.getSelectedDocRequest()
         );
-    }
 
-    private void paymentManage(String referenceId){
-        if(!checkRequestService.checkRequestedStatus(referenceId)){
+        checkRequestStatus.checkRequestStatus();
+    }
+    private void paymentManage(){
+        String referenceId = requestSelectContext.getSelectedDocRequest().referenceId();
+
+        if(!checkRequestService.isRequestApproved(referenceId)){
             Util.printMessage("You cannot proceed in this section!");
             Util.printMessage("Please wait for the admin request approval.");
             return;
