@@ -1,11 +1,9 @@
 package org.isu_std.user.user_check_request;
 
-import org.isu_std.client_context.UserContext;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.dao.PaymentDao;
 import org.isu_std.io.custom_exception.NotFoundException;
-import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
 import org.isu_std.models.User;
@@ -63,7 +61,9 @@ public class CheckRequestService {
         });
 
         if(documentDetailList.isEmpty()){
-            throw new NotFoundException("Theres no existing document detail for the existing request.");
+            throw new NotFoundException(
+                    "Theres no existing document detail for the existing request."
+            );
         }
 
         return documentDetailList;
@@ -71,7 +71,10 @@ public class CheckRequestService {
 
     protected CheckRequestStatus createCheckRequestStatus(DocumentRequest documentRequest){
         var checkReqStatusService = new CheckReqStatusService(documentRequestDao);
-        var checkReqStatusController = new CheckReqStatusController(checkReqStatusService, documentRequest);
+        var checkReqStatusController = new CheckReqStatusController(
+                checkReqStatusService, documentRequest
+        );
+
         return new CheckRequestStatus(checkReqStatusController);
     }
 
@@ -86,7 +89,11 @@ public class CheckRequestService {
 
     protected UserDeleteRequest createUserDeleteRequest(DocumentRequest documentRequest){
         var userDeleteReqService = new UserDeleteReqService(documentRequestDao, paymentDao);
-        var userDeleteReqController = new UserDeleteReqController(userDeleteReqService, documentRequest);
+        var userDeleteReqController = new UserDeleteReqController(
+                userDeleteReqService, documentRequest
+        );
+
+
         return new UserDeleteRequest(userDeleteReqController);
     }
 
