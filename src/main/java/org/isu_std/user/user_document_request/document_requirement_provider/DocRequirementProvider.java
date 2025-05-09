@@ -1,4 +1,4 @@
-package org.isu_std.user.user_document_request.document_Requirement_provider;
+package org.isu_std.user.user_document_request.document_requirement_provider;
 
 import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.SystemInput;

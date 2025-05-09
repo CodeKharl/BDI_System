@@ -36,7 +36,7 @@ public class RequestedDocumentController {
     }
 
     protected void printRequestedDocs(){
-        Util.printSectionTitle("Pending Document Requests (IDs)");
+        Util.printSubSectionTitle("Pending Document Requests (IDs)");
         Util.printInformation("User ID - Document ID");
         Util.printListWithCount(documentRequestList);
     }

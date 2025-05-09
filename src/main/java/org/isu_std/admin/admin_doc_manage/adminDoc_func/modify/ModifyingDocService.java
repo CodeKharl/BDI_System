@@ -24,18 +24,6 @@ public class ModifyingDocService {
         this.docIDValidation = docIDValidation;
     }
 
-    private static final class Holder{
-        private static ModifyingDocService instance;
-    }
-
-    public static ModifyingDocService getInstance(DocManageDao documentRepository, DocIDValidation docIDValidation){
-        if(Holder.instance == null){
-            Holder.instance = new ModifyingDocService(documentRepository, docIDValidation);
-        }
-
-        return Holder.instance;
-    }
-
     protected ModifyDocumentContext createModDocModel(int barangayID){
         return new ModifyDocumentContext(barangayID, BuilderFactory.createDocumentBuilder());
     }

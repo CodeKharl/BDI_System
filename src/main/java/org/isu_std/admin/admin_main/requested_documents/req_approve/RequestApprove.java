@@ -21,7 +21,7 @@ public class RequestApprove {
             return false;
         }
 
-        Util.printMessage("Document request approve");
+        Util.printMessage("Document request approve!");
         return true;
     }
 

@@ -218,10 +218,10 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
     }
 
     private File getResultedFile(String fileName, InputStream inputStream){
-        String path = FolderConfig.DOC_DOCUMENT_PATH.getPath();
-        FolderManager.setFileFolder(path);
+        FolderConfig documentPath = FolderConfig.DOC_DOCUMENT_PATH;
+        FolderManager.setFileFolder(documentPath);
 
-        File file = new File(path + File.separator + fileName);
+        File file = new File(documentPath.getPath() + File.separator + fileName);
         if(file.exists()){
             return file;
         }

@@ -16,6 +16,7 @@ public class RequestedDocument {
 
     public void requestedDocSection(){
         while(true){
+            Util.printSectionTitle("Requested Document Section (Pending)");
             if (!reqDocController.isThereExistingRequest()) {
                 return;
             }

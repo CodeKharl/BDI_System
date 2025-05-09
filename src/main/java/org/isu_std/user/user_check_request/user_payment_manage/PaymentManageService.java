@@ -41,7 +41,7 @@ public class PaymentManageService {
 
     protected String getPaymentTime(){
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yy-MM-dd hh:mm:ss");
-        return DateTime.localTimeStr(dateTimeFormatter);
+        return DateTime.localDateTimeStr(dateTimeFormatter);
     }
 
     protected void addPaymentPerformed(String referenceId, Payment payment){

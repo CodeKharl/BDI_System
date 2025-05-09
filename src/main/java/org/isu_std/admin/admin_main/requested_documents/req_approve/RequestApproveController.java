@@ -20,7 +20,7 @@ public class RequestApproveController {
             requestApproveService.createOutputDocumentFile(requestDocumentContext);
             requestApproveService.requestApprovePerformed(requestDocumentContext);
             return true;
-        }catch (IOException | OperationFailedException e){
+        }catch (OperationFailedException e){
             Util.printException(e.getMessage());
         }
 

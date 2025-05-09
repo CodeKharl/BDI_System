@@ -38,7 +38,7 @@ public class ApprovedDocumentController {
     }
 
     protected void printApprovedDocuments(){
-        Util.printSectionTitle("Approved Requests (Reference ID -> User ID - Document ID)");
+        Util.printSubSectionTitle("Approved Requests (Reference ID -> User ID - Document ID)");
 
         for(int i = 0; i < approvedDocList.size(); i++){
             String details = approvedDocList.get(i).getWithReferenceId();

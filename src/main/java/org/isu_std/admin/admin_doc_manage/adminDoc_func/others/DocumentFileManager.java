@@ -1,17 +1,17 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.others;
 
+import org.isu_std.admin.doc_output_file_provider.DocOutFileContext;
+import org.isu_std.admin.doc_output_file_provider.DocOutFileProvider;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.file_setup.FileChooser;
 import org.isu_std.io.file_setup.DocxFileManager;
 import org.isu_std.io.file_setup.DocxMessage;
-import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.RecordComponent;
 import java.util.Optional;
 import java.util.Set;
@@ -33,14 +33,14 @@ public class DocumentFileManager {
                 continue;
             }
 
-            if(isModificationSuccess(file)){
+            if(isValidationSuccess(file)){
                 return Optional.of(file);
             }
         }
     }
 
-    private static boolean isModificationSuccess(File docxFile){
-        if(modificationDocumentProcess(docxFile)){
+    private static boolean isValidationSuccess(File docxFile){
+        if(validationDocumentProcess(docxFile)){
             Util.printMessage("Document file accepted!");
             return true;
         }
@@ -68,10 +68,10 @@ public class DocumentFileManager {
         );
     }
 
-    private static boolean modificationDocumentProcess(File documentFile){
-        Set<String> placeHolders = getNeededPlaceHolders();
+    private static boolean validationDocumentProcess(File documentFile){
+        Set<String> placeHolders = DocOutFileContext.getPlaceHolderSet();
 
-        printAvailableTextPlaceHolders(placeHolders);
+        DocOutFileContext.printAvailableTextPlaceHolders(placeHolders);
         FileChooser.openFile(documentFile);
 
         if(!isConfirmedToDocValidate()){
@@ -79,18 +79,6 @@ public class DocumentFileManager {
         }
 
         return isDocumentFileAccepted(documentFile, placeHolders);
-    }
-
-    private static Set<String> getNeededPlaceHolders(){
-        // Main information for the output document file. E.g. name, age, sex, etc.
-        RecordComponent[] recordComponents = UserPersonal.class.getRecordComponents();
-        Set<String> placeHolders = DocxFileManager.convertRecComToPlaceHoldersSet(recordComponents);
-
-        // Date
-        String dateHolder = DocxFileManager.convertToPlaceholder("date");
-        placeHolders.add(dateHolder);
-
-        return placeHolders;
     }
 
     private static boolean isDocumentFileAccepted(File documentFile, Set<String> placeHolders){
@@ -104,13 +92,6 @@ public class DocumentFileManager {
         }
         return true;
     }
-
-    private static void printAvailableTextPlaceHolders(Set<String> userPerPlaceHolders){
-        Util.printSubSectionTitle("Available Document Text Place-Holders");
-        Util.printMessage("This place holders can only be use on paragraphs!");
-        userPerPlaceHolders.forEach(Util::printChoice);
-    }
-
 
     private static boolean isConfirmedToDocValidate(){
         return SystemInput.isPerformConfirmed(

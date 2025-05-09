@@ -18,6 +18,7 @@ public class ApprovedDocument {
 
     public void approvedDocView(){
         while(true) {
+            Util.printSectionTitle("Requested Documents (Approved)");
             if (!approvedDocumentController.isThereExistingApprovedRequests()) {
                 return;
             }
@@ -54,7 +55,10 @@ public class ApprovedDocument {
             Util.printSectionTitle(approvedDocumentController.getApprovedSectionTitle());
             Util.printChoices(APPROVE_SECTION_CONTENTS);
 
-            int choice = SystemInput.getIntChoice("Enter your choice : ", APPROVE_SECTION_CONTENTS.length);
+            int choice = SystemInput.getIntChoice(
+                    "Enter your choice : ",
+                    APPROVE_SECTION_CONTENTS.length
+            );
 
             if(choice == APPROVE_SECTION_CONTENTS.length){
                 return;

@@ -198,4 +198,17 @@ public class DocxFileManager {
     public static <T> String convertToPlaceholder(T type){
         return PLACE_HOLDER_FORMAT.formatted(type.toString());
     }
+
+    public static void copyFile(File sourceFile, File newFile) throws IOException{
+        try(InputStream inputStream = new FileInputStream(sourceFile);
+            OutputStream outputStream = new FileOutputStream(newFile)
+        ){
+            byte[] bytes = new byte[8192];
+            int reader;
+
+            while ((reader = inputStream.read(bytes)) != -1){
+                outputStream.write(bytes, 0, reader);
+            }
+        }
+    }
 }

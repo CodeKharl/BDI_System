@@ -135,17 +135,17 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
                 "FROM doc_requirement_request WHERE reference_id = ?";
 
         List<File> reqFileList = new ArrayList<>();
-        String path = FolderConfig.DOC_REQUEST_PATH.getPath();
+        FolderConfig folderPath = FolderConfig.DOC_REQUEST_PATH;
 
         // Setting the folder that stores the requirement files.
-        FolderManager.setFileFolder(path);
+        FolderManager.setFileFolder(folderPath);
 
         try(PreparedStatement preStatement = connection.prepareStatement(query)){
             preStatement.setString(1, referenceId);
             ResultSet resultSet = preStatement.executeQuery();
 
             while (resultSet.next()) {
-                Optional<File> optionalFile = getOptionalReqFile(resultSet, path);
+                Optional<File> optionalFile = getOptionalReqFile(resultSet, folderPath.getPath());
                 optionalFile.ifPresent(reqFileList::add);
             }
 
