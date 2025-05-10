@@ -1,6 +1,6 @@
 package org.isu_std.dao.mysqldao;
 
-import org.isu_std.database.MySQLDBConnection;
+import org.isu_std.config.MySQLDBConfig;
 import org.isu_std.io.SystemLogger;
 
 import java.sql.Connection;
@@ -18,7 +18,7 @@ public class MySqlDeletedDocument {
         // Executes when the admin deleted a document. This method store the document id.
         String query = "INSERT INTO deleted_documents(barangay_id, document_id) VALUES(?, ?)";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query)
         ){
             preStatement.setInt(1, barangayId);
@@ -36,7 +36,7 @@ public class MySqlDeletedDocument {
         // Returns a document id when the admin create a new document.
         String query = "SELECT document_id FROM deleted_documents WHERE barangay_id = ? ORDER BY document_id LIMIT 1";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query)
         ){
             preStatement.setInt(1, barangayId);

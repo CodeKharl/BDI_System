@@ -1,14 +1,13 @@
 package org.isu_std.admin.admin_main;
 
+import org.isu_std.io.SystemInput;
+import org.isu_std.io.Util;
+
 /*
     This class will be the UI for Admins.
     It manages the available features for the admin
     and managing barangay documents.
  */
-
-import org.isu_std.io.SystemInput;
-import org.isu_std.io.Util;
-
 
 public class AdminUI {
     private final String[] ADMIN_UI_CONTENTS = {
@@ -29,7 +28,10 @@ public class AdminUI {
             );
 
             Util.printChoices(ADMIN_UI_CONTENTS);
-            int choice = SystemInput.getIntChoice("Enter your choice : ", ADMIN_UI_CONTENTS.length);
+            int choice = SystemInput.getIntChoice(
+                    "Enter your choice : ",
+                    ADMIN_UI_CONTENTS.length
+            );
 
             if(choice == ADMIN_UI_CONTENTS.length){
                 Util.printMessage("Account sign-out...");

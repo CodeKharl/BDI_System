@@ -1,7 +1,7 @@
 package org.isu_std.dao.mysqldao;
 
 import org.isu_std.dao.BarangayDao;
-import org.isu_std.database.MySQLDBConnection;
+import org.isu_std.config.MySQLDBConfig;
 import org.isu_std.io.SystemLogger;
 import org.isu_std.models.Barangay;
 
@@ -19,7 +19,7 @@ public class MySqlBarangay implements BarangayDao{
                 "AND municipality = ? " +
                 "AND province = ? LIMIT 1";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setString(1, barangay.barangayName());
@@ -43,7 +43,7 @@ public class MySqlBarangay implements BarangayDao{
         String query = "INSERT barangay(barangay_name, municipality, province, barangay_pin) " +
                 "VALUES(?, ?, ?, ?)";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setString(1, barangay.barangayName());
@@ -63,7 +63,7 @@ public class MySqlBarangay implements BarangayDao{
     public Optional<Barangay> getOptionalBarangay(int barangayId) {
         String query = "SELECT * FROM barangay WHERE barangay_id = ? LIMIT 1";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setInt(1, barangayId);

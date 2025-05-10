@@ -7,10 +7,11 @@ public class UserPersonalBuilder {
     private String name;
     private char sex;
     private int age;
-    String birthDate;
-    String civilStatus;
-    String nationality;
-    String phoneNumber;
+    private String birthDate;
+    private String birthPlace;
+    private String civilStatus;
+    private String nationality;
+    private String phoneNumber;
 
     public UserPersonalBuilder name(String name){
         this.name = name;
@@ -29,6 +30,11 @@ public class UserPersonalBuilder {
 
     public UserPersonalBuilder birthDate(String birthDate){
         this.birthDate = birthDate;
+        return this;
+    }
+
+    public UserPersonalBuilder birthPlace(String birthPlace){
+        this.birthPlace = birthPlace;
         return this;
     }
 
@@ -53,6 +59,7 @@ public class UserPersonalBuilder {
                 this.sex,
                 this.age,
                 this.birthDate,
+                this.birthPlace,
                 this.civilStatus,
                 this.nationality,
                 this.phoneNumber

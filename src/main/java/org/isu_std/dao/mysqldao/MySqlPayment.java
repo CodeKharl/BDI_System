@@ -1,7 +1,7 @@
 package org.isu_std.dao.mysqldao;
 
 import org.isu_std.dao.PaymentDao;
-import org.isu_std.database.MySQLDBConnection;
+import org.isu_std.config.MySQLDBConfig;
 import org.isu_std.io.SystemLogger;
 import org.isu_std.models.Payment;
 
@@ -17,7 +17,7 @@ public class MySqlPayment implements PaymentDao {
         var query = "INSERT INTO payment(reference_id, payment_type, payment_number, document_cost, payment_date_time) " +
                 "VALUES(?, ?, ?, ?, ?)";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setString(1, referenceId);
@@ -39,7 +39,7 @@ public class MySqlPayment implements PaymentDao {
         String query = "SELECT payment_type, payment_number, document_cost, payment_date_time " +
                 "FROM payment WHERE reference_id = ?";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query)
         ){
             preStatement.setString(1, referenceId);
@@ -68,7 +68,7 @@ public class MySqlPayment implements PaymentDao {
     public boolean deletePayment(String referenceId){
         String query = "DELETE FROM bdis_db.payment WHERE reference_id = ?";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query)
         ){
             preStatement.setString(1, referenceId);

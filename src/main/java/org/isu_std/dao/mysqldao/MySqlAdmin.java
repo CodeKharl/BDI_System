@@ -1,7 +1,7 @@
 package org.isu_std.dao.mysqldao;
 
 import org.isu_std.dao.AdminDao;
-import org.isu_std.database.MySQLDBConnection;
+import org.isu_std.config.MySQLDBConfig;
 import org.isu_std.io.SystemLogger;
 import org.isu_std.models.Admin;
 
@@ -16,7 +16,7 @@ public class MySqlAdmin implements AdminDao {
     public int getAdminID(String adminName) {
         String query = "SELECT admin_id FROM admin WHERE admin_name = ? LIMIT 1";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setString(1, adminName);
@@ -36,7 +36,7 @@ public class MySqlAdmin implements AdminDao {
     public boolean insertAdmin(Admin admin){
         String query = "INSERT admin(admin_name, admin_pin) VALUES(?, ?)";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setString(1, admin.adminName());
@@ -54,7 +54,7 @@ public class MySqlAdmin implements AdminDao {
         // Index: 0 == adminId, 1 == adminName, 2 == adminPin, 3 == barangayId
         String query = "SELECT * FROM admin WHERE admin_id = ? LIMIT 1";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setInt(1, adminId);
@@ -83,7 +83,7 @@ public class MySqlAdmin implements AdminDao {
     public boolean setAdminBarangayId(int barangayId, int adminId) {
         String query = "UPDATE admin SET barangay_id = ? WHERE admin_id = ?";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setInt(1, barangayId);

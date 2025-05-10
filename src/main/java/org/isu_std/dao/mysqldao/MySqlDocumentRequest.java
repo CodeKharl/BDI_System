@@ -1,7 +1,7 @@
 package org.isu_std.dao.mysqldao;
 
 import org.isu_std.dao.DocumentRequestDao;
-import org.isu_std.database.MySQLDBConnection;
+import org.isu_std.config.MySQLDBConfig;
 import org.isu_std.io.folder_setup.FolderManager;
 import org.isu_std.io.folder_setup.FolderConfig;
 import org.isu_std.io.SystemLogger;
@@ -20,7 +20,7 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
         String query = "INSERT INTO document_request(reference_id, user_id, barangay_id, document_id) " +
                 "values(?, ?, ?, ?)";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query)
         ){
             preStatement.setString(1, documentRequest.referenceId());
@@ -81,7 +81,7 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
 
         List<DocumentRequest> docReqList = new ArrayList<>();
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query)
         ){
             preStatement.setInt(1, barangayId);
@@ -104,7 +104,7 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
 
         List<DocumentRequest> approvedDocList = new ArrayList<>();
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query)
         ){
             preStatement.setInt(1, barangayId);
@@ -188,7 +188,7 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
     public boolean setRequestApprove(String referenceId){
         String query = "UPDATE document_request SET is_Approve = TRUE WHERE reference_id = ? ";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setString(1, referenceId);
@@ -202,7 +202,7 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
 
     @Override
     public boolean deleteDocRequest(DocumentRequest documentRequest){
-        try(Connection connection = MySQLDBConnection.getConnection()){
+        try(Connection connection = MySQLDBConfig.getConnection()){
             if(deleteDocRequestRequestFiles(connection, documentRequest)){
                 return deleteDocRequestInfo(connection, documentRequest);
             }
@@ -238,7 +238,7 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
         String query = "SELECT COUNT(user_id) FROM document_request " +
                 "WHERE user_id = ? AND barangay_id = ? AND document_id = ?";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setInt(1, documentRequest.userId());
@@ -260,7 +260,7 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
     public boolean isRequestApproved(String referenceId){
         var query = "SELECT is_approve FROM document_request WHERE reference_id = ? LIMIT 1";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setString(1, referenceId);
@@ -283,7 +283,7 @@ public class MySqlDocumentRequest implements DocumentRequestDao {
 
         List<DocumentRequest> userDocReqList = new ArrayList<>();
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query)
         ){
             preStatement.setInt(1, userId);

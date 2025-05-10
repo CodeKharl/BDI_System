@@ -3,7 +3,7 @@ package org.isu_std.dao.mysqldao;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.modify.ModifyDocumentContext;
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.dao.DocumentDao;
-import org.isu_std.database.MySQLDBConnection;
+import org.isu_std.config.MySQLDBConfig;
 import org.isu_std.io.SystemLogger;
 import org.isu_std.io.folder_setup.FolderManager;
 import org.isu_std.io.folder_setup.FolderConfig;
@@ -26,7 +26,7 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
                 "document_name, price, requirements, doc_file_name, document_file) " +
                 "VALUES(?, ?, ?, ?, ?, ?, ?)";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
             FileInputStream fileInputStream = new FileInputStream(document.documentFile());
         ){
@@ -82,7 +82,7 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
     private int getBrgyDocIdCount(int barangayId){
         String query = "SELECT COUNT(document_id) FROM document WHERE barangay_id = ?";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query)
         ){
             preStatement.setInt(1, barangayId);
@@ -100,7 +100,7 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
 
     @Override
     public boolean modify(ModifyDocumentContext modifyDocumentContext) {
-        try(Connection connection = MySQLDBConnection.getConnection()) {
+        try(Connection connection = MySQLDBConfig.getConnection()) {
             //If the document file is modify
             File documentFile = modifyDocumentContext.getDocumentBuilder().getDocumentFile();
             if(documentFile != null){
@@ -182,7 +182,7 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
                 "requirements, doc_file_name, document_file FROM document " +
                 "WHERE barangay_id = ? ORDER BY document_id ASC";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setInt(1, barangayId);
@@ -250,7 +250,7 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
     public Optional<String> getDocumentName(int barangayId, int documentId){
         String query = "SELECT document_name FROM document WHERE barangay_id = ? AND document_id = ? LIMIT 1";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setInt(1, barangayId);
@@ -275,7 +275,7 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
         }
 
         String query = "DELETE FROM document WHERE document_id = ? AND barangay_id = ?";
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query)
         ){
             preStatement.setInt(1, documentId);
@@ -293,7 +293,7 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
     public Optional<Document> getOptionalDocument(int barangayId, int documentId) {
         String query = "SELECT document_name, price, requirements, doc_file_name, document_file " +
                 "FROM document WHERE barangay_id = ? AND document_id = ? LIMIT 1";
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setInt(1, barangayId);
@@ -327,7 +327,7 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
         String query = "SELECT document_name, price, requirements " +
                 "FROM document WHERE barangay_id = ? AND document_id = ?";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query)
         ){
             preStatement.setInt(1, barangayId);
@@ -359,7 +359,7 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
     public double getDocumentPrice(int barangayId, int documentId){
         String query = "SELECT price FROM document WHERE barangay_id = ? AND document_id = ? LIMIT 1";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query)
         ){
             preStatement.setInt(1, barangayId);

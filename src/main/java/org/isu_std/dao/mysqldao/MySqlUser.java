@@ -2,11 +2,8 @@ package org.isu_std.dao.mysqldao;
 
 import org.isu_std.dao.UserDao;
 import org.isu_std.dao.UserPersonalDao;
-import org.isu_std.database.MySQLDBConnection;
+import org.isu_std.config.MySQLDBConfig;
 import org.isu_std.io.SystemLogger;
-import org.isu_std.io.custom_exception.NotFoundException;
-import org.isu_std.io.dynamic_enum_handler.CharValue;
-import org.isu_std.models.Barangay;
 import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
 
@@ -21,7 +18,7 @@ public class MySqlUser implements UserDao, UserPersonalDao {
     public int getUserId(String username) {
         String query = "SELECT user_id FROM user WHERE username = ? LIMIT 1";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setString(1, username);
@@ -41,7 +38,7 @@ public class MySqlUser implements UserDao, UserPersonalDao {
     public boolean addUser(User user){
         String query = "INSERT INTO user (username, password, barangay_id) values(?, ?, ?)";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setString(1, user.username());
@@ -60,7 +57,7 @@ public class MySqlUser implements UserDao, UserPersonalDao {
     public Optional<User> getOptionalUser(String username){
         String query = "SELECT * FROM user WHERE username = ? LIMIT 1";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setString(1, username);
@@ -87,10 +84,10 @@ public class MySqlUser implements UserDao, UserPersonalDao {
 
     @Override
     public Optional<UserPersonal> getOptionalUserPersonal(int userId) {
-        String query = "SELECT name, sex, age, birth_date, civil_status, nationality, contact_number " +
+        String query = "SELECT name, sex, age, birth_date, birth_place, civil_status, nationality, contact_number " +
                 "FROM user_personal WHERE user_id = ? LIMIT 1";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setInt(1, userId);
@@ -114,17 +111,18 @@ public class MySqlUser implements UserDao, UserPersonalDao {
                 resultSet.getString(4),
                 resultSet.getString(5),
                 resultSet.getString(6),
-                resultSet.getString(7)
+                resultSet.getString(7),
+                resultSet.getString(8)
         );
     }
 
     @Override
     public boolean addUserPersonal(int userId, UserPersonal userPersonal) {
         String query = "INSERT INTO user_personal(user_id, name, sex, age, " +
-                "birth_date, civil_status, nationality, contact_number) " +
+                "birth_date, birth_place, civil_status, nationality, contact_number) " +
                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setInt(1, userId);
@@ -132,9 +130,10 @@ public class MySqlUser implements UserDao, UserPersonalDao {
             preStatement.setString(3, String.valueOf(userPersonal.sex()));
             preStatement.setInt(4, userPersonal.age());
             preStatement.setString(5, userPersonal.birthDate());
-            preStatement.setString(6, userPersonal.civilStatus());
-            preStatement.setString(7, userPersonal.nationality());
-            preStatement.setString(8, userPersonal.phoneNumber());
+            preStatement.setString(6, userPersonal.birthPlace());
+            preStatement.setString(7, userPersonal.civilStatus());
+            preStatement.setString(8, userPersonal.nationality());
+            preStatement.setString(9, userPersonal.phoneNumber());
 
             return preStatement.executeUpdate() == 1;
         }catch (SQLException e){
@@ -148,7 +147,7 @@ public class MySqlUser implements UserDao, UserPersonalDao {
     public boolean modifyUserPersonal(int userId, String chosenDetail, UserPersonal userPersonal){
         String query = getModifyQuery(chosenDetail);
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             setModifyValues(preStatement, userId, userPersonal);
@@ -171,8 +170,8 @@ public class MySqlUser implements UserDao, UserPersonalDao {
         Object[] values = {
                 userPersonal.name(), userPersonal.sex(),
                 userPersonal.age(), userPersonal.birthDate(),
-                userPersonal.civilStatus(), userPersonal.nationality(),
-                userPersonal.phoneNumber()
+                userPersonal.birthPlace(), userPersonal.civilStatus(),
+                userPersonal.nationality(), userPersonal.phoneNumber()
         };
 
         for(Object value : values){
@@ -193,7 +192,7 @@ public class MySqlUser implements UserDao, UserPersonalDao {
     public boolean updateUserBarangay(User newUser){
         String query = "UPDATE user SET barangay_id = ? WHERE user_id = ?";
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setInt(1, newUser.barangayId());
@@ -211,7 +210,7 @@ public class MySqlUser implements UserDao, UserPersonalDao {
     public boolean updateUserInfo(String chosenDetail, User user){
         String query = getUpdateDetailQuery(chosenDetail);
 
-        try(Connection connection = MySQLDBConnection.getConnection();
+        try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);
         ){
             preStatement.setObject(1, getUpdateUserInfo(user));
