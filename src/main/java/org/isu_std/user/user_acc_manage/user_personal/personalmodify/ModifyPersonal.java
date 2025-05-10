@@ -12,7 +12,7 @@ public class ModifyPersonal {
     }
 
     public void modifyPerformed(){
-        String[] personalDetails = modifyPersonalController.personalDetails();
+        String[] personalDetails = modifyPersonalController.getPersonalDetails();
 
         while(true){
             if(!setDetailsToModify(personalDetails)){
@@ -32,7 +32,7 @@ public class ModifyPersonal {
     private boolean setDetailsToModify(String[] personalDetails){
         int backValue = personalDetails.length + 1;
 
-        while(true) {
+        while(true){
             Util.printSectionTitle("Personal Information Modification");
             Util.printChoices(personalDetails);
             Util.printChoice("%d. Back to Manage Account Menu".formatted(backValue));
@@ -45,7 +45,7 @@ public class ModifyPersonal {
                 return false;
             }
 
-            modifyPersonalController.setDetailToModify(choice);
+            modifyPersonalController.setDetailToModify(personalDetails, choice);
             if(setDetailValue(choice)){
                 return true;
             }
@@ -63,12 +63,12 @@ public class ModifyPersonal {
 
     private boolean setOtherDetailValue(int choice){
         String personalDetail = modifyPersonalController.getChosenDetail();
-        String personalDetailSpec = modifyPersonalController.personalDetailSpecs(choice);
+        String personalDetailSpec = modifyPersonalController.getPersonalDetailSpec(choice);
         char cancellationValue = ChoiceCollection.EXIT_CODE.getValue();
 
         while(true){
             String input = SystemInput.getStringInput(
-                    "Enter your %s%s (%c == cancel): ".formatted(
+                    "Enter your %s %s (%c == cancel): ".formatted(
                             personalDetail,
                             personalDetailSpec,
                             cancellationValue

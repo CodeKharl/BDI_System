@@ -4,7 +4,7 @@ import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 
-public class CreatePersonal {
+public class CreatePersonal{
     private final CreatePersonalController createPersonalController;
 
     public CreatePersonal(CreatePersonalController createPersonalController){
@@ -25,7 +25,7 @@ public class CreatePersonal {
 
     private boolean setInformations(){
         // Setting up the name.
-        if(!createPersonalController.isNameSet()){
+        if(!createPersonalController.setName()){
             return false;
         }
 
@@ -41,7 +41,7 @@ public class CreatePersonal {
         int count = 1; // start at one since name is already set.
         while(count < informations.length){
             String input = SystemInput.getStringInput(
-                    "Enter your %s%s (Cancel == %c) : "
+                    "Enter your %s %s (Cancel == %c) : "
                             .formatted(informations[count], specifications[count], cancellationValue)
             );
 

@@ -8,7 +8,7 @@ import org.isu_std.models.Barangay;
 import org.isu_std.models.User;
 import org.isu_std.models.model_builders.BarangayBuilder;
 import org.isu_std.models.model_builders.BuilderFactory;
-import org.isu_std.user_brgy_select.BrgySelect;
+import org.isu_std.user_brgy_select.BarangaySelect;
 import org.isu_std.user_brgy_select.BrgySelectFactory;
 
 import java.util.Optional;
@@ -22,7 +22,7 @@ public class ManageBarangayService {
         this.userDao = userDao;
     }
 
-    protected BrgySelect getBrgySelect(){
+    protected BarangaySelect getBrgySelect(){
         return BrgySelectFactory.createBrgySelect(barangayDao);
     }
 

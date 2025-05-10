@@ -10,32 +10,30 @@ import org.isu_std.user.user_acc_manage.user_personal.PersonalInfoSetter;
 
 public class CreatePersonalController {
     private final CreatePersonalService createPersonalService;
-    private final ManagePersonalService managePersonalService;
     private final User user;
 
     private final UserPersonalBuilder userPersonalBuilder;
     private final PersonalInfoSetter personalInfoSetter;
 
     public CreatePersonalController(
-            CreatePersonalService createPersonalService, ManagePersonalService managePersonalService, User user
+            CreatePersonalService createPersonalService, User user
     ){
         this.createPersonalService = createPersonalService;
-        this.managePersonalService = managePersonalService;
         this.user = user;
 
-        this.userPersonalBuilder = managePersonalService.createUserPersonalBuilder();
-        this.personalInfoSetter = managePersonalService.createPersonalInfoSetter(this.userPersonalBuilder);
+        this.userPersonalBuilder = createPersonalService.getUserPersonalBuilder();
+        this.personalInfoSetter = createPersonalService.getPersonalInfoSetter(this.userPersonalBuilder);
     }
 
     protected String[] getPersonalDetails(){
-        return managePersonalService.getPersonalDetails();
+        return this.createPersonalService.getPersonalDetails();
     }
 
     protected String[] getPersonalDetailSpecs(){
-        return managePersonalService.getPersonalDetailSpecs();
+        return this.createPersonalService.getPersonalDetailSpecs();
     }
 
-    protected boolean isNameSet(){
+    protected boolean setName(){
         return personalInfoSetter.setName();
     }
 
@@ -45,9 +43,10 @@ public class CreatePersonalController {
                 case 1 -> personalInfoSetter.setSex(input);
                 case 2 -> personalInfoSetter.setAge(input);
                 case 3 -> personalInfoSetter.setBirthDate(input);
-                case 4 -> personalInfoSetter.setCivilStatus(input);
-                case 5 -> personalInfoSetter.setNationality(input);
-                case 6 -> personalInfoSetter.setPhoneNumber(input);
+                case 4 -> personalInfoSetter.setBirthPlace(input);
+                case 5 -> personalInfoSetter.setCivilStatus(input);
+                case 6 -> personalInfoSetter.setNationality(input);
+                case 7 -> personalInfoSetter.setPhoneNumber(input);
             }
 
             return true;
@@ -74,4 +73,5 @@ public class CreatePersonalController {
     protected void printUserPersonalInfo(){
         userPersonalBuilder.printPersonalStats();
     }
+
 }

@@ -1,6 +1,7 @@
 package org.isu_std.user.user_acc_manage.user_personal;
 
 import org.isu_std.models.model_builders.UserPersonalBuilder;
+import org.isu_std.user_brgy_select.BarangaySelect;
 
 import java.util.Optional;
 
@@ -14,11 +15,11 @@ public class PersonalInfoSetter {
     }
 
     public boolean setName(){
-        Optional<String> fullName = managePersonalService
+        String fullName = managePersonalService
                 .getNameCreation().getOptionalCreatedName();
 
-        if(fullName.isPresent()){
-            this.userPersonalBuilder.name(fullName.get());
+        if(fullName != null){
+            this.userPersonalBuilder.name(fullName);
             return true;
         }
 
@@ -41,13 +42,18 @@ public class PersonalInfoSetter {
         userPersonalBuilder.birthDate(birthDate);
     }
 
+    public void setBirthPlace(String input){
+        managePersonalService.checkBirthPlace(input);
+        userPersonalBuilder.birthPlace(input);
+    }
+
     public void setCivilStatus(String input){
-        String civilStatus = managePersonalService.getCheckedStrInput("civil status", input);
+        String civilStatus = managePersonalService.getCheckedStrInput(input);
         userPersonalBuilder.civilStatus(civilStatus);
     }
 
     public void setNationality(String input){
-        String nationality = managePersonalService.getCheckedStrInput("nationality", input);
+        String nationality = managePersonalService.getCheckedStrInput(input);
         userPersonalBuilder.nationality(nationality);
     }
 

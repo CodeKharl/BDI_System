@@ -1,5 +1,6 @@
 package org.isu_std.user.user_acc_manage.user_personal;
 
+import org.isu_std.dao.BarangayDao;
 import org.isu_std.dao.UserPersonalDao;
 import org.isu_std.io.Validation;
 import org.isu_std.io.collections.InputMessageCollection;
@@ -25,37 +26,39 @@ import java.util.Optional;
 
 public class ManagePersonalService {
     private final UserPersonalDao userPersonalDao;
+    private final BarangayDao barangayDao;
 
-    public ManagePersonalService(UserPersonalDao userPersonalDao){
+    public ManagePersonalService(UserPersonalDao userPersonalDao, BarangayDao barangayDao){
         this.userPersonalDao = userPersonalDao;
+        this.barangayDao = barangayDao;
     }
 
-    protected UserPersonal getUserPersonal(int userId){
+    UserPersonal getUserPersonal(int userId){
         Optional<UserPersonal> userPersonal = userPersonalDao.getOptionalUserPersonal(userId);
         return userPersonal.orElseThrow(
                 () -> new NotFoundException("Theres no existing personal information of your account.")
         );
     }
 
-    protected CreatePersonal createPersonal(User user){
-        var createPersonalService = new CreatePersonalService(userPersonalDao);
+    CreatePersonal createPersonal(User user){
+        var createPersonalService = new CreatePersonalService(this, userPersonalDao);
         var createPersonalController = new CreatePersonalController(
-                createPersonalService, this, user
+                createPersonalService, user
         );
 
         return new CreatePersonal(createPersonalController);
     }
 
-    protected ModifyPersonal createModifyPersonal(User user){
-        var modifyPersonalService = new ModifyPersonalService(userPersonalDao);
+    ModifyPersonal createModifyPersonal(User user){
+        var modifyPersonalService = new ModifyPersonalService(this, userPersonalDao);
         var modifyPersonalController = new ModifyPersonalController(
-                modifyPersonalService, this, user
+                modifyPersonalService, user
         );
 
         return new ModifyPersonal(modifyPersonalController);
     }
 
-    public UserPersonalBuilder createUserPersonalBuilder(){
+    public UserPersonalBuilder getUserPersonalBuilder(){
         return BuilderFactory.createUserPersonalBuilder();
     }
 
@@ -124,10 +127,22 @@ public class ManagePersonalService {
         }
     }
 
-    public String getCheckedStrInput(String type, String input){ // Used for civil status and nationality.
+    public void checkBirthPlace(String birthPlace){
+        String birthPlaceFormat = EnumValueProvider.getStringValue(
+                PersonalInfoConfig.BIRTHPLACE_FORMAT.getValue()
+        );
+
+        if(!birthPlace.matches(birthPlaceFormat)){
+            throw new IllegalArgumentException(
+                    InputMessageCollection.INPUT_INVALID.getFormattedMessage("birth place")
+            );
+        }
+    }
+
+    public String getCheckedStrInput(String input){ // Used for civil status and nationality.
         if(!Validation.isInputMatchesLetters(input)){
             throw new IllegalArgumentException(
-                    InputMessageCollection.INPUT_LETTERS_ONLY.getFormattedMessage(type)
+                    InputMessageCollection.INPUT_LETTERS_ONLY.getMessage()
             );
         }
 

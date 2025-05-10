@@ -3,41 +3,38 @@ package org.isu_std.user.user_acc_manage.user_personal.personalmodify;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.User;
-import org.isu_std.user.user_acc_manage.user_personal.ManagePersonalService;
 import org.isu_std.user.user_acc_manage.user_personal.PersonalInfoSetter;
 
 public class ModifyPersonalController {
     private final ModifyPersonalService modifyPersonalService;
-    private final ManagePersonalService managePersonalService;
 
     private final ModifyPersonalContext modifyPersonalContext;
     private final PersonalInfoSetter personalInfoSetter;
 
     public ModifyPersonalController(
-            ModifyPersonalService modifyPersonalService, ManagePersonalService managePersonalService, User user
+            ModifyPersonalService modifyPersonalService, User user
     ){
         this.modifyPersonalService = modifyPersonalService;
-        this.managePersonalService = managePersonalService;
 
-        this.modifyPersonalContext = modifyPersonalService.createPersonalModifierManager(
-                user, managePersonalService.createUserPersonalBuilder()
+        this.modifyPersonalContext = modifyPersonalService.createPersonalModifierContext(
+                user, modifyPersonalService.getUserPersonalBuilder()
         );
 
-        this.personalInfoSetter = managePersonalService.createPersonalInfoSetter(
+        this.personalInfoSetter = modifyPersonalService.getPersonalInfoSetter(
                 this.modifyPersonalContext.getUserPersonalBuilder()
         );
     }
 
-    protected String[] personalDetails(){
-        return managePersonalService.getPersonalDetails();
+    protected String[] getPersonalDetails(){
+        return modifyPersonalService.getPersonalDetails();
     }
 
-    protected String personalDetailSpecs(int choice) {
-        return managePersonalService.getPersonalDetailSpecs()[choice - 1];
+    protected String getPersonalDetailSpec(int choice) {
+        return modifyPersonalService.getPersonalDetailSpecs()[choice - 1];
     }
 
-    protected void setDetailToModify(int choice){
-        String personalDetail = personalDetails()[choice - 1];
+    protected void setDetailToModify(String[] personalInfo, int choice){
+        String personalDetail = personalInfo[choice - 1];
         modifyPersonalContext.setChosenDetail(personalDetail);
     }
 
@@ -55,9 +52,10 @@ public class ModifyPersonalController {
                 case 2 -> personalInfoSetter.setSex(value);
                 case 3 -> personalInfoSetter.setAge(value);
                 case 4 -> personalInfoSetter.setBirthDate(value);
-                case 5 -> personalInfoSetter.setCivilStatus(value);
-                case 6 -> personalInfoSetter.setNationality(value);
-                case 7 -> personalInfoSetter.setPhoneNumber(value);
+                case 5 -> personalInfoSetter.setBirthPlace(value);
+                case 6 -> personalInfoSetter.setCivilStatus(value);
+                case 7 -> personalInfoSetter.setNationality(value);
+                case 8 -> personalInfoSetter.setPhoneNumber(value);
             }
 
             return true;

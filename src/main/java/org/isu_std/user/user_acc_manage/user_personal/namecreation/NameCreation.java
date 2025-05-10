@@ -17,7 +17,7 @@ public class NameCreation {
         this.nameCreationController = nameCreationController;
     }
 
-    public Optional<String> getOptionalCreatedName(){
+    public String getOptionalCreatedName(){
         char cancellationValue = ChoiceCollection.EXIT_CODE.getValue();
 
         int count = 0;
@@ -27,7 +27,7 @@ public class NameCreation {
             );
 
             if(input.charAt(0) == cancellationValue){
-                return Optional.empty();
+                return null;
             }
 
             if(nameCreationController.isInputAccepted(NAME_INFO[count], input)){
@@ -35,6 +35,6 @@ public class NameCreation {
             }
         }
 
-        return Optional.of(nameCreationController.getName());
+        return nameCreationController.getName();
     }
 }

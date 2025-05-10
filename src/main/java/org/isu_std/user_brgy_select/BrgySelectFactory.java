@@ -3,10 +3,10 @@ package org.isu_std.user_brgy_select;
 import org.isu_std.dao.BarangayDao;
 
 public class BrgySelectFactory {
-    public static BrgySelect createBrgySelect(BarangayDao barangayDao){
+    public static BarangaySelect createBrgySelect(BarangayDao barangayDao){
         var brgySelectService = new BrgySelectService(barangayDao);
         var brgySelectController = new BrgySelectController(brgySelectService);
 
-        return new BrgySelect(brgySelectController);
+        return new BarangaySelect(brgySelectController);
     }
 }

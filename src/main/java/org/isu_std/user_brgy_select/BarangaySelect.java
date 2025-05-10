@@ -4,11 +4,11 @@ import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 
-public class BrgySelect {
+public class BarangaySelect {
     private final String[] BARANGAY_INFO = {"Barangay Name", "Municipality", "Province"};
     private final BrgySelectController brgySelectController;
 
-    protected BrgySelect(BrgySelectController brgySelectController){
+    protected BarangaySelect(BrgySelectController brgySelectController){
         this.brgySelectController = brgySelectController;
     }
 

@@ -35,7 +35,7 @@ public class UserManageAccService {
     }
 
     private ManagePersonal createManagePersonal(UserContext userContext){
-        var managePersonalService = new ManagePersonalService(userPersonalDao);
+        var managePersonalService = new ManagePersonalService(userPersonalDao, barangayDao);
         var managePersonalController = new ManagePersonalController(managePersonalService, userContext);
         return new ManagePersonal(managePersonalController);
     }
