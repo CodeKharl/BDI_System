@@ -112,7 +112,7 @@ public class UserPersonalBuilder {
                 "Birth Place : " + birthPlace,
                 "Civil Status : " + civilStatus,
                 "Nationality : " + nationality,
-                "Contact Number : " + phoneNumber
+                "Phone Number : " + phoneNumber
         };
     }
 

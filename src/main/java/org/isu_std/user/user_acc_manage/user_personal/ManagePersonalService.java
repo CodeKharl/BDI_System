@@ -151,7 +151,7 @@ public class ManagePersonalService {
     }
 
     public void checkPhoneNum(String phoneNumber){
-        String phoneNumFormat = EnumValueProvider.getStringValue(PersonalInfoConfig.PHONE_NUMBER.getValue());
+        String phoneNumFormat = EnumValueProvider.getStringValue(PersonalInfoConfig.PHONE_NUMBER_FORMAT.getValue());
         if(phoneNumber.matches(phoneNumFormat)){
             return;
         }

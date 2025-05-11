@@ -27,7 +27,7 @@ public record UserPersonal(
                 "Birth Place",
                 "Civil Status",
                 "Nationality",
-                "Contact Number"
+                "Phone Number"
         };
     }
 

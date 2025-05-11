@@ -84,7 +84,7 @@ public class MySqlUser implements UserDao, UserPersonalDao {
 
     @Override
     public Optional<UserPersonal> getOptionalUserPersonal(int userId) {
-        String query = "SELECT name, sex, age, birth_date, birth_place, civil_status, nationality, contact_number " +
+        String query = "SELECT name, sex, age, birth_date, birth_place, civil_status, nationality, phone_number " +
                 "FROM user_personal WHERE user_id = ? LIMIT 1";
 
         try(Connection connection = MySQLDBConfig.getConnection();
@@ -119,7 +119,7 @@ public class MySqlUser implements UserDao, UserPersonalDao {
     @Override
     public boolean addUserPersonal(int userId, UserPersonal userPersonal) {
         String query = "INSERT INTO user_personal(user_id, name, sex, age, " +
-                "birth_date, birth_place, civil_status, nationality, contact_number) " +
+                "birth_date, birth_place, civil_status, nationality, phone_number) " +
                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try(Connection connection = MySQLDBConfig.getConnection();

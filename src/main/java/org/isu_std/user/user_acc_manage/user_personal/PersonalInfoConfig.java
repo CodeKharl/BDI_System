@@ -9,7 +9,7 @@ public enum PersonalInfoConfig {
                         "Name", "Sex","Age",
                         "Birth_Date", "Birth_Place",
                         "Civil_Status", "Nationality",
-                        "Contact_Number"
+                        "Phone_Number"
                 }
             )
     ),
@@ -19,7 +19,7 @@ public enum PersonalInfoConfig {
                 new String[]{
                         "", "(M == Male, F == Female)", " (min. 10)",
                         "(format. YYYY-MM-DD, 2000-03-12)", "(format. Brgy Name, Mun., Prov. : ALL CAPS)",
-                        "", "", "(start. 09, min.11)"
+                        "", "", "(start. +63, min.13)"
                 }
             )
     ),
@@ -28,7 +28,7 @@ public enum PersonalInfoConfig {
     MALE(new CharValue('M')), FEMALE(new CharValue('F')),
     BIRTHDATE_FORMAT(new StringValue("yyyy-MM-dd")),
     BIRTHPLACE_FORMAT(new StringValue("^(BRGY\\.?\\s)?[A-Z0-9. ]+, [A-Z. ]+, [A-Z. ]+$")),
-    PHONE_NUMBER(new StringValue("^09\\d{9}$"));
+    PHONE_NUMBER_FORMAT(new StringValue("^\\+63\\d{10}$"));
 
     private final ConfigValue configValue;
 
