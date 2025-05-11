@@ -120,7 +120,7 @@ public class MySqlUser implements UserDao, UserPersonalDao {
     public boolean addUserPersonal(int userId, UserPersonal userPersonal) {
         String query = "INSERT INTO user_personal(user_id, name, sex, age, " +
                 "birth_date, birth_place, civil_status, nationality, contact_number) " +
-                "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try(Connection connection = MySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(query);

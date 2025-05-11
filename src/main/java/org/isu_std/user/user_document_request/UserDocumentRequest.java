@@ -15,6 +15,12 @@ public class UserDocumentRequest implements UserProcess {
     public void processPerformed(String processTitle){
         Util.printSectionTitle(processTitle);
 
+        if(!userDocumentRequestController.setUserPersonal()){
+            //message for the user to put some personal information of his/her account if not exist.
+            Util.printInformation("Guide : User Menu -> Manage Account -> Personal Information");
+            return;
+        }
+
         if(!userDocumentRequestController.setBrgyDocs()){
             return;
         }

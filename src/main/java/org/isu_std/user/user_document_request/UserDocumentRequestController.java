@@ -5,18 +5,21 @@ import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.DocumentRequest;
+import org.isu_std.models.User;
+import org.isu_std.models.UserPersonal;
 import org.isu_std.user.user_document_request.document_request_contexts.DocInfoContext;
 import org.isu_std.user.user_document_request.document_request_contexts.DocRequestContext;
 import org.isu_std.user.user_document_request.document_request_contexts.UserInfoContext;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class UserDocumentRequestController {
     private final UserDocumentRequestService userDocumentRequestService;
-    private final UserInfoContext userInfoContext;
 
+    private final UserInfoContext userInfoContext;
     private final DocRequestContext docRequestContext;
     private DocInfoContext docInfoContext;
 
@@ -28,10 +31,25 @@ public class UserDocumentRequestController {
         this.docRequestContext = userDocumentRequestService.createDocRequestMod();
     }
 
+    protected boolean setUserPersonal(){
+        try{
+            int userId = userInfoContext.getUser().userId();
+            UserPersonal userPersonal = userDocumentRequestService.getUserPersonal(userId);
+
+            userInfoContext.setUserPersonal(userPersonal);
+
+            return true;
+        }catch (NotFoundException e){
+            Util.printException(e.getMessage());
+        }
+
+        return false;
+    }
+
     protected boolean setBrgyDocs(){
         try {
             docInfoContext = userDocumentRequestService
-                    .createUserReqModel(userInfoContext.user().barangayId());
+                    .createUserReqModel(userInfoContext.getUser().barangayId());
 
             return true;
         } catch (NotFoundException e){
@@ -106,17 +124,20 @@ public class UserDocumentRequestController {
     protected void printAllInformations(){
         Util.printSectionTitle("Information Confirmation");
         docRequestContext.getDocument().printDetails();
-        userInfoContext.userPersonal().printPersonalStats();
+        userInfoContext.getUserPersonal().printPersonalStats();
         printDocRequirementsPath();
     }
 
     protected boolean isAddDocRequestSuccess(){
+        User user = userInfoContext.getUser();
+        int documentId = docRequestContext.getDocumentId();
+
         try{
             DocumentRequest documentRequest = userDocumentRequestService.createDocReq(
-                    userDocumentRequestService.createReferenceId(docRequestContext.getDocumentId()),
-                    userInfoContext.user().userId(),
-                    userInfoContext.user().barangayId(),
-                    docRequestContext.getDocumentId(),
+                    userDocumentRequestService.createReferenceId(documentId),
+                    user.userId(),
+                    user.barangayId(),
+                    documentId,
                     docRequestContext.getDocRequirementFiles()
             );
 

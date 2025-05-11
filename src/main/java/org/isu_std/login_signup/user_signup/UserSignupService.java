@@ -4,7 +4,7 @@ import org.isu_std.dao.BarangayDao;
 import org.isu_std.dao.UserDao;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.user_brgy_select.BrgySelectFactory;
-import org.isu_std.user_brgy_select.BrgySelect;
+import org.isu_std.user_brgy_select.BarangaySelect;
 import org.isu_std.models.User;
 import org.isu_std.models.model_builders.BuilderFactory;
 import org.isu_std.models.model_builders.UserBuilder;
@@ -23,7 +23,7 @@ public class UserSignupService{
         return BuilderFactory.createUserBuilder();
     }
 
-    protected BrgySelect createBrgySelection(){
+    protected BarangaySelect createBrgySelection(){
         return BrgySelectFactory.createBrgySelect(barangayDao);
     }
 

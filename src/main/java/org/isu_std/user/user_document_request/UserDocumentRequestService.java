@@ -43,19 +43,15 @@ public class UserDocumentRequestService {
     }
 
     protected UserInfoContext createUserInfoContext(User user){
-        return new UserInfoContext(user, getUserPersonal(user.userId()));
+        return new UserInfoContext(user);
     }
 
-    private UserPersonal getUserPersonal(int userId){
+    UserPersonal getUserPersonal(int userId){
         Optional<UserPersonal> optionalUserPersonal = userPersonalDao.getOptionalUserPersonal(userId);
-
-        //message for the user to put some personal information of his/her account if not exist.
-        String guideMessage = "Guide : User Menu -> Manage Account -> Personal Information";
 
         return optionalUserPersonal.orElseThrow(
                 () -> new NotFoundException(
-                        "Theres no existing personal information of your account!\n%s%s"
-                                .formatted(Symbols.MESSAGE.getType(), guideMessage)
+                        "Theres no existing personal information of your account!"
                 )
         );
     }

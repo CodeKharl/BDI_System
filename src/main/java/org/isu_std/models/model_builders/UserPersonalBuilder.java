@@ -95,21 +95,25 @@ public class UserPersonalBuilder {
     }
 
     public void printPersonalStats() {
-        String[] infos = {
+        String[] attributesWithValues = getAttributesWithValues();
+
+        Util.printSubSectionTitle("Personal Information");
+        for (String info : attributesWithValues) {
+            Util.printInformation(info);
+        }
+    }
+
+    public String[] getAttributesWithValues(){
+        return new String[]{
                 "Name [FN, MN, LN]: " + name,
                 "Sex : " + sex,
                 "Age : " + age,
-                "Birth date : " + birthDate,
+                "Birth Date : " + birthDate,
+                "Birth Place : " + birthPlace,
                 "Civil Status : " + civilStatus,
                 "Nationality : " + nationality,
                 "Contact Number : " + phoneNumber
         };
-
-
-        Util.printSubSectionTitle("Personal Information");
-        for (String info : infos) {
-            Util.printInformation(info);
-        }
     }
 
     public void resetValues(){
@@ -117,6 +121,7 @@ public class UserPersonalBuilder {
         this.sex = '\u0000';
         this.age = 0;
         this.birthDate = null;
+        this.birthPlace = null;
         this.civilStatus = null;
         this.nationality = null;
         this.phoneNumber = null;
