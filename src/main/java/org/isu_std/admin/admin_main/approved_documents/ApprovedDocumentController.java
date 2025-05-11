@@ -126,7 +126,8 @@ public class ApprovedDocumentController {
     private void viewApprovedFile(){
         try{
             if(this.outputDocFile == null){
-                this.outputDocFile = approvedDocumentService.getApprovedDocFile(requestDocumentContext);
+                this.outputDocFile = approvedDocumentService
+                        .getApprovedDocFile(requestDocumentContext);
             }
 
             Util.printMessage("Opening the user document file...");

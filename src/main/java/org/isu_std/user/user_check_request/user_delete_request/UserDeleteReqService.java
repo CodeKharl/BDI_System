@@ -7,18 +7,12 @@ import org.isu_std.models.DocumentRequest;
 
 public class UserDeleteReqService {
     private final DocumentRequestDao documentRequestDao;
-    private final PaymentDao paymentDao;
 
-    public UserDeleteReqService(DocumentRequestDao documentRequestDao, PaymentDao paymentDao){
+    public UserDeleteReqService(DocumentRequestDao documentRequestDao){
         this.documentRequestDao = documentRequestDao;
-        this.paymentDao = paymentDao;
     }
 
     protected void deleteRequestPerform(DocumentRequest documentRequest){
-        if(!paymentDao.deletePayment(documentRequest.referenceId())){
-            throw new OperationFailedException("Failed to delete the payment request!");
-        }
-
         if(!documentRequestDao.deleteDocRequest(documentRequest)){
             throw new OperationFailedException("Failed to delete the request! Please try to cancel it again.");
         }

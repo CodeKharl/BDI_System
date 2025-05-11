@@ -88,7 +88,7 @@ public class CheckRequestService {
     }
 
     protected UserDeleteRequest createUserDeleteRequest(DocumentRequest documentRequest){
-        var userDeleteReqService = new UserDeleteReqService(documentRequestDao, paymentDao);
+        var userDeleteReqService = new UserDeleteReqService(documentRequestDao);
         var userDeleteReqController = new UserDeleteReqController(
                 userDeleteReqService, documentRequest
         );

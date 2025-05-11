@@ -63,24 +63,4 @@ public class MySqlPayment implements PaymentDao {
                 resultSet.getString(4)
         );
     }
-
-    @Override
-    public boolean deletePayment(String referenceId){
-        String query = "DELETE FROM bdis_db.payment WHERE reference_id = ?";
-
-        try(Connection connection = MySQLDBConfig.getConnection();
-            PreparedStatement preStatement = connection.prepareStatement(query)
-        ){
-            preStatement.setString(1, referenceId);
-            int updateValue = preStatement.executeUpdate();
-
-            // 0 == no payment found
-            // 1 == payment found and deleted
-            return updateValue == 0 || updateValue == 1;
-        }catch (SQLException e){
-            SystemLogger.logWarning(MySqlPayment.class, e.getMessage());
-        }
-
-        return false;
-    }
 }
