@@ -1,18 +1,15 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.others;
 
-import org.isu_std.admin.doc_output_file_provider.DocOutFileContext;
-import org.isu_std.admin.doc_output_file_provider.DocOutFileProvider;
+import org.isu_std.doc_output_file_provider.DocOutFileContext;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.file_setup.FileChooser;
 import org.isu_std.io.file_setup.DocxFileManager;
 import org.isu_std.io.file_setup.DocxMessage;
-import org.isu_std.models.UserPersonal;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.RecordComponent;
 import java.util.Optional;
 import java.util.Set;
 

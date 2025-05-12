@@ -3,19 +3,20 @@ package org.isu_std.user.user_check_request.user_delete_request;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.DocumentRequest;
+import org.isu_std.user.user_check_request.RequestSelectContext;
 
 public class UserDeleteReqController {
     private final UserDeleteReqService userDeleteReqService;
-    private final DocumentRequest selectedDocRequest;
+    private final RequestSelectContext requestSelectContext;
 
-    public UserDeleteReqController(UserDeleteReqService userDeleteReqService, DocumentRequest selectedDocRequest){
+    public UserDeleteReqController(UserDeleteReqService userDeleteReqService, RequestSelectContext requestSelectContext){
         this.userDeleteReqService = userDeleteReqService;
-        this.selectedDocRequest = selectedDocRequest;
+        this.requestSelectContext = requestSelectContext;
     }
 
     protected boolean requestCancellationProcess(){
         try{
-            userDeleteReqService.deleteRequestPerform(this.selectedDocRequest);
+            userDeleteReqService.deleteRequestPerform(requestSelectContext);
             return true;
         }catch (OperationFailedException e){
             Util.printException(e.getMessage());

@@ -30,11 +30,11 @@ public class CheckRequestService {
         this.paymentDao = paymentDao;
     }
 
-    protected RequestInfoContext createReqInfoManager(User user){
+    protected RequestInfoContext createReqInfoContext(User user){
         return new RequestInfoContext(user);
     }
 
-    protected RequestSelectContext createReqSelectManager(){
+    protected RequestSelectContext createReqSelectContext(){
         return new RequestSelectContext();
     }
 
@@ -53,7 +53,7 @@ public class CheckRequestService {
 
         userDocReqList.forEach((docReq) -> {
             int documentId = docReq.documentId();
-            Optional<Document> optionalDocDetail = documentDao.getOptionalDocDetail(barangayId, documentId);
+            Optional<Document> optionalDocDetail = documentDao.getOptionalDocument(barangayId, documentId);
 
             optionalDocDetail.ifPresent(
                     (docDetail) -> documentDetailList.put(documentId, docDetail)
@@ -87,10 +87,10 @@ public class CheckRequestService {
         return new PaymentManage(paymentManageController);
     }
 
-    protected UserDeleteRequest createUserDeleteRequest(DocumentRequest documentRequest){
+    protected UserDeleteRequest createUserDeleteRequest(RequestSelectContext requestSelectContext){
         var userDeleteReqService = new UserDeleteReqService(documentRequestDao);
         var userDeleteReqController = new UserDeleteReqController(
-                userDeleteReqService, documentRequest
+                userDeleteReqService, requestSelectContext
         );
 
 

@@ -3,17 +3,17 @@ package org.isu_std.io.folder_setup;
 import java.io.File;
 
 public enum FolderConfig {
-    DOC_DOCUMENT_PATH(".bdis\\data\\brgy_docs"),
-    DOC_REQUEST_PATH(".bdis\\data\\doc_request"),
-    DOC_APPROVE_PATH(".bdis\\data\\approved_request");
+    DOC_DOCUMENT_DIRECTORY(".bdis\\data\\brgy_docs"),
+    DOC_REQUEST_DIRECTORY(".bdis\\data\\doc_request"),
+    DOC_APPROVE_DIRECTORY(".bdis\\data\\approved_request");
 
-    private final String path;
+    private final String directory;
 
-    FolderConfig(String path){
-        this.path = path;
+    FolderConfig(String directory){
+        this.directory = directory;
     }
 
-    public String getPath(){
-        return System.getProperty("user.home") + File.separator + path;
+    public String getDirectory(){
+        return System.getProperty("user.home") + File.separator + directory;
     }
 }

@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 public class FolderChooser {
-    public static Optional<Path> getPath(String dialogTitle){
+    public static Optional<Path> getDirectory(String dialogTitle){
         JFileChooser jFileChooser = new JFileChooser();
         jFileChooser.setDialogTitle(dialogTitle);
         jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);

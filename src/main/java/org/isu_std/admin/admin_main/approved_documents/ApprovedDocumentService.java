@@ -3,19 +3,19 @@ package org.isu_std.admin.admin_main.approved_documents;
 import org.isu_std.admin.admin_main.RequestDocumentContext;
 import org.isu_std.admin.admin_main.ReqDocsManagerBuilder;
 import org.isu_std.admin.admin_main.ReqDocsManagerProvider;
-import org.isu_std.admin.admin_main.approved_documents.approved_documents_export.ApprovedDocExport;
-import org.isu_std.admin.admin_main.approved_documents.approved_documents_export.ApprovedDocExportController;
-import org.isu_std.admin.admin_main.approved_documents.approved_documents_export.ApprovedDocExportService;
+import org.isu_std.admin.admin_main.approved_documents.approved_doc_confirm_export.ApprovedDocExport;
+import org.isu_std.admin.admin_main.approved_documents.approved_doc_confirm_export.ApprovedDocExportController;
+import org.isu_std.admin.admin_main.approved_documents.approved_doc_confirm_export.ApprovedDocExportService;
 import org.isu_std.admin.admin_main.req_files_view.ReqFilesViewFactory;
 import org.isu_std.admin.admin_main.req_files_view.RequirementFilesView;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.dao.PaymentDao;
 import org.isu_std.dao.UserPersonalDao;
+import org.isu_std.doc_output_file_provider.DocOutFileManager;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.file_setup.FileChooser;
-import org.isu_std.io.folder_setup.FolderConfig;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
 import org.isu_std.models.Payment;
@@ -69,13 +69,10 @@ public class ApprovedDocumentService {
     }
 
     protected File getApprovedDocFile(RequestDocumentContext requestDocumentContext){
-        String filePath = FolderConfig.DOC_APPROVE_PATH.getPath();
+        String outputDocFilePathName = DocOutFileManager
+                .getOutputDocFilePathName(requestDocumentContext);
 
-        String referenceId = requestDocumentContext.documentRequest().referenceId();
-        String requestDocFileName = requestDocumentContext.document().documentFile().getName();
-        String fileName = "%s_%s".formatted(referenceId, requestDocFileName);
-
-        File outputFile = new File(filePath + File.separator + fileName);
+        File outputFile = new File(outputDocFilePathName);
 
         if(!outputFile.exists()){
             throw new NotFoundException("Theres no existing approved document file!");
@@ -91,7 +88,7 @@ public class ApprovedDocumentService {
     }
 
     protected ApprovedDocExport createApprovedDocExport(RequestDocumentContext requestDocumentContext, File outputDocumentFile){
-        ApprovedDocExportService approvedDocExportService = new ApprovedDocExportService();
+        ApprovedDocExportService approvedDocExportService = new ApprovedDocExportService(documentRequestDao);
         ApprovedDocExportController approvedDocExportController = new ApprovedDocExportController(
                 approvedDocExportService, requestDocumentContext, outputDocumentFile
         );

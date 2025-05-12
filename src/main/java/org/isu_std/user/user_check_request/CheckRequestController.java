@@ -1,11 +1,8 @@
 package org.isu_std.user.user_check_request;
 
 import org.isu_std.client_context.UserContext;
-import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
-import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.custom_exception.NotFoundException;
-import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
 import org.isu_std.models.User;
@@ -23,8 +20,8 @@ public class CheckRequestController {
 
     public CheckRequestController(CheckRequestService checkRequestService, UserContext userContext){
         this.checkRequestService = checkRequestService;
-        this.requestInfoContext = checkRequestService.createReqInfoManager(userContext.getUser());
-        this.requestSelectContext = checkRequestService.createReqSelectManager();
+        this.requestInfoContext = checkRequestService.createReqInfoContext(userContext.getUser());
+        this.requestSelectContext = checkRequestService.createReqSelectContext();
     }
 
     protected boolean isExistingDocMapSet(){
@@ -112,7 +109,7 @@ public class CheckRequestController {
 
     protected boolean deleteRequest(){
         UserDeleteRequest userDeleteRequest = checkRequestService
-                .createUserDeleteRequest(requestSelectContext.getSelectedDocRequest());
+                .createUserDeleteRequest(this.requestSelectContext);
 
         return userDeleteRequest.requestDeletePerform();
     }

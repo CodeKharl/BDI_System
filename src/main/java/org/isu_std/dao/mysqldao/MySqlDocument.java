@@ -218,10 +218,10 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
     }
 
     private File getResultedFile(String fileName, InputStream inputStream){
-        FolderConfig documentPath = FolderConfig.DOC_DOCUMENT_PATH;
-        FolderManager.setFileFolder(documentPath);
+        FolderConfig documentPath = FolderConfig.DOC_DOCUMENT_DIRECTORY;
+        FolderManager.setFileDirectory(documentPath);
 
-        File file = new File(documentPath.getPath() + File.separator + fileName);
+        File file = new File(documentPath.getDirectory() + File.separator + fileName);
         if(file.exists()){
             return file;
         }
@@ -320,40 +320,6 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
                         resultSet.getBinaryStream(5)
                 )
         );
-    }
-
-    @Override
-    public Optional<Document> getOptionalDocDetail(int barangayId, int documentId) {
-        String query = "SELECT document_name, price, requirements " +
-                "FROM document WHERE barangay_id = ? AND document_id = ?";
-
-        try(Connection connection = MySQLDBConfig.getConnection();
-            PreparedStatement preStatement = connection.prepareStatement(query)
-        ){
-            preStatement.setInt(1, barangayId);
-            preStatement.setInt(2, documentId);
-
-            ResultSet resultSet = preStatement.executeQuery();
-            if(resultSet.next()){
-                Document documentDetail = buildDocumentDetail(resultSet);
-                return Optional.of(documentDetail);
-            }
-        }catch(SQLException e){
-            SystemLogger.logWarning(MySqlDocument.class, e.getMessage());
-        }
-
-        return Optional.empty();
-    }
-
-    private Document buildDocumentDetail(ResultSet resultSet) throws SQLException{
-        DocumentBuilder documentBuilder = new DocumentBuilder();
-
-        documentBuilder
-                .documentName(resultSet.getString(1))
-                .price(resultSet.getDouble(2))
-                .requirements(resultSet.getString(3));
-
-        return documentBuilder.build();
     }
 
     public double getDocumentPrice(int barangayId, int documentId){

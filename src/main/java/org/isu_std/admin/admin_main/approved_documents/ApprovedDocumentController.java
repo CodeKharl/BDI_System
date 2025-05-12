@@ -1,7 +1,7 @@
 package org.isu_std.admin.admin_main.approved_documents;
 
 import org.isu_std.admin.admin_main.RequestDocumentContext;
-import org.isu_std.admin.admin_main.approved_documents.approved_documents_export.ApprovedDocExport;
+import org.isu_std.admin.admin_main.approved_documents.approved_doc_confirm_export.ApprovedDocExport;
 import org.isu_std.admin.admin_main.req_files_view.RequirementFilesView;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
