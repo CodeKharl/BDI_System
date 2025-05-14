@@ -19,7 +19,7 @@ public class ModifyingDocController {
     }
 
     protected final boolean setValidDocumentId(){
-        int documentId = modifyingDocService.getValidDocID(modifyDocumentContext.getBarangayId());
+        int documentId = modifyingDocService.getValidDocID();
 
         if(documentId != 0){
             modifyDocumentContext.setDocumentId(documentId);
@@ -35,23 +35,12 @@ public class ModifyingDocController {
         );
     }
 
-    protected String[] getDocumentInfos(){
+    protected String[] getDocumentDetailArr(){
         return this.document_info;
     }
 
     protected String getDocumentDetail(){
         return modifyDocumentContext.getDocumentDetail();
-    }
-
-    protected final boolean isDocDetailAccepted(int detailChoice){
-        try{
-            modifyingDocService.checkInputChoice(detailChoice, document_info.length);
-            return true;
-        }catch (IllegalArgumentException e){
-            Util.printException(e.getMessage());
-        }
-
-        return false;
     }
 
     protected final boolean isDocNameOrPriceValid(String documentDetail, String input){
@@ -142,12 +131,12 @@ public class ModifyingDocController {
         return false;
     }
 
-    protected void printDocumentInfos(){
-        Util.printChoices(document_info);
-    }
-
     public final void modifyProcess(){
         try{
+            if(modifyingDocService.isDocumentFileModify(modifyDocumentContext)){
+               modifyingDocService.deletePrevDocFile(modifyDocumentContext);
+            }
+
             if(modifyingDocService.modifyPerformed(modifyDocumentContext)){
                 Util.printMessage("Modify Success!");
             }
@@ -157,6 +146,8 @@ public class ModifyingDocController {
     }
 
     protected void printDocDetail(){
-        Util.printMessage("Detail to Modify -> %s".formatted(modifyDocumentContext.getDocumentDetail()));
+        Util.printMessage("Detail to Modify -> %s".formatted(
+                modifyDocumentContext.getDocumentDetail())
+        );
     }
 }

@@ -1,15 +1,19 @@
 package org.isu_std.admin.admin_doc_manage;
 
-import org.isu_std.admin.admin_doc_manage.adminDoc_func.AdminDocFuncFactory;
+import org.isu_std.dao.DocManageDao;
+import org.isu_std.dao.DocumentDao;
 
 public class ManageDocumentService {
-    private final AdminDocFuncFactory adminDocFuncFactory;
+    private final DocumentDao documentDao;
+    private final DocManageDao docManageDao;
 
-    public ManageDocumentService(AdminDocFuncFactory adminDocFuncFactory){
-        this.adminDocFuncFactory = adminDocFuncFactory;
+    public ManageDocumentService(DocumentDao documentDao, DocManageDao docManageDao){
+        this.documentDao = documentDao;
+        this.docManageDao = docManageDao;
     }
 
-    protected AdminDocumentImpl getDocumentFunctions(int choice){
-        return adminDocFuncFactory.createDocumentManage(choice);
+    protected ManageDocumentImpl[] getAdminDocumentImplArr(int barangayId){
+        ManageDocImplFactory manageDocImplFactory = new ManageDocImplFactory(docManageDao, documentDao);
+        return manageDocImplFactory.createAdminDocumentMap(barangayId);
     }
 }

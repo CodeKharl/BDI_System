@@ -1,15 +1,12 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.add;
 
-import org.isu_std.admin.admin_doc_manage.AdminDocumentImpl;
-import org.isu_std.admin.admin_doc_manage.ManageDocumentUI;
+import org.isu_std.admin.admin_doc_manage.ManageDocumentImpl;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentManageCodes;
 import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 
-public class AddingDocument implements AdminDocumentImpl {
-    private final String[] DOCUMENT_INFO = DocumentManageCodes.DOCUMENT_INFO.getArrCode();
-
+public class AddingDocument implements ManageDocumentImpl {
     private final AddingDocController addingDocController;
 
     public AddingDocument(AddingDocController addingDocController){
@@ -36,10 +33,13 @@ public class AddingDocument implements AdminDocumentImpl {
     }
 
     private boolean setDocumentInformation(){
+        String[] docInfoArr = addingDocController.getInfoArr();
         // Set only the document name and price.
+
         int count = 0;
-        while(count < DOCUMENT_INFO.length - 2){
-            String input = SystemInput.getStringInput("Enter the %s : ".formatted(DOCUMENT_INFO[count]));
+        while(count < docInfoArr.length - 2){
+            String input = SystemInput.
+                    getStringInput("Enter the %s : ".formatted(docInfoArr[count]));
 
             if(input.charAt(0) == ChoiceCollection.EXIT_CODE.getValue()){
                 return false;

@@ -56,13 +56,4 @@ public class DocumentBuilder {
     public File getDocumentFile() {
         return documentFile;
     }
-
-    public void printStatus(){
-        Object[] objects = {documentName, price, requirements, documentFile.getName()};
-        String[] labels = DocumentManageCodes.DOCUMENT_INFO.getArrCode();
-
-        for(int i = 0; i < labels.length; i++){
-            Util.printInformation("%s -> %s".formatted(labels[i], objects[i]));
-        }
-    }
 }

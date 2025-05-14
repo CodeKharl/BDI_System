@@ -1,27 +1,32 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.modify;
 
-import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentManageCodes;
-import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.RequirementProvider;
-import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.docIdValidation.DocIDValidation;
-import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentConfig;
+import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.*;
+import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.doc_Id_Validation.ValidDocIDProvider;
 import org.isu_std.dao.DocManageDao;
+import org.isu_std.dao.DocumentDao;
 import org.isu_std.io.collections.InputMessageCollection;
 import org.isu_std.io.Validation;
+import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.file_setup.FileChooser;
 import org.isu_std.io.file_setup.DocxFileManager;
+import org.isu_std.io.folder_setup.FolderConfig;
 import org.isu_std.models.model_builders.BuilderFactory;
 
 import java.io.File;
 import java.util.Optional;
 
 public class ModifyingDocService {
-    private final DocManageDao docManageRepository;
-    private final DocIDValidation docIDValidation;
+    private final DocumentDao documentDao;
+    private final DocManageDao docManageDao;
+    private final ValidDocIDProvider validDocIDProvider;
 
-    public ModifyingDocService(DocManageDao docManageRepository, DocIDValidation docIDValidation){
-        this.docManageRepository = docManageRepository;
-        this.docIDValidation = docIDValidation;
+    public ModifyingDocService(
+            DocumentDao documentDao, DocManageDao docManageDao, ValidDocIDProvider validDocIDProvider
+    ){
+        this.documentDao = documentDao;
+        this.docManageDao = docManageDao;
+        this.validDocIDProvider = validDocIDProvider;
     }
 
     protected ModifyDocumentContext createModDocModel(int barangayID){
@@ -33,7 +38,7 @@ public class ModifyingDocService {
     }
 
     protected final boolean modifyPerformed(ModifyDocumentContext modifyDocumentContext) {
-        if(docManageRepository.modify(modifyDocumentContext)){
+        if(docManageDao.modify(modifyDocumentContext)){
             return true;
         }
 
@@ -60,19 +65,8 @@ public class ModifyingDocService {
         return Integer.parseInt(strPrice);
     }
 
-    public final void checkInputChoice(int inputChoice, int docInfoLength){
-        // Input choice can be 1, 2, and 3. Early Validate in this method to fasten the process.
-        if(inputChoice > 0 && inputChoice <= docInfoLength){
-            return;
-        }
-
-        throw new IllegalArgumentException(
-                InputMessageCollection.INPUT_INVALID.getFormattedMessage("input choice")
-        );
-    }
-
-    protected int getValidDocID(int barangayId){
-        return this.docIDValidation.getInputDocumentId(barangayId);
+    protected int getValidDocID(){
+        return this.validDocIDProvider.getValidatedId();
     }
 
     protected Optional<String> getOptionalRequirements(){
@@ -88,5 +82,20 @@ public class ModifyingDocService {
 
     protected void openDocumentFile(File file){
         FileChooser.openFile(file);
+    }
+
+    protected boolean isDocumentFileModify(ModifyDocumentContext modifyDocumentContext){
+        // Builder already set by a new file
+        return modifyDocumentContext.getDocumentBuilder().getDocumentFile() != null;
+    }
+
+    protected void deletePrevDocFile(ModifyDocumentContext modifyDocumentContext) throws OperationFailedException{
+        int barangayId = modifyDocumentContext.getBarangayId();
+        int documentId = modifyDocumentContext.getDocumentId();
+
+        DocFileDeletion docFileDeletion = DocFileDeletionFactory
+                .createDocFileDeletion(documentDao);
+
+        docFileDeletion.deletePerform(barangayId, documentId);
     }
 }

@@ -2,6 +2,7 @@ package org.isu_std.admin.admin_doc_manage.adminDoc_func.add;
 
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentFileManager;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentConfig;
+import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentManageCodes;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.RequirementProvider;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
@@ -15,24 +16,30 @@ import java.io.File;
 import java.util.Optional;
 
 public class AddingDocService {
-    private final DocManageDao docManageRepository;
+    private final DocManageDao docManageDao;
 
-    public AddingDocService(DocManageDao documentRepository){
-        this.docManageRepository = documentRepository;
+    public AddingDocService(DocManageDao docManageDao){
+        this.docManageDao = docManageDao;
     }
 
-    protected void addPerformed(int barangayId, Document document) {
-        if(!docManageRepository.add(barangayId, document)){
-            throw new OperationFailedException("Failed to add the document! Please try again.");
-        }
+    protected String[] getInfoArr(){
+        return DocumentManageCodes.DOCUMENT_INFO.getArrCode();
     }
 
     protected DocumentBuilder getDocumentBuilder(){
         return BuilderFactory.createDocumentBuilder();
     }
 
-    public void checkedDocName(String documentName) {
-        if(!Validation.isInputLengthAccepted(DocumentConfig.MIN_DOCNAME_LENGTH.getValue(), documentName)){
+    protected void addPerform(int barangayId, Document document) {
+        if(!docManageDao.add(barangayId, document)){
+            throw new OperationFailedException("Failed to add the document! Please try again.");
+        }
+    }
+
+    protected void checkedDocName(String documentName) {
+        if(!Validation.isInputLengthAccepted(
+                DocumentConfig.MIN_DOCNAME_LENGTH.getValue(), documentName
+        )){
             throw new IllegalArgumentException(
                     InputMessageCollection.INPUT_SHORT.getFormattedMessage("document name")
             );

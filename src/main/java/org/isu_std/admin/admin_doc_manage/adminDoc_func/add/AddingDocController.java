@@ -18,6 +18,10 @@ public class AddingDocController {
         this.barangayId = barangayId;
     }
 
+    protected String[] getInfoArr(){
+        return this.addingDocService.getInfoArr();
+    }
+
     protected final boolean setDocumentInformation(int count, String input){
         try {
             switch (count) {
@@ -37,7 +41,7 @@ public class AddingDocController {
 
     protected final void processDocument(){
         try {
-            addingDocService.addPerformed(this.barangayId, documentBuilder.build());
+            addingDocService.addPerform(this.barangayId, documentBuilder.build());
             Util.printMessage(
                     "The %s document has been added!".formatted(documentBuilder.getDocumentName())
             );
@@ -75,7 +79,9 @@ public class AddingDocController {
     }
 
     protected void printDocument(){
-        documentBuilder.printStatus();
+        documentBuilder
+                .build()
+                .printDetailsWithDocumentFile();
     }
 }
 

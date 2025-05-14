@@ -1,7 +1,6 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.modify;
 
-import org.isu_std.admin.admin_doc_manage.AdminDocumentImpl;
-import org.isu_std.admin.admin_doc_manage.ManageDocumentUI;
+import org.isu_std.admin.admin_doc_manage.ManageDocumentImpl;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentManageCodes;
 import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.SystemInput;
@@ -14,7 +13,7 @@ import org.isu_std.io.Util;
    Document ID cannot also be change.
 */
 
-public class ModifyingDocument implements AdminDocumentImpl {
+public class ModifyingDocument implements ManageDocumentImpl {
     private final ModifyingDocController modifyingDocController;
 
     public ModifyingDocument(ModifyingDocController modifyingDocController){
@@ -41,7 +40,7 @@ public class ModifyingDocument implements AdminDocumentImpl {
                 return;
             }
 
-            if(!isModifyDocumentInfoSet(modifyingDocController.getDocumentDetail())){
+            if(!isModifyDocumentInfoSet()){
                 continue;
             }
 
@@ -53,27 +52,28 @@ public class ModifyingDocument implements AdminDocumentImpl {
 
     private boolean setDocumentDetail(){
         // Function that returning the specific document detail that the client wants to modify.
+        String[] documentDetails = modifyingDocController.getDocumentDetailArr();
+        int backValue = documentDetails.length + 1;
+
         Util.printSubSectionTitle("Selection of Document Information to be Modify : ");
-        modifyingDocController.printDocumentInfos();
+        Util.printChoices(documentDetails);
+        Util.printChoice("%d. Cancel Process".formatted(backValue));
 
-        while(true){
-            int inputChoice = SystemInput.getIntInput(
-                    "Enter choice (%d == cancel selecting) : ".formatted(ChoiceCollection.EXIT_INT_CODE.getIntValue())
-            );
+        int inputChoice = SystemInput.getIntChoice(
+                "Enter choice : ", backValue
+        );
 
-            if(inputChoice == ChoiceCollection.EXIT_INT_CODE.getIntValue()){
-                return false;
-            }
-
-            if(modifyingDocController.isDocDetailAccepted(inputChoice)){
-                modifyingDocController.setDocumentDetail(inputChoice);
-                return true;
-            }
+        if(inputChoice == backValue){
+            return false;
         }
+
+        modifyingDocController.setDocumentDetail(inputChoice);
+        return true;
     }
 
-    private boolean isModifyDocumentInfoSet(String documentDetail){
-        String[] details = modifyingDocController.getDocumentInfos();
+    private boolean isModifyDocumentInfoSet(){
+        String documentDetail = modifyingDocController.getDocumentDetail();
+        String[] details = modifyingDocController.getDocumentDetailArr();
 
         if(documentDetail.equals(details[0])){
             return modifyingDocController.setDocName(getDocNameOrPrice(documentDetail));
@@ -91,13 +91,15 @@ public class ModifyingDocument implements AdminDocumentImpl {
     }
 
     private String getDocNameOrPrice(String documentDetail){
+        char backValue = ChoiceCollection.EXIT_CODE.getValue();
+
         while(true) {
             String input = SystemInput.getStringInput(
                     "Enter %s (%c == return to doc id section) : "
-                            .formatted(documentDetail, ChoiceCollection.EXIT_CODE.getValue())
+                            .formatted(documentDetail, backValue)
             );
 
-            if(input.charAt(0) == ChoiceCollection.EXIT_CODE.getValue()){
+            if(input.charAt(0) == backValue){
                 return null;
             }
 

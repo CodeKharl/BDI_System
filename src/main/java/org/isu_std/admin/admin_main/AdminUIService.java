@@ -31,7 +31,7 @@ public class AdminUIService {
     }
 
     protected ManageDocumentUI getManageDocumentUI(int barangayID){
-        ManageDocumentFactory manageDocumentFactory = ManageDocumentFactory.getInstance(
+        ManageDocumentFactory manageDocumentFactory = new ManageDocumentFactory(
                 docManageDao,
                 documentDao
         );

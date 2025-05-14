@@ -72,6 +72,7 @@ public class DocumentFileManager {
         FileChooser.openFile(documentFile);
 
         if(!isConfirmedToDocValidate()){
+            Util.printMessage("Back to file choosing");
             return false;
         }
 

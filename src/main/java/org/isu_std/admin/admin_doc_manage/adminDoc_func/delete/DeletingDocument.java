@@ -1,13 +1,12 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.delete;
 
-import org.isu_std.admin.admin_doc_manage.AdminDocumentImpl;
-import org.isu_std.admin.admin_doc_manage.ManageDocumentUI;
+import org.isu_std.admin.admin_doc_manage.ManageDocumentImpl;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentManageCodes;
 import org.isu_std.io.collections.ChoiceCollection;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 
-public class DeletingDocument implements AdminDocumentImpl {
+public class DeletingDocument implements ManageDocumentImpl {
     private final DeletingDocController deletingDocController;
 
     public DeletingDocument(DeletingDocController deletingDocController){

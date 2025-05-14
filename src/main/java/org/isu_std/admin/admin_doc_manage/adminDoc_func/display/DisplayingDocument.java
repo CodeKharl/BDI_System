@@ -1,8 +1,8 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.display;
 
-import org.isu_std.admin.admin_doc_manage.AdminDocumentImpl;
+import org.isu_std.admin.admin_doc_manage.ManageDocumentImpl;
 
-public class DisplayingDocument implements AdminDocumentImpl {
+public class DisplayingDocument implements ManageDocumentImpl {
     private final DisplayingDocController displayingDocController;
 
     public DisplayingDocument(DisplayingDocController displayingDocController){

@@ -341,4 +341,25 @@ public class MySqlDocument implements DocManageDao, DocumentDao{
 
         return 0;
     }
+
+    @Override
+    public Optional<String> getDocumentFileName(int barangayId, int documentId){
+        var query = "SELECT doc_file_name FROM document WHERE barangay_id = ? AND document_id = ?";
+
+        try(Connection connection = MySQLDBConfig.getConnection();
+            PreparedStatement preStatement = connection.prepareStatement(query)
+        ){
+            preStatement.setInt(1, barangayId);
+            preStatement.setInt(2, documentId);
+
+            ResultSet resultSet = preStatement.executeQuery();
+            if(resultSet.next()){
+                return Optional.of(resultSet.getString(1));
+            }
+        }catch (SQLException e){
+            SystemLogger.logWarning(MySqlDocument.class, e.getMessage());
+        }
+
+        return Optional.empty();
+    }
 }

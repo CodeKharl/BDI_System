@@ -1,20 +1,22 @@
-package org.isu_std.admin.admin_doc_manage.adminDoc_func.others.docIdValidation;
+package org.isu_std.admin.admin_doc_manage.adminDoc_func.others.doc_Id_Validation;
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
 
-public class DocIDValidationController {
-    private final DocIDValidationService docIdValidService;
+public class ValidDocIDController {
+    private final ValidDocIDService docIdValidService;
+    private final int barangayId;
 
-    public DocIDValidationController(DocIDValidationService docIdValidService){
+    public ValidDocIDController(ValidDocIDService docIdValidService, int barangayId){
         this.docIdValidService = docIdValidService;
+        this.barangayId = barangayId;
     }
 
-    protected final boolean isDocumentExist(int barangayId, int documentId){
+    protected boolean isDocumentExist(int documentId){
         // Checks the document id that the user input is exists on the database.
         try{
             String documentName = docIdValidService.getDocumentName(
-                    barangayId,
+                    this.barangayId,
                     documentId
             );
 

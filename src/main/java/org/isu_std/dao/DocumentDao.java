@@ -10,4 +10,5 @@ public interface DocumentDao {
     Optional<String> getDocumentName(int barangayId, int documentId);
     Optional<Document> getOptionalDocument(int barangayId, int documentId);
     double getDocumentPrice(int barangayId, int documentId);
+    Optional<String> getDocumentFileName(int barangayId, int documentId);
 }
