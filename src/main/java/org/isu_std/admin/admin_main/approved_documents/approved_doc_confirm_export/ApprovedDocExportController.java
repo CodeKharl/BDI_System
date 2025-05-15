@@ -6,7 +6,6 @@ import org.isu_std.io.custom_exception.OperationFailedException;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 public class ApprovedDocExportController {
@@ -14,7 +13,7 @@ public class ApprovedDocExportController {
     private final RequestDocumentContext requestDocumentContext;
     private final File outputDocumentFile;
 
-    private Path targetPath;
+    private Path targetDirectory;
 
     public ApprovedDocExportController(ApprovedDocExportService approvedDocExportService, RequestDocumentContext requestDocumentContext, File outputDocumentFile){
         this.approvedDocExportService = approvedDocExportService;
@@ -23,14 +22,15 @@ public class ApprovedDocExportController {
     }
 
     protected boolean isTargetPathSet(){
-        Optional<Path> optionalPath = approvedDocExportService.getChosenDocFilePath();
+        Optional<Path> optionalPath = approvedDocExportService.getChosenDocFileDirectory();
 
         if(optionalPath.isPresent()){
             Path chosenPath = optionalPath.get();
             Util.printInformation("Target Path : " + chosenPath);
 
-            this.targetPath = Paths.get(chosenPath.toString(), outputDocumentFile.getName());
-
+            this.targetDirectory = Path.of(
+                    chosenPath.toString(), requestDocumentContext.getReferenceId()
+            );
             return true;
         }
 
@@ -39,10 +39,12 @@ public class ApprovedDocExportController {
 
     protected boolean exportPerform() {
         try{
-            approvedDocExportService.docFileMoveDirPerformed(outputDocumentFile, this.targetPath);
-            approvedDocExportService.addReceipt(targetPath, requestDocumentContext);
+            approvedDocExportService.docFileMoveDirPerformed(
+                    outputDocumentFile, this.targetDirectory
+            );
+            approvedDocExportService.addReceipt(targetDirectory, requestDocumentContext);
 
-            approvedDocExportService.deleteRequestPerform(requestDocumentContext);
+            approvedDocExportService.deleteApprovedReqPerform(requestDocumentContext);
             return true;
         }catch(OperationFailedException e) {
             Util.printException(e.getMessage());

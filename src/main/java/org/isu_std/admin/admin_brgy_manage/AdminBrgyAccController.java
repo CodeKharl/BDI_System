@@ -1,5 +1,6 @@
 package org.isu_std.admin.admin_brgy_manage;
 
+import org.isu_std.client_context.AdminContext;
 import org.isu_std.io.collections.InputMessageCollection;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
@@ -7,22 +8,22 @@ import org.isu_std.models.Admin;
 
 public class AdminBrgyAccController {
     private final AdminBrgyService adminBrgyService;
-    private final Admin admin;
+    private final AdminContext adminContext;
 
-    public AdminBrgyAccController(Admin admin, AdminBrgyService adminBrgyService){
-        this.admin = admin;
+    public AdminBrgyAccController(AdminContext adminContext, AdminBrgyService adminBrgyService){
+        this.adminContext = adminContext;
         this.adminBrgyService = adminBrgyService;
     }
 
     protected boolean isUserHasNoBarangayId(){
-        return admin.barangayId() == 0;
+        return adminContext.getAdmin().barangayId() == 0;
     }
 
     protected boolean isProcessSuccess(int choice){
         switch(choice){
             case 1 -> {
                 return adminBrgyService
-                        .createLinkBrgy(admin)
+                        .createLinkBrgy(adminContext)
                         .linkPerformed();
             }
 
@@ -40,7 +41,7 @@ public class AdminBrgyAccController {
 
     protected void launchAdminUI(){
         try {
-            adminBrgyService.getAdminUi(admin).adminMenu();
+            adminBrgyService.getAdminUi(adminContext).adminMenu();
         }catch(OperationFailedException e){
             Util.printException(e.getMessage());
         }

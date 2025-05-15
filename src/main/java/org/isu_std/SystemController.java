@@ -38,7 +38,7 @@ public class SystemController {
             systemService.getPostLoginNav(
                     type,
                     userContext,
-                    adminContext.getAdmin()
+                    adminContext
             ).navigateToSection();
         }
     }

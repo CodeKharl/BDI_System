@@ -33,12 +33,12 @@ public class LinkBrgyService {
         return Holder.instance;
     }
 
-    protected Admin buildAdminWithId(Admin prevAdmin, int adminId){
+    protected Admin buildAdminWithId(Admin prevAdmin, Barangay barangay){
         AdminBuilder adminBuilder = BuilderFactory.createAdminBuilder();
         adminBuilder.adminId(prevAdmin.adminId())
                 .adminName(prevAdmin.adminName())
                 .adminPin(prevAdmin.adminPin())
-                .adminId(adminId);
+                .barangayId(barangay.barangayId());
 
         return adminBuilder.build();
     }

@@ -33,7 +33,7 @@ public class SystemService {
         return logSignFactory.createSignupInsType(type);
     }
 
-    protected PostLoginNavigator getPostLoginNav(int type, UserContext userContext, Admin admin){
-        return postLogNavFactory.getPostLogNav(type, userContext, admin);
+    protected PostLoginNavigator getPostLoginNav(int type, UserContext userContext, AdminContext adminContext){
+        return postLogNavFactory.getPostLogNav(type, userContext, adminContext);
     }
 }

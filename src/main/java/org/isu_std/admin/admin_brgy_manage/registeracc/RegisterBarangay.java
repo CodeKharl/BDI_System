@@ -24,8 +24,13 @@ public class RegisterBarangay{
                 continue;
             }
 
-            if(isRegisteringConfirmed()){
-                printSuccessMessage(registerBrgyController.isAddingSuccess());
+            if(!isRegisteringConfirmed()){
+                continue;
+            }
+
+            if(registerBrgyController.isAddingSuccess()){
+                printSuccessMessage();
+                return;
             }
         }
     }
@@ -49,20 +54,16 @@ public class RegisterBarangay{
         return true;
     }
 
-    protected void printSuccessMessage(boolean isRegisteringSuccess){
-        if(!isRegisteringSuccess){
-            return;
-        }
-
+    protected void printSuccessMessage(){
         Util.printMessage(
                 (
                     """
                         You successfully register the barangay %s
                         %sBarangay ID : %d"""
                 ).formatted(
-                        RegisterBrgyController.getStrBrgyInfo(),
+                        registerBrgyController.getStrBrgyInfo(),
                         Symbols.MESSAGE.getType(),
-                        registerBrgyController.getBarangayId()
+                        registerBrgyController.getNewBarangayId()
                 )
         );
     }

@@ -8,6 +8,7 @@ import org.isu_std.admin.admin_brgy_manage.registeracc.RegisterBrgyController;
 import org.isu_std.admin.admin_brgy_manage.registeracc.RegisterBrgyService;
 import org.isu_std.admin.admin_main.AdminUI;
 import org.isu_std.admin.admin_main.AdminUIFactory;
+import org.isu_std.client_context.AdminContext;
 import org.isu_std.dao.*;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Admin;
@@ -46,16 +47,16 @@ public class AdminBrgyService {
         );
     }
 
-    protected LinkBarangay createLinkBrgy(Admin admin){
+    protected LinkBarangay createLinkBrgy(AdminContext adminContext){
         return new LinkBarangay(
                 new LinkBrgyController(
                         LinkBrgyService.getInstance(barangayDao, adminDao),
-                        admin
+                        adminContext
                 )
         );
     }
 
-    protected AdminUI getAdminUi(Admin admin){
+    protected AdminUI getAdminUi(AdminContext adminContext){
         AdminUIFactory adminUIFactory = AdminUIFactory.getInstance(
                 docManageDao,
                 documentDao,
@@ -64,9 +65,12 @@ public class AdminBrgyService {
                 paymentDao
         );
 
-        Optional<Barangay> optionalBarangay = barangayDao.getOptionalBarangay(admin.barangayId());
+        Optional<Barangay> optionalBarangay = barangayDao.getOptionalBarangay(
+                adminContext.getAdmin().barangayId()
+        );
+
         return adminUIFactory.createAdmin(
-                admin,
+                adminContext,
                 optionalBarangay.orElseThrow(
                         () -> new OperationFailedException("Failed to get the barangay informations.")
                 )

@@ -95,46 +95,36 @@ public class ApprovedDocumentController {
         requirementFilesView.viewProcess();
     }
 
-    private boolean approvedDocExport(){
-        if(!isPaymentPresent()){
-            return false;
-        }
-
-        ApprovedDocExport approvedDocExport = approvedDocumentService
-                .createApprovedDocExport(this.requestDocumentContext, this.outputDocFile);
-
-        if(!approvedDocExport.isExported()) {
-            return false;
-        }
-
-        return deleteApprovedReqPerformed();
-    }
-
-    private boolean deleteApprovedReqPerformed(){
-        try{
-            DocumentRequest documentRequest = requestDocumentContext.documentRequest();
-            approvedDocumentService.deleteApprovedRequestDocs(documentRequest);
+    private boolean setOutputDocFile(){
+        try {
+            if (this.outputDocFile == null) {
+                this.outputDocFile = approvedDocumentService
+                        .getApprovedDocFile(requestDocumentContext);
+            }
 
             return true;
-        }catch (OperationFailedException e){
+        }catch (NotFoundException e){
             Util.printMessage(e.getMessage());
         }
 
         return false;
     }
 
+    private boolean approvedDocExport(){
+        if(!isPaymentPresent() || !setOutputDocFile()){
+            return false;
+        }
+
+        ApprovedDocExport approvedDocExport = approvedDocumentService
+                .createApprovedDocExport(this.requestDocumentContext, this.outputDocFile);
+
+        return approvedDocExport.isExported();
+    }
+
     private void viewApprovedFile(){
-        try{
-            if(this.outputDocFile == null){
-                this.outputDocFile = approvedDocumentService
-                        .getApprovedDocFile(requestDocumentContext);
-            }
-
+        if(setOutputDocFile()){
             Util.printMessage("Opening the user document file...");
-
             approvedDocumentService.openDocFile(this.outputDocFile);
-        }catch (NotFoundException e) {
-            Util.printException(e.getMessage());
         }
     }
 

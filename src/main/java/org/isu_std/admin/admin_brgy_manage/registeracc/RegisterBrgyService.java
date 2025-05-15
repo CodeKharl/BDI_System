@@ -74,16 +74,26 @@ public class RegisterBrgyService {
         return Integer.parseInt(strBrgyPin);
     }
 
-    protected int getBarangayId(Barangay barangay){
+    protected void checkBarangayIfUnique(Barangay barangay){
         int barangayId = barangayDao.getBarangayId(barangay);
 
-        if(barangayId == 0){
-            throw new NotFoundException(
-                    InputMessageCollection.INPUT_OBJECT_NOT_EXIST.getFormattedMessage("barangay id")
+        if(barangayId != 0){
+            throw new IllegalArgumentException(
+                    "Barangay already exist! Please enter a unique brgy address."
             );
         }
+    }
 
-        return barangayId;
+    protected int getNewBarangayId(Barangay barangay){
+        int barangayId = barangayDao.getBarangayId(barangay);
+
+        if(barangayId != 0){
+            return barangayId;
+        }
+
+        throw new NotFoundException(
+                "BarangayID not found! There some issue on the system, please try when it fixes"
+        );
     }
 
     protected void addBarangay(Barangay barangay){

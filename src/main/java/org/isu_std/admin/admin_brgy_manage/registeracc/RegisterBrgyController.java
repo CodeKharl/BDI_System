@@ -2,8 +2,8 @@ package org.isu_std.admin.admin_brgy_manage.registeracc;
 
 import org.isu_std.admin.admin_brgy_manage.BarangayConfig;
 import org.isu_std.io.Util;
-import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.models.Barangay;
 import org.isu_std.models.model_builders.BarangayBuilder;
 
 public class RegisterBrgyController {
@@ -16,6 +16,8 @@ public class RegisterBrgyController {
 
     private final RegisterBrgyService registerBrgyService;
     private final BarangayBuilder barangayBuilder;
+
+    private Barangay newBarangay;
 
     public RegisterBrgyController(RegisterBrgyService registerBrgyService){
         this.registerBrgyService = registerBrgyService;
@@ -56,30 +58,22 @@ public class RegisterBrgyController {
     }
 
     protected boolean isBarangayAccepted(){
-        try {
-            if(getBarangayId() == 0) return true;
-        }catch (IllegalArgumentException e){
-            Util.printException(e.getMessage());
+        try{
+            Barangay barangay = barangayBuilder.build();
+            registerBrgyService.checkBarangayIfUnique(barangay);
+            this.newBarangay = barangay;
+
+            return true;
+        }catch(IllegalArgumentException e){
+            Util.printMessage(e.getMessage());
         }
 
         return false;
     }
 
-    protected int getBarangayId(){
-        try{
-            return registerBrgyService.getBarangayId(
-                    barangayBuilder.build()
-            );
-        }catch (NotFoundException e){
-            Util.printException(e.getMessage());
-        }
-
-        return 0;
-    }
-
     protected boolean isAddingSuccess(){
         try{
-            registerBrgyService.addBarangay(barangayBuilder.build());
+            registerBrgyService.addBarangay(this.newBarangay);
             return true;
         }catch (OperationFailedException e){
             Util.printException(e.getMessage());
@@ -88,16 +82,20 @@ public class RegisterBrgyController {
         return false;
     }
 
+    protected int getNewBarangayId(){
+        return this.registerBrgyService
+                .getNewBarangayId(this.newBarangay);
+    }
 
     protected static String[] getBrgyInfoNeeds(){
         return BRGY_INFORMATIONS_NEEDS;
     }
 
-    protected static String getStrBrgyInfo(){
+    protected String getStrBrgyInfo(){
         return "%s, %s, %s".formatted(
-                BRGY_INFORMATIONS_NEEDS[0],
-                BRGY_INFORMATIONS_NEEDS[1],
-                BRGY_INFORMATIONS_NEEDS[2]
+                newBarangay.barangayName(),
+                newBarangay.municipality(),
+                newBarangay.province()
         );
     }
 }

@@ -21,7 +21,9 @@ public class ApprovedDocExport {
         }
 
         if(approvedDocExportController.exportPerform()){
-            Util.printMessage("File has been export to the target path : ");
+            Util.printMessage("The approved file has been exported.");
+            Util.printMessage("Your request will now be deleted.");
+            Util.printMessage("The transaction will be closed.");
             return true;
         }
 

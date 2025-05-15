@@ -1,5 +1,6 @@
 package org.isu_std.admin.admin_brgy_manage;
 
+import org.isu_std.client_context.AdminContext;
 import org.isu_std.dao.*;
 import org.isu_std.models.Admin;
 
@@ -10,7 +11,7 @@ public class AdminBrgyAccFactory {
         this.daoFactory = daoFactory;
     }
 
-    public AdminBrgyAccUI createAdminBrgyAcc(Admin admin){
+    public AdminBrgyAccUI createAdminBrgyAcc(AdminContext adminContext){
         AdminBrgyService adminBrgyService = new AdminBrgyService(
                 daoFactory.createBrgyDao(),
                 daoFactory.createAdminDao(),
@@ -21,7 +22,10 @@ public class AdminBrgyAccFactory {
                 daoFactory.paymentDao()
         );
 
-        AdminBrgyAccController adminBrgyAccController = new AdminBrgyAccController(admin, adminBrgyService);
+        AdminBrgyAccController adminBrgyAccController = new AdminBrgyAccController(
+                adminContext, adminBrgyService
+        );
+
         return new AdminBrgyAccUI(adminBrgyAccController);
     }
 }

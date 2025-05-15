@@ -14,7 +14,7 @@ public class UserDeleteReqService {
         this.documentRequestDao = documentRequestDao;
     }
 
-    void deleteRequestPerform(RequestSelectContext requestSelectContext){
+    protected void deleteRequestPerform(RequestSelectContext requestSelectContext){
         DocumentRequest documentRequest = requestSelectContext.getSelectedDocRequest();
 
         if(!documentRequestDao.deleteDocRequest(documentRequest)){

@@ -9,9 +9,13 @@ import java.nio.file.Path;
 
 public class FolderManager {
     public static void setFileDirectory(FolderConfig folderConfig){
+        Path path = Path.of(folderConfig.getDirectory());
+        setFileDirectory(path);
+    }
+
+    public static void setFileDirectory(Path directory){
         try{
-            Path path = Path.of(folderConfig.getDirectory());
-            Files.createDirectories(path);
+            Files.createDirectories(directory);
         }catch (FileAlreadyExistsException _){
         } catch (IOException io){
             SystemLogger.logWarning(FolderManager.class, io.getMessage());

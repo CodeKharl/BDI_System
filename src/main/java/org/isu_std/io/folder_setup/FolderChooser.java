@@ -17,7 +17,7 @@ public class FolderChooser {
             return Optional.empty();
         }
 
-        File file = jFileChooser.getCurrentDirectory();
+        File file = jFileChooser.getSelectedFile();
         return Optional.of(file.toPath());
     }
 }

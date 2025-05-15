@@ -5,7 +5,9 @@ import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 
 public class AdminBrgyAccUI implements PostLoginNavigator {
-    private final String[] ADMIN_BRGY_CONTENTS = {"Link your Account to a Barangay", "Register a Barangay", "Cancel"};
+    private final String[] ADMIN_BRGY_CONTENTS = {
+            "Link your Account to a Barangay", "Register a Barangay", "Cancel"
+    };
 
     private final AdminBrgyAccController adminBrgyAccController;
 

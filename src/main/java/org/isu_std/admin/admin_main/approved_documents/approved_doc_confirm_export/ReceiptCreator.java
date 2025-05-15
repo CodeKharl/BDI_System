@@ -8,21 +8,19 @@ import java.lang.reflect.RecordComponent;
 import java.nio.file.Path;
 
 public class ReceiptCreator {
-    protected static void createReceiptFile(
-            String fileName, Path targetPath, RequestDocumentContext requestDocumentContext
-    ) throws IOException{
-        File receiptFile = new File(targetPath.toString() + File.separator + fileName);
+    private final static String RECEIPT_FILE_NAME = "Receipt!.txt";
+
+    protected static void createReceiptFile(Path targetDirectory, RequestDocumentContext requestDocumentContext) throws IOException{
+        File receiptFile = new File(
+                targetDirectory.toString() + File.separator + RECEIPT_FILE_NAME
+        );
 
         try(FileWriter fileWriter = new FileWriter(receiptFile);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)
         ){
-            bufferedWriter.write(fileName);
-            bufferedWriter.newLine();
-
             String referenceId = requestDocumentContext.documentRequest().referenceId();
-            bufferedWriter
-                    .append("Reference ID -> ")
-                    .append(referenceId);
+            bufferedWriter.write("REFERENCE ID -> %s".formatted(referenceId));
+            bufferedWriter.newLine();
 
             addReceiptContents(bufferedWriter, requestDocumentContext);
         }
@@ -43,8 +41,8 @@ public class ReceiptCreator {
 
         for(RecordComponent label : recordComponents){
             stringBuilder
-                    .append(" ")
-                    .append(label.getName().toUpperCase());
+                    .append(label.getName().toUpperCase())
+                    .append(" - ");
         }
 
         return stringBuilder.toString();

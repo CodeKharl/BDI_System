@@ -1,5 +1,6 @@
 package org.isu_std.admin.admin_main;
 
+import org.isu_std.client_context.AdminContext;
 import org.isu_std.dao.*;
 import org.isu_std.models.Admin;
 import org.isu_std.models.Barangay;
@@ -49,10 +50,10 @@ public class AdminUIFactory {
         return Holder.instance;
     }
 
-    public AdminUI createAdmin(Admin admin, Barangay barangay){
+    public AdminUI createAdmin(AdminContext adminContext, Barangay barangay){
         AdminUIController adminUIController = new AdminUIController(
                 new AdminUIService(docManageDao, documentDao, documentRequestDao, userPersonalDao, paymentDao),
-                admin,
+                adminContext,
                 barangay
         );
 

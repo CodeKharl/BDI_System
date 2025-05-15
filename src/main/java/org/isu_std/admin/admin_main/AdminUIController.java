@@ -1,21 +1,22 @@
 package org.isu_std.admin.admin_main;
 
+import org.isu_std.client_context.AdminContext;
 import org.isu_std.models.Admin;
 import org.isu_std.models.Barangay;
 
 public class AdminUIController {
     private final AdminUIService adminUIService;
-    private final Admin admin;
+    private final AdminContext adminContext;
     private final Barangay barangay;
 
-    public AdminUIController(AdminUIService adminUIService, Admin admin, Barangay barangay){
+    public AdminUIController(AdminUIService adminUIService, AdminContext adminContext, Barangay barangay){
         this.adminUIService = adminUIService;
-        this.admin = admin;
+        this.adminContext = adminContext;
         this.barangay = barangay;
     }
 
     protected String getAdminName(){
-        return this.admin.adminName();
+        return this.adminContext.getAdmin().adminName();
     }
 
     protected String getBarangayFullName(){
@@ -34,8 +35,9 @@ public class AdminUIController {
             case 2 -> adminUIService.getApprovedDocsRequest(barangay)
                     .approvedDocView();
 
-            case 3 -> adminUIService.getManageDocumentUI(admin.barangayId())
-                    .manageMenu();
+            case 3 -> adminUIService.getManageDocumentUI(
+                    adminContext.getAdmin().barangayId()
+                    ).manageMenu();
 
             case 4 -> {}
         };
