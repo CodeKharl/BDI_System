@@ -80,7 +80,7 @@ public class DocxFileManager {
     }
 
 
-    public static void editDocxPlaceHolders(File file, Map<String, String> informations) throws IOException, OperationFailedException{
+    public static void editDocxPlaceHolders(File file, Map<String, String> informations) throws IOException{
         try(InputStream inputStream = new FileInputStream(file);
             XWPFDocument document = new XWPFDocument(inputStream);
             OutputStream outputStream = new FileOutputStream(file)
@@ -94,7 +94,7 @@ public class DocxFileManager {
         }
     }
 
-    private static void editOnProcess(List<XWPFRun> runList, Map<String, String> informations)throws OperationFailedException{
+    private static void editOnProcess(List<XWPFRun> runList, Map<String, String> informations){
         List<Integer> runStartIndexes = new ArrayList<>();
         String paragraphTxt = getParagraphTxt(runList, runStartIndexes);
 

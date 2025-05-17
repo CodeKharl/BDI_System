@@ -38,9 +38,11 @@ public class ManageBarangayService {
         );
     }
 
-    protected void changeBrgyPerform(User newUser){
+    protected void changeBrgyPerform(User newUser) throws OperationFailedException{
         if(!userDao.updateUserBarangay(newUser)){
-            throw new OperationFailedException("Failed to change your barangay! Please try again.");
+            throw new OperationFailedException(
+                    "Failed to change your barangay! Please try again."
+            );
         }
     }
 

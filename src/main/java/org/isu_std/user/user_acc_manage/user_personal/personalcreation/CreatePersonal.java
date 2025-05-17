@@ -1,6 +1,6 @@
 package org.isu_std.user.user_acc_manage.user_personal.personalcreation;
 
-import org.isu_std.io.collections.ChoiceCollection;
+import org.isu_std.io.collections_enum.ChoiceCollection;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 

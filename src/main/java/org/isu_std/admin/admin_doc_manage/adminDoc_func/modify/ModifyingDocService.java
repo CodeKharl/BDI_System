@@ -4,13 +4,11 @@ import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.*;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.doc_Id_Validation.ValidDocIDProvider;
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.dao.DocumentDao;
-import org.isu_std.io.collections.InputMessageCollection;
+import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.io.Validation;
-import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.file_setup.FileChooser;
 import org.isu_std.io.file_setup.DocxFileManager;
-import org.isu_std.io.folder_setup.FolderConfig;
 import org.isu_std.models.model_builders.BuilderFactory;
 
 import java.io.File;
@@ -37,7 +35,7 @@ public class ModifyingDocService {
         return DocumentManageCodes.DOCUMENT_INFO.getArrCode();
     }
 
-    protected final boolean modifyPerformed(ModifyDocumentContext modifyDocumentContext) {
+    protected final boolean modifyPerformed(ModifyDocumentContext modifyDocumentContext) throws OperationFailedException{
         if(docManageDao.modify(modifyDocumentContext)){
             return true;
         }
@@ -93,9 +91,9 @@ public class ModifyingDocService {
         int barangayId = modifyDocumentContext.getBarangayId();
         int documentId = modifyDocumentContext.getDocumentId();
 
-        DocFileDeletion docFileDeletion = DocFileDeletionFactory
+        DocumentFileDeletion documentFileDeletion = DocFileDeletionFactory
                 .createDocFileDeletion(documentDao);
 
-        docFileDeletion.deletePerform(barangayId, documentId);
+        documentFileDeletion.deletePerform(barangayId, documentId);
     }
 }

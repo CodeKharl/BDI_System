@@ -12,16 +12,24 @@ public class RequestApproveService {
         this.documentRequestDao = documentRequestDao;
     }
 
-    protected void requestApprovePerformed(RequestDocumentContext requestDocumentContext){
-        String referenceId = requestDocumentContext.documentRequest().referenceId();
+    protected void requestApprovePerformed(RequestDocumentContext requestDocumentContext)
+            throws OperationFailedException{
+        String referenceId = requestDocumentContext
+                .documentRequest().referenceId();
+
         if (!documentRequestDao.setRequestApprove(referenceId)) {
-            throw new OperationFailedException("Failed to Approve the Requested Document! Please try again.");
+            throw new OperationFailedException(
+                    "Failed to Approve the Requested Document! Please try again."
+            );
         }
     }
 
-    protected void createOutputDocumentFile(RequestDocumentContext requestDocumentContext){
+    protected void createOutputDocumentFile(RequestDocumentContext requestDocumentContext)
+            throws OperationFailedException{
         if(!DocOutFileManager.createOutputDocumentFile(requestDocumentContext)){
-            throw new OperationFailedException("Failed to Create Document Output File! Please try again.");
+            throw new OperationFailedException(
+                    "Failed to Create Document Output File! Please try again."
+            );
         }
     }
 }

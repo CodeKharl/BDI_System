@@ -1,7 +1,7 @@
 package org.isu_std.login_signup.admin_signup;
 
 import org.isu_std.dao.AdminDao;
-import org.isu_std.io.collections.InputMessageCollection;
+import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.io.Validation;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Admin;
@@ -12,10 +12,10 @@ public class AdminSignupService {
     private final static int MIN_NAME_LENGTH = 8;
     private final static int MIN_PIN_LENGTH = 4;
 
-    private final AdminDao adminRepository;
+    private final AdminDao adminDao;
 
-    public AdminSignupService(AdminDao adminRepository){
-        this.adminRepository = adminRepository;
+    public AdminSignupService(AdminDao adminDao){
+        this.adminDao = adminDao;
     }
 
     protected AdminBuilder createAdminBuilder(){
@@ -45,12 +45,10 @@ public class AdminSignupService {
         }
     }
 
-    public void insertingAdminData(Admin admin){
-        if(adminRepository.insertAdmin(admin)){
-            return;
+    public void insertingAdminData(Admin admin) throws OperationFailedException{
+        if(!adminDao.insertAdmin(admin)){
+            throw new OperationFailedException("Failed to create the admin account.");
         }
-
-        throw new OperationFailedException("Failed to create the admin account.");
     }
 
     public void checkAdminIdExist(String adminName){
@@ -63,7 +61,7 @@ public class AdminSignupService {
     }
 
     public int getAdminId(String adminName){
-        return adminRepository.getAdminID(adminName);
+        return adminDao.getAdminID(adminName);
     }
 
     public static int getMinNameLength(){

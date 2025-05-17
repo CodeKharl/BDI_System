@@ -45,14 +45,26 @@ public class RequestedDocumentService {
     }
 
     protected RequestDocumentContext getReqDocsContext(DocumentRequest documentRequest) throws OperationFailedException{
-        ReqDocsManagerBuilder reqDocsManagerBuilder = new ReqDocsManagerBuilder(documentRequest);
-        UserPersonal userPersonal = ReqDocsManagerProvider.getUserPersonal(userPersonalDao, documentRequest.userId());
-        Document document = ReqDocsManagerProvider.getDocument(
-                documentDao, documentRequest.barangayId(), documentRequest.documentId()
+        var reqDocsManagerBuilder = new ReqDocsManagerBuilder(documentRequest);
+        var reqDocsManagerProvider = new ReqDocsManagerProvider(
+                userPersonalDao, documentDao, null
         );
 
-        reqDocsManagerBuilder.userPersonal(userPersonal).document(document);
-        return reqDocsManagerBuilder.build();
+        try {
+            UserPersonal userPersonal = reqDocsManagerProvider
+                    .getUserPersonal(documentRequest.userId());
+
+            Document document = reqDocsManagerProvider
+                    .getDocument(documentRequest.barangayId(), documentRequest.documentId());
+
+            reqDocsManagerBuilder
+                    .userPersonal(userPersonal)
+                    .document(document);
+
+            return reqDocsManagerBuilder.build();
+        }catch (NotFoundException e){
+            throw new OperationFailedException("Failed to get the requested information!", e);
+        }
     }
 
     protected RequirementFilesView getReqFilesView(List<File> requirmentFileList){
@@ -60,8 +72,8 @@ public class RequestedDocumentService {
     }
 
     protected RequestApprove createRequestApprove(RequestDocumentContext requestDocumentContext){
-        RequestApproveService requestApproveService = new RequestApproveService(documentRequestDao);
-        RequestApproveController requestApproveController = new RequestApproveController(
+        var requestApproveService = new RequestApproveService(documentRequestDao);
+        var requestApproveController = new RequestApproveController(
                 requestApproveService, requestDocumentContext
         );
 

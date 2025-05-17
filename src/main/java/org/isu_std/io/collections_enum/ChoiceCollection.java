@@ -1,4 +1,4 @@
-package org.isu_std.io.collections;
+package org.isu_std.io.collections_enum;
 
 public enum ChoiceCollection {
     CONFIRM('C'),

@@ -1,12 +1,9 @@
 package org.isu_std.user.user_acc_manage.user_personal;
 
-import org.isu_std.io.collections.ChoiceCollection;
+import org.isu_std.io.collections_enum.ChoiceCollection;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
-import org.isu_std.models.User;
 import org.isu_std.user.user_acc_manage.UserManageProcess;
-
-import java.util.Optional;
 
 public class ManagePersonal implements UserManageProcess {
     private final ManagePersonalController managePersonalController;

@@ -2,7 +2,7 @@ package org.isu_std.user_info_manager;
 
 import org.isu_std.dao.UserDao;
 import org.isu_std.io.Validation;
-import org.isu_std.io.collections.InputMessageCollection;
+import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.io.dynamic_enum_handler.EnumValueProvider;
 
 public class UserInfoManager {

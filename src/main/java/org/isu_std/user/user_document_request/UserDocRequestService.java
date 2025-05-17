@@ -3,11 +3,10 @@ package org.isu_std.user.user_document_request;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.dao.UserPersonalDao;
-import org.isu_std.io.Symbols;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
-import org.isu_std.io.collections.InputMessageCollection;
+import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.models.DocumentRequest;
 import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
@@ -25,12 +24,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class UserDocumentRequestService {
+public class UserDocRequestService {
     private final DocumentDao documentDao;
     private final DocumentRequestDao documentRequestDao;
     private final UserPersonalDao userPersonalDao;
 
-    public UserDocumentRequestService(
+    public UserDocRequestService(
             DocumentDao documentDao, DocumentRequestDao documentRequestDao, UserPersonalDao userPersonalDao
     ){
         this.documentDao = documentDao;
@@ -111,9 +110,11 @@ public class UserDocumentRequestService {
         }
     }
 
-    protected void addDocumentRequest(DocumentRequest documentRequest){
+    protected void addDocumentRequest(DocumentRequest documentRequest) throws OperationFailedException{
         if(!documentRequestDao.addDocRequest(documentRequest)){
-            throw new OperationFailedException("Request Failed! Please try again.");
+            throw new OperationFailedException(
+                    "Request Failed! Please try again."
+            );
         }
     }
 }

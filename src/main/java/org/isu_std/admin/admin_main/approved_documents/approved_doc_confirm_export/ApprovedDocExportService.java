@@ -29,7 +29,7 @@ public class ApprovedDocExportService {
         return Path.of(targetDirectory.toString(), file.getName());
     }
 
-    protected void docFileMoveDirPerformed(File docFile, Path targetDirectory){
+    protected void docFileMoveDirPerformed(File docFile, Path targetDirectory) throws OperationFailedException{
         try {
             Path docSourcePath = docFile.toPath();
             Path newFilePath = createNewFilePath(targetDirectory, docFile);
@@ -43,7 +43,8 @@ public class ApprovedDocExportService {
         }
     }
 
-    protected void addReceipt(Path targetDirectory, RequestDocumentContext requestDocumentContext){
+    protected void addReceipt(Path targetDirectory, RequestDocumentContext requestDocumentContext)
+            throws OperationFailedException{
         try {
             ReceiptCreator.createReceiptFile(targetDirectory, requestDocumentContext);
         }catch (IOException e){
@@ -53,7 +54,8 @@ public class ApprovedDocExportService {
         }
     }
 
-    protected void deleteApprovedReqPerform(RequestDocumentContext requestDocumentContext){
+    protected void deleteApprovedReqPerform(RequestDocumentContext requestDocumentContext)
+            throws OperationFailedException{
         DocumentRequest approvedRequest = requestDocumentContext.documentRequest();
 
         if(!documentRequestDao.deleteDocRequest(approvedRequest)){

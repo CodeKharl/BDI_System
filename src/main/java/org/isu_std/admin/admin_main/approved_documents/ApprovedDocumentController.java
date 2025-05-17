@@ -55,7 +55,8 @@ public class ApprovedDocumentController {
     protected boolean isDocumentRequestSet(int docsChoice){
         try{
             DocumentRequest documentRequest = approvedDocList.get(docsChoice - 1);
-            this.requestDocumentContext = approvedDocumentService.getReqDocsManager(documentRequest);
+            this.requestDocumentContext = approvedDocumentService
+                    .getRequestDocContext(documentRequest);
 
             return true;
         }catch (OperationFailedException e){

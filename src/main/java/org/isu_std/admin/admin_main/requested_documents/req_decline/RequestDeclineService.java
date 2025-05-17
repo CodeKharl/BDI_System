@@ -11,7 +11,7 @@ public class RequestDeclineService {
         this.documentRequestDao = documentRequestDao;
     }
 
-    protected void deleteRequestPerformed(DocumentRequest documentRequest){
+    protected void deleteRequestPerformed(DocumentRequest documentRequest) throws OperationFailedException{
         if(!documentRequestDao.deleteDocRequest(documentRequest)){
             throw new OperationFailedException("Failed to delete the request! Please try again.");
         }

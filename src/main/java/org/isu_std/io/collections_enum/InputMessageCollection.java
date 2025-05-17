@@ -1,4 +1,4 @@
-package org.isu_std.io.collections;
+package org.isu_std.io.collections_enum;
 
 public enum InputMessageCollection {
     INPUT_SHORT("The %s you input is too short! Please try again."),

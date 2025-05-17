@@ -13,28 +13,27 @@ import org.isu_std.user.user_document_request.document_request_contexts.UserInfo
 
 import java.io.File;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class UserDocumentRequestController {
-    private final UserDocumentRequestService userDocumentRequestService;
+public class UserDocRequestController {
+    private final UserDocRequestService userDocRequestService;
 
     private final UserInfoContext userInfoContext;
     private final DocRequestContext docRequestContext;
     private DocInfoContext docInfoContext;
 
-    protected UserDocumentRequestController(
-            UserDocumentRequestService userDocumentRequestService, UserContext userContext
+    protected UserDocRequestController(
+            UserDocRequestService userDocRequestService, UserContext userContext
     ){
-        this.userDocumentRequestService = userDocumentRequestService;
-        this.userInfoContext = userDocumentRequestService.createUserInfoContext(userContext.getUser());
-        this.docRequestContext = userDocumentRequestService.createDocRequestMod();
+        this.userDocRequestService = userDocRequestService;
+        this.userInfoContext = userDocRequestService.createUserInfoContext(userContext.getUser());
+        this.docRequestContext = userDocRequestService.createDocRequestMod();
     }
 
     protected boolean setUserPersonal(){
         try{
             int userId = userInfoContext.getUser().userId();
-            UserPersonal userPersonal = userDocumentRequestService.getUserPersonal(userId);
+            UserPersonal userPersonal = userDocRequestService.getUserPersonal(userId);
 
             userInfoContext.setUserPersonal(userPersonal);
 
@@ -48,7 +47,7 @@ public class UserDocumentRequestController {
 
     protected boolean setBrgyDocs(){
         try {
-            docInfoContext = userDocumentRequestService
+            docInfoContext = userDocRequestService
                     .createUserReqModel(userInfoContext.getUser().barangayId());
 
             return true;
@@ -90,7 +89,7 @@ public class UserDocumentRequestController {
     protected boolean isDocumentChoiceAccepted(int choice){
         try{
             int brgyDocMapLength = docInfoContext.getBarangayDocumentsMap().size();
-            userDocumentRequestService.checkDocumentChoice(brgyDocMapLength, choice);
+            userDocRequestService.checkDocumentChoice(brgyDocMapLength, choice);
 
             return true;
         }catch (IllegalArgumentException e){
@@ -102,7 +101,7 @@ public class UserDocumentRequestController {
 
     protected boolean setDocUserRequirements(){
         String[] requirementsInfo = docRequestContext.getDocument().getRequirementsArr();
-        List<File> requirementFiles = userDocumentRequestService
+        List<File> requirementFiles = userDocRequestService
                 .createDocRequirement(requirementsInfo)
                 .getUserDocReqList();
 
@@ -133,16 +132,16 @@ public class UserDocumentRequestController {
         int documentId = docRequestContext.getDocumentId();
 
         try{
-            DocumentRequest documentRequest = userDocumentRequestService.createDocReq(
-                    userDocumentRequestService.createReferenceId(documentId),
+            DocumentRequest documentRequest = userDocRequestService.createDocReq(
+                    userDocRequestService.createReferenceId(documentId),
                     user.userId(),
                     user.barangayId(),
                     documentId,
                     docRequestContext.getDocRequirementFiles()
             );
 
-            userDocumentRequestService.checkDocRequestIfUnique(documentRequest);
-            userDocumentRequestService.addDocumentRequest(documentRequest);
+            userDocRequestService.checkDocRequestIfUnique(documentRequest);
+            userDocRequestService.addDocumentRequest(documentRequest);
             return true;
         }catch (OperationFailedException | IllegalArgumentException e){
             Util.printException(e.getMessage());

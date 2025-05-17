@@ -2,7 +2,7 @@ package org.isu_std.admin.admin_doc_manage.adminDoc_func.add;
 
 import org.isu_std.admin.admin_doc_manage.ManageDocumentImpl;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentManageCodes;
-import org.isu_std.io.collections.ChoiceCollection;
+import org.isu_std.io.collections_enum.ChoiceCollection;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 

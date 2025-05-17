@@ -2,7 +2,7 @@ package org.isu_std.user.user_acc_manage.user_personal.personalmodify;
 
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
-import org.isu_std.io.collections.ChoiceCollection;
+import org.isu_std.io.collections_enum.ChoiceCollection;
 
 public class ModifyPersonal {
     private final ModifyPersonalController modifyPersonalController;

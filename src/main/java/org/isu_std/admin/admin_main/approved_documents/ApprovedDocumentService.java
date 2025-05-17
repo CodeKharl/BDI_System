@@ -47,21 +47,34 @@ public class ApprovedDocumentService {
         return approvedDodList;
     }
 
-    protected RequestDocumentContext getReqDocsManager(DocumentRequest documentRequest) throws OperationFailedException {
-        ReqDocsManagerBuilder reqDocsManagerBuilder = new ReqDocsManagerBuilder(documentRequest);
-        UserPersonal userPersonal = ReqDocsManagerProvider.getUserPersonal(userPersonalDao, documentRequest.userId());
-        Document document = ReqDocsManagerProvider.getDocument(
-                documentDao, documentRequest.barangayId(), documentRequest.documentId()
+    protected RequestDocumentContext getRequestDocContext(DocumentRequest documentRequest)
+            throws OperationFailedException {
+        var reqDocsManagerBuilder = new ReqDocsManagerBuilder(documentRequest);
+        var reqDocsManagerProvider = new ReqDocsManagerProvider(
+                userPersonalDao, documentDao, paymentDao
         );
 
-        Payment payment = ReqDocsManagerProvider.getPayment(paymentDao, documentRequest.referenceId());
+        try {
+            UserPersonal userPersonal = reqDocsManagerProvider
+                    .getUserPersonal(documentRequest.userId());
 
-        reqDocsManagerBuilder
-                .userPersonal(userPersonal)
-                .document(document)
-                .payment(payment);
+            Document document = reqDocsManagerProvider
+                    .getDocument(documentRequest.barangayId(), documentRequest.documentId());
 
-        return reqDocsManagerBuilder.build();
+            Payment payment = reqDocsManagerProvider
+                    .getPayment(documentRequest.referenceId());
+
+            reqDocsManagerBuilder
+                    .userPersonal(userPersonal)
+                    .document(document)
+                    .payment(payment);
+
+            return reqDocsManagerBuilder.build();
+        }catch (NotFoundException e){
+            throw new OperationFailedException(
+                    "Failed to get the approved request information", e
+            );
+        }
     }
 
     protected RequirementFilesView getReqFilesView(List<File> requirementFiles){
@@ -74,16 +87,18 @@ public class ApprovedDocumentService {
 
         File outputFile = new File(outputDocFilePathName);
 
-        if(!outputFile.exists()){
-            throw new NotFoundException("Theres no existing approved document file!");
+        if(outputFile.exists()){
+            return outputFile;
         }
 
-        return outputFile;
+        throw new NotFoundException("Theres no existing approved document file!");
     }
 
     protected void checkPayment(Payment payment){
         if(payment == null){
-            throw new NotFoundException("Theres no existing payment information of this approved request!");
+            throw new NotFoundException(
+                    "Theres no existing payment information of this approved request!"
+            );
         }
     }
 
@@ -94,14 +109,6 @@ public class ApprovedDocumentService {
         );
 
         return new ApprovedDocExport(approvedDocExportController);
-    }
-
-    protected void deleteApprovedRequestDocs(DocumentRequest documentRequest){
-        if(!documentRequestDao.deleteDocRequest(documentRequest)){
-            throw new OperationFailedException(
-                    "Failed to delete the approved request document. Request can see but failed to process."
-            );
-        }
     }
 
     protected void openDocFile(File file){

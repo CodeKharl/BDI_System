@@ -1,6 +1,6 @@
 package org.isu_std.user.user_acc_manage.user_personal.namecreation;
 
-import org.isu_std.io.collections.InputMessageCollection;
+import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.io.Validation;
 
 public class NameCreationService {
