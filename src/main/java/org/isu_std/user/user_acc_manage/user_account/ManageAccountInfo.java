@@ -2,11 +2,8 @@ package org.isu_std.user.user_acc_manage.user_account;
 
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
-import org.isu_std.io.collections.ChoiceCollection;
-import org.isu_std.models.User;
+import org.isu_std.io.collections_enum.ChoiceCollection;
 import org.isu_std.user.user_acc_manage.UserManageProcess;
-
-import java.util.Optional;
 
 public class ManageAccountInfo implements UserManageProcess{
     private final ManageAccInfoController manageAccInfoController;

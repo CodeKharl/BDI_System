@@ -44,9 +44,11 @@ public class PaymentManageService {
         return DateTime.localDateTimeStr(dateTimeFormatter);
     }
 
-    protected void addPaymentPerformed(String referenceId, Payment payment){
+    protected void addPaymentPerformed(String referenceId, Payment payment) throws OperationFailedException{
         if(!paymentDao.addPayment(referenceId, payment)){
-            throw new OperationFailedException("Failed to add the payment informations! Please try again!");
+            throw new OperationFailedException(
+                    "Failed to add the payment informations! Please try again!"
+            );
         }
     }
 }

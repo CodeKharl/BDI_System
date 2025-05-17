@@ -61,9 +61,11 @@ public class ManageAccInfoService {
         return userBuilder.build();
     }
 
-    protected void updateUserPerform(String chosenDetail, User user){
+    protected void updateUserPerform(String chosenDetail, User user) throws OperationFailedException{
         if(!userDao.updateUserInfo(chosenDetail, user)){
-            throw new OperationFailedException("Failed to update account info! Please try again.");
+            throw new OperationFailedException(
+                    "Failed to update account info! Please try again."
+            );
         }
     }
 }

@@ -3,7 +3,7 @@ package org.isu_std.user.user_acc_manage.user_personal;
 import org.isu_std.dao.BarangayDao;
 import org.isu_std.dao.UserPersonalDao;
 import org.isu_std.io.Validation;
-import org.isu_std.io.collections.InputMessageCollection;
+import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.dynamic_enum_handler.*;
 import org.isu_std.models.User;
@@ -26,21 +26,18 @@ import java.util.Optional;
 
 public class ManagePersonalService {
     private final UserPersonalDao userPersonalDao;
-    private final BarangayDao barangayDao;
-
-    public ManagePersonalService(UserPersonalDao userPersonalDao, BarangayDao barangayDao){
+    public ManagePersonalService(UserPersonalDao userPersonalDao){
         this.userPersonalDao = userPersonalDao;
-        this.barangayDao = barangayDao;
     }
 
-    UserPersonal getUserPersonal(int userId){
+    protected UserPersonal getUserPersonal(int userId){
         Optional<UserPersonal> userPersonal = userPersonalDao.getOptionalUserPersonal(userId);
         return userPersonal.orElseThrow(
                 () -> new NotFoundException("Theres no existing personal information of your account.")
         );
     }
 
-    CreatePersonal createPersonal(User user){
+    protected CreatePersonal createPersonal(User user){
         var createPersonalService = new CreatePersonalService(this, userPersonalDao);
         var createPersonalController = new CreatePersonalController(
                 createPersonalService, user
@@ -49,7 +46,7 @@ public class ManagePersonalService {
         return new CreatePersonal(createPersonalController);
     }
 
-    ModifyPersonal createModifyPersonal(User user){
+    protected ModifyPersonal createModifyPersonal(User user){
         var modifyPersonalService = new ModifyPersonalService(this, userPersonalDao);
         var modifyPersonalController = new ModifyPersonalController(
                 modifyPersonalService, user

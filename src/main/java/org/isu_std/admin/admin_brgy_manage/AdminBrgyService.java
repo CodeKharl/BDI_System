@@ -10,6 +10,8 @@ import org.isu_std.admin.admin_main.AdminUI;
 import org.isu_std.admin.admin_main.AdminUIFactory;
 import org.isu_std.client_context.AdminContext;
 import org.isu_std.dao.*;
+import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Admin;
 import org.isu_std.models.Barangay;
@@ -56,7 +58,7 @@ public class AdminBrgyService {
         );
     }
 
-    protected AdminUI getAdminUi(AdminContext adminContext){
+    protected AdminUI getAdminUi(AdminContext adminContext) throws OperationFailedException{
         AdminUIFactory adminUIFactory = AdminUIFactory.getInstance(
                 docManageDao,
                 documentDao,
@@ -65,15 +67,22 @@ public class AdminBrgyService {
                 paymentDao
         );
 
+        try {
+            return adminUIFactory.createAdmin(
+                    adminContext, getBarangay(adminContext)
+            );
+        }catch (NotFoundException e){
+            throw new OperationFailedException("Failed to create and get admin contents!", e);
+        }
+    }
+
+    private Barangay getBarangay(AdminContext adminContext){
         Optional<Barangay> optionalBarangay = barangayDao.getOptionalBarangay(
                 adminContext.getAdmin().barangayId()
         );
 
-        return adminUIFactory.createAdmin(
-                adminContext,
-                optionalBarangay.orElseThrow(
-                        () -> new OperationFailedException("Failed to get the barangay informations.")
-                )
+        return optionalBarangay.orElseThrow(
+                () -> new NotFoundException("Barangay not found!")
         );
     }
 }

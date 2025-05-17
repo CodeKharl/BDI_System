@@ -1,6 +1,6 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.delete;
 
-import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocFileDeletion;
+import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentFileDeletion;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocFileDeletionFactory;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.doc_Id_Validation.ValidDocIDProvider;
 import org.isu_std.dao.DocManageDao;
@@ -20,7 +20,7 @@ public class DeletingDocService {
         this.documentDao = documentDao;
     }
 
-    public void deletePerformed(int barangayId, int documentId){
+    public void deletePerformed(int barangayId, int documentId) throws OperationFailedException{
         if(!docManageDao.isDeleteSuccess(barangayId, documentId)){
             throw new OperationFailedException("Error to Delete the Document! Please try again.");
         }
@@ -31,7 +31,7 @@ public class DeletingDocService {
     }
 
     protected void deleteDocFile(int barangayId, int documentId) throws OperationFailedException{
-        DocFileDeletion docFileDeletion = DocFileDeletionFactory.createDocFileDeletion(documentDao);
-        docFileDeletion.deletePerform(barangayId, documentId);
+        DocumentFileDeletion documentFileDeletion = DocFileDeletionFactory.createDocFileDeletion(documentDao);
+        documentFileDeletion.deletePerform(barangayId, documentId);
     }
 }

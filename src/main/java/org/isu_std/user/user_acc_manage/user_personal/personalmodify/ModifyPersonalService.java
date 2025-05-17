@@ -18,27 +18,27 @@ public class ModifyPersonalService {
         this.userPersonalDao = userPersonalDao;
     }
 
-    public ModifyPersonalContext createPersonalModifierContext(User user, UserPersonalBuilder userPersonalBuilder){
+    protected ModifyPersonalContext createPersonalModifierContext(User user, UserPersonalBuilder userPersonalBuilder){
         return new ModifyPersonalContext(user, userPersonalBuilder);
     }
 
-    String[] getPersonalDetails(){
+    protected String[] getPersonalDetails(){
         return this.managePersonalService.getPersonalDetails();
     }
 
-    String[] getPersonalDetailSpecs(){
+    protected String[] getPersonalDetailSpecs(){
         return this.managePersonalService.getPersonalDetailSpecs();
     }
 
-    UserPersonalBuilder getUserPersonalBuilder(){
+    protected UserPersonalBuilder getUserPersonalBuilder(){
         return this.managePersonalService.getUserPersonalBuilder();
     }
 
-    PersonalInfoSetter getPersonalInfoSetter(UserPersonalBuilder userPersonalBuilder){
+    protected PersonalInfoSetter getPersonalInfoSetter(UserPersonalBuilder userPersonalBuilder){
         return this.managePersonalService.createPersonalInfoSetter(userPersonalBuilder);
     }
 
-    void saveModifiedPersonalInfo(ModifyPersonalContext modifyPersonalContext){
+    protected void saveModifiedPersonalInfo(ModifyPersonalContext modifyPersonalContext) throws OperationFailedException{
         int userId = modifyPersonalContext.getUser().userId();
         String chosenDetail = modifyPersonalContext.getChosenDetail();
         UserPersonal userPersonal = modifyPersonalContext.getUserPersonalBuilder().build();

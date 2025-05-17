@@ -2,7 +2,7 @@ package org.isu_std.admin.admin_brgy_manage.registeracc;
 
 import org.isu_std.admin.admin_brgy_manage.BarangayConfig;
 import org.isu_std.dao.BarangayDao;
-import org.isu_std.io.collections.InputMessageCollection;
+import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.io.Validation;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
@@ -96,7 +96,7 @@ public class RegisterBrgyService {
         );
     }
 
-    protected void addBarangay(Barangay barangay){
+    protected void addBarangay(Barangay barangay) throws OperationFailedException{
         if(!barangayDao.addBarangay(barangay)){
             throw new OperationFailedException("Failed to add the barangay! Please try again.");
         }

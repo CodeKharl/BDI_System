@@ -1,10 +1,9 @@
 package org.isu_std.admin.admin_brgy_manage;
 
 import org.isu_std.client_context.AdminContext;
-import org.isu_std.io.collections.InputMessageCollection;
+import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
-import org.isu_std.models.Admin;
 
 public class AdminBrgyAccController {
     private final AdminBrgyService adminBrgyService;
@@ -44,6 +43,7 @@ public class AdminBrgyAccController {
             adminBrgyService.getAdminUi(adminContext).adminMenu();
         }catch(OperationFailedException e){
             Util.printException(e.getMessage());
+            Util.printMessage("You cannot proceed to admin menu! Please try again.");
         }
     }
 }

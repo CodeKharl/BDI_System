@@ -1,6 +1,6 @@
 package org.isu_std.io;
 
-import org.isu_std.io.collections.InputMessageCollection;
+import org.isu_std.io.collections_enum.InputMessageCollection;
 
 import java.util.Scanner;
 

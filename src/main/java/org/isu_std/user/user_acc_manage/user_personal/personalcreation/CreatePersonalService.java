@@ -28,11 +28,11 @@ public class CreatePersonalService {
         return this.managePersonalService.getUserPersonalBuilder();
     }
 
-    PersonalInfoSetter getPersonalInfoSetter(UserPersonalBuilder userPersonalBuilder){
+    protected PersonalInfoSetter getPersonalInfoSetter(UserPersonalBuilder userPersonalBuilder){
         return this.managePersonalService.createPersonalInfoSetter(userPersonalBuilder);
     }
 
-    void savePersonalInfo(int userId, UserPersonal userPersonal){
+    protected void savePersonalInfo(int userId, UserPersonal userPersonal) throws OperationFailedException{
         if(!userPersonalDao.addUserPersonal(userId, userPersonal)){
             throw new OperationFailedException(
                     "Failed to save your personal information! Please try again!"

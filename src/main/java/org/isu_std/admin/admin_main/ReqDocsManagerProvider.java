@@ -3,6 +3,7 @@ package org.isu_std.admin.admin_main;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.PaymentDao;
 import org.isu_std.dao.UserPersonalDao;
+import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.models.Payment;
@@ -11,23 +12,33 @@ import org.isu_std.models.UserPersonal;
 import java.util.Optional;
 
 public class ReqDocsManagerProvider {
-    private ReqDocsManagerProvider(){}
+    private final UserPersonalDao userPersonalDao;
+    private final DocumentDao documentDao;
+    private final PaymentDao paymentDao;
 
-    public static UserPersonal getUserPersonal(UserPersonalDao userPersonalDao, int userId){
+    public ReqDocsManagerProvider(UserPersonalDao userPersonalDao, DocumentDao documentDao, PaymentDao paymentDao){
+        this.userPersonalDao = userPersonalDao;
+        this.documentDao = documentDao;
+        this.paymentDao = paymentDao;
+    }
+
+    public UserPersonal getUserPersonal(int userId){
         Optional<UserPersonal> optionalUserPersonal = userPersonalDao.getOptionalUserPersonal(userId);
+
         return optionalUserPersonal.orElseThrow(
-                () -> new OperationFailedException("Failed to get the informations of the user.")
+                () -> new NotFoundException("User personal information not found!")
         );
     }
 
-    public static Document getDocument(DocumentDao documentDao, int barangayId, int docId){
+    public Document getDocument(int barangayId, int docId){
         Optional<Document> optionalDocument = documentDao.getOptionalDocument(barangayId, docId);
+
         return optionalDocument.orElseThrow(
-                () -> new OperationFailedException("Failed to get the document.")
+                () -> new NotFoundException("Document information not found!")
         );
     }
 
-    public static Payment getPayment(PaymentDao paymentDao, String referenceId){
+    public Payment getPayment(String referenceId){
         Optional<Payment> optionalPayment = paymentDao.getOptionalPayment(referenceId);
         return optionalPayment.orElse(null);
     }

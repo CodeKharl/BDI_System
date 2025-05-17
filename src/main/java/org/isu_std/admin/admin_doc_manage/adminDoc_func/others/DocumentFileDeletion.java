@@ -1,7 +1,6 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.others;
 
 import org.isu_std.dao.DocumentDao;
-import org.isu_std.io.SystemLogger;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.folder_setup.FolderConfig;
@@ -11,14 +10,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Optional;
 
-public class DocFileDeletion {
+public class DocumentFileDeletion {
     private final DocumentDao documentDao;
 
-    public DocFileDeletion(DocumentDao documentDao){
+    public DocumentFileDeletion(DocumentDao documentDao){
         this.documentDao = documentDao;
     }
 
-    public void deletePerform(int barangayId, int documentId){
+    public void deletePerform(int barangayId, int documentId) throws OperationFailedException {
         try {
             String docFileName = getDocFileName(barangayId, documentId);
             String documentDirectory = FolderConfig.DOC_DOCUMENT_DIRECTORY.getDirectory();
@@ -26,8 +25,7 @@ public class DocFileDeletion {
 
             Files.deleteIfExists(file.toPath());
         }catch (NotFoundException | IOException e){
-            SystemLogger.logWarning(DocFileDeletion.class, e.getMessage());
-            throw new OperationFailedException("Failed to delete the document file");
+            throw new OperationFailedException("Failed to delete the document file", e);
         }
     }
 

@@ -2,7 +2,7 @@ package org.isu_std.user.user_check_request.user_payment_manage;
 
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
-import org.isu_std.io.collections.ChoiceCollection;
+import org.isu_std.io.collections_enum.ChoiceCollection;
 
 public class PaymentManage {
     private final PaymentManageController paymentManageController;

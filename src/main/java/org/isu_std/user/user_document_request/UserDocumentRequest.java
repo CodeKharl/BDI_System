@@ -1,27 +1,27 @@
 package org.isu_std.user.user_document_request;
 
-import org.isu_std.io.collections.ChoiceCollection;
+import org.isu_std.io.collections_enum.ChoiceCollection;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 import org.isu_std.user.UserProcess;
 
 public class UserDocumentRequest implements UserProcess {
-    private final UserDocumentRequestController userDocumentRequestController;
+    private final UserDocRequestController userDocRequestController;
 
-    protected UserDocumentRequest(UserDocumentRequestController userDocumentRequestController){
-        this.userDocumentRequestController = userDocumentRequestController;
+    protected UserDocumentRequest(UserDocRequestController userDocRequestController){
+        this.userDocRequestController = userDocRequestController;
     }
 
     public void processPerformed(String processTitle){
         Util.printSectionTitle(processTitle);
 
-        if(!userDocumentRequestController.setUserPersonal()){
+        if(!userDocRequestController.setUserPersonal()){
             //message for the user to put some personal information of his/her account if not exist.
             Util.printInformation("Guide : User Menu -> Manage Account -> Personal Information");
             return;
         }
 
-        if(!userDocumentRequestController.setBrgyDocs()){
+        if(!userDocRequestController.setBrgyDocs()){
             return;
         }
 
@@ -29,7 +29,7 @@ public class UserDocumentRequest implements UserProcess {
     }
 
     private void documentProcess(){
-        userDocumentRequestController.printAvailableDocs();
+        userDocRequestController.printAvailableDocs();
         if(!setDocument()){
             return;
         }
@@ -38,7 +38,7 @@ public class UserDocumentRequest implements UserProcess {
             return;
         }
         
-        if(userDocumentRequestController.isAddDocRequestSuccess()){
+        if(userDocRequestController.isAddDocRequestSuccess()){
             Util.printMessage(
                     "Your document request has been process! Please wait for the approval."
             );
@@ -55,8 +55,8 @@ public class UserDocumentRequest implements UserProcess {
                 return false;
             }
 
-            if(userDocumentRequestController.isDocumentChoiceAccepted(choice)){
-                userDocumentRequestController.setChoiceDocument(choice);
+            if(userDocRequestController.isDocumentChoiceAccepted(choice)){
+                userDocRequestController.setChoiceDocument(choice);
                 break;
             }
         }
@@ -66,7 +66,7 @@ public class UserDocumentRequest implements UserProcess {
 
     private boolean isSelectedDocConfirm(){
         Util.printMessage("You selected %s document"
-                .formatted(userDocumentRequestController.getDocumentName())
+                .formatted(userDocRequestController.getDocumentName())
         );
 
         return (SystemInput.isPerformConfirmed(
@@ -77,11 +77,11 @@ public class UserDocumentRequest implements UserProcess {
     }
 
     private boolean documentInfoProcess(){
-        if(!userDocumentRequestController.setDocUserRequirements()){
+        if(!userDocRequestController.setDocUserRequirements()){
             return false;
         }
 
-        userDocumentRequestController.printAllInformations();
+        userDocRequestController.printAllInformations();
 
         return SystemInput.isPerformConfirmed(
                 "Confirm Request",

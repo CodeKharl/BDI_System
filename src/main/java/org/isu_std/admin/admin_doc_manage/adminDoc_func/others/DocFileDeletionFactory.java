@@ -5,7 +5,7 @@ import org.isu_std.dao.DocumentDao;
 public class DocFileDeletionFactory {
     private DocFileDeletionFactory(){}
 
-    public static DocFileDeletion createDocFileDeletion(DocumentDao documentDao){
-        return new DocFileDeletion(documentDao);
+    public static DocumentFileDeletion createDocFileDeletion(DocumentDao documentDao){
+        return new DocumentFileDeletion(documentDao);
     }
 }

@@ -31,9 +31,11 @@ public class UserSignupService{
         return UserInfoManager.getUserDetailWithSpecs();
     }
 
-    protected void addingUser(User user){
+    protected void addingUser(User user) throws OperationFailedException{
         if(!userDao.addUser(user)){
-            throw new OperationFailedException("Failed to create the account! Please try again.");
+            throw new OperationFailedException(
+                    "Failed to create the account! Please try again."
+            );
         }
     }
 

@@ -7,7 +7,7 @@ import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.RequirementProvid
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Document;
 import org.isu_std.dao.DocManageDao;
-import org.isu_std.io.collections.InputMessageCollection;
+import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.io.Validation;
 import org.isu_std.models.model_builders.BuilderFactory;
 import org.isu_std.models.model_builders.DocumentBuilder;
@@ -30,7 +30,7 @@ public class AddingDocService {
         return BuilderFactory.createDocumentBuilder();
     }
 
-    protected void addPerform(int barangayId, Document document) {
+    protected void addPerform(int barangayId, Document document) throws OperationFailedException{
         if(!docManageDao.add(barangayId, document)){
             throw new OperationFailedException("Failed to add the document! Please try again.");
         }

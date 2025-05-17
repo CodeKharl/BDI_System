@@ -7,7 +7,7 @@ import org.isu_std.models.model_builders.AdminBuilder;
 import org.isu_std.models.Barangay;
 import org.isu_std.dao.AdminDao;
 import org.isu_std.dao.BarangayDao;
-import org.isu_std.io.collections.InputMessageCollection;
+import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.models.model_builders.BuilderFactory;
 
 import java.util.Optional;
@@ -61,7 +61,7 @@ public class LinkBrgyService {
         }
     }
 
-    protected void setAdminBarangayId(int barangayId, int adminId){
+    protected void setAdminBarangayId(int barangayId, int adminId) throws OperationFailedException {
         if(!adminDao.setAdminBarangayId(barangayId, adminId)){
             throw new OperationFailedException(
                     "Failed to link your account to the barangay! Please try again."

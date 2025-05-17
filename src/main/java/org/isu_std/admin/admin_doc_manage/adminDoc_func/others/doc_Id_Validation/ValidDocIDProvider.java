@@ -1,6 +1,6 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.others.doc_Id_Validation;
 
-import org.isu_std.io.collections.ChoiceCollection;
+import org.isu_std.io.collections_enum.ChoiceCollection;
 import org.isu_std.io.SystemInput;
 
 // Class that manage the input of the admins for documents id. No structure

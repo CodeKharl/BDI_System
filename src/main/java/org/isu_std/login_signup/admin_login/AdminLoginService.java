@@ -3,7 +3,7 @@ package org.isu_std.login_signup.admin_login;
 import org.isu_std.dao.AdminDao;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.models.Admin;
-import org.isu_std.io.collections.InputMessageCollection;
+import org.isu_std.io.collections_enum.InputMessageCollection;
 
 import java.util.Optional;
 
