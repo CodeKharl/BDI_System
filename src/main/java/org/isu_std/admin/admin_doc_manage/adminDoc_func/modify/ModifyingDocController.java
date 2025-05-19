@@ -2,6 +2,7 @@ package org.isu_std.admin.admin_doc_manage.adminDoc_func.modify;
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.io.file_setup.DocxMessage;
 
 import java.io.File;
@@ -117,14 +118,13 @@ public class ModifyingDocController {
 
             if (optionalDocFile.isPresent()) {
                 File file = optionalDocFile.get();
-                modifyingDocService.openDocumentFile(file);
                 this.modifyDocumentContext.getDocumentBuilder().documentFile(file);
 
                 return true;
             }
 
             Util.printMessage("No selected file!");
-        }catch (IllegalArgumentException e){
+        }catch (ServiceException e){
             Util.printException(e.getMessage());
         }
         
@@ -140,7 +140,7 @@ public class ModifyingDocController {
             if(modifyingDocService.modifyPerformed(modifyDocumentContext)){
                 Util.printMessage("Modify Success!");
             }
-        }catch (OperationFailedException e){
+        }catch (OperationFailedException | ServiceException e){
             Util.printException(e.getMessage());
         }
     }

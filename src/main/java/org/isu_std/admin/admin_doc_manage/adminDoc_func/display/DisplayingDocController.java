@@ -1,6 +1,7 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.display;
 
 import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.Document;
 import org.isu_std.io.Util;
 
@@ -24,7 +25,7 @@ public final class DisplayingDocController {
             );
 
             return true;
-        }catch (NotFoundException e){
+        }catch (NotFoundException | ServiceException e){
             Util.printException(e.getMessage());
         }
 

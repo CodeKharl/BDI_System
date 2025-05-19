@@ -17,7 +17,7 @@ public class RequestApproveService {
         String referenceId = requestDocumentContext
                 .documentRequest().referenceId();
 
-        if (!documentRequestDao.setRequestApprove(referenceId)) {
+        if (!documentRequestDao.requestApprove(referenceId)) {
             throw new OperationFailedException(
                     "Failed to Approve the Requested Document! Please try again."
             );

@@ -4,7 +4,10 @@ import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentFileManag
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentConfig;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentManageCodes;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.RequirementProvider;
+import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.Document;
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.io.collections_enum.InputMessageCollection;
@@ -13,6 +16,7 @@ import org.isu_std.models.model_builders.BuilderFactory;
 import org.isu_std.models.model_builders.DocumentBuilder;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 public class AddingDocService {
@@ -31,8 +35,14 @@ public class AddingDocService {
     }
 
     protected void addPerform(int barangayId, Document document) throws OperationFailedException{
-        if(!docManageDao.add(barangayId, document)){
-            throw new OperationFailedException("Failed to add the document! Please try again.");
+        try {
+            if (!docManageDao.addDocument(barangayId, document)) {
+                throw new OperationFailedException("Failed to add the document! Please try again.");
+            }
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to insert document : " + document);
         }
     }
 
@@ -60,7 +70,15 @@ public class AddingDocService {
         return RequirementProvider.getRequirements();
     }
 
-    protected Optional<File> getOptionalDocumentFile() throws IllegalArgumentException{
-        return DocumentFileManager.getOptionalDocFile();
+    protected Optional<File> getOptionalDocumentFile(){
+        try {
+            return DocumentFileManager.getOptionalDocFile();
+        }catch (IOException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException(
+                    "There some problem on getting your document file! Please try again some time"
+            );
+        }
     }
 }

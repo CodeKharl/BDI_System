@@ -2,6 +2,7 @@ package org.isu_std.admin.admin_doc_manage.adminDoc_func.add;
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.model_builders.DocumentBuilder;
 
 import java.io.File;
@@ -41,11 +42,12 @@ public class AddingDocController {
 
     protected final void processDocument(){
         try {
-            addingDocService.addPerform(this.barangayId, documentBuilder.build());
+            addingDocService.addPerform(barangayId, documentBuilder.build());
+
             Util.printMessage(
                     "The %s document has been added!".formatted(documentBuilder.getDocumentName())
             );
-        } catch (OperationFailedException e){
+        } catch (OperationFailedException | ServiceException e){
             Util.printException(e.getMessage());
         }
     }
@@ -71,7 +73,9 @@ public class AddingDocController {
 
                 return true;
             }
-        }catch (IllegalArgumentException e){
+
+            Util.printMessage("No selected document file!");
+        }catch (ServiceException e){
             Util.printException(e.getMessage());
         }
 

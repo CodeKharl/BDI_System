@@ -2,7 +2,6 @@ package org.isu_std.admin.admin_brgy_manage.registeracc;
 
 import org.isu_std.io.collections_enum.ChoiceCollection;
 import org.isu_std.io.SystemInput;
-import org.isu_std.io.Symbols;
 import org.isu_std.io.Util;
 
 public class RegisterBarangay{
@@ -56,16 +55,10 @@ public class RegisterBarangay{
 
     protected void printSuccessMessage(){
         Util.printMessage(
-                (
-                    """
-                        You successfully register the barangay %s
-                        %sBarangay ID : %d"""
-                ).formatted(
-                        registerBrgyController.getStrBrgyInfo(),
-                        Symbols.MESSAGE.getType(),
-                        registerBrgyController.getNewBarangayId()
-                )
+                "You successfully register the barangay " + registerBrgyController.getStrBrgyInfo()
         );
+
+        registerBrgyController.printNewBarangayId();
     }
 
     private boolean isRegisteringConfirmed(){

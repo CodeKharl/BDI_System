@@ -2,6 +2,7 @@ package org.isu_std.admin.admin_doc_manage.adminDoc_func.others.doc_Id_Validatio
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.ServiceException;
 
 public class ValidDocIDController {
     private final ValidDocIDService docIdValidService;
@@ -22,7 +23,7 @@ public class ValidDocIDController {
 
             Util.printInformation("Document Name : " + documentName);
             return true;
-        }catch (NotFoundException e){
+        }catch (NotFoundException | ServiceException e){
             Util.printException(e.getMessage());
         }
 

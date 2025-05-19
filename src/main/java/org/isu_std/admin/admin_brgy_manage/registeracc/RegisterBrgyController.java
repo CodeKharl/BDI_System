@@ -3,6 +3,7 @@ package org.isu_std.admin.admin_brgy_manage.registeracc;
 import org.isu_std.admin.admin_brgy_manage.BarangayConfig;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.Barangay;
 import org.isu_std.models.model_builders.BarangayBuilder;
 
@@ -64,7 +65,7 @@ public class RegisterBrgyController {
             this.newBarangay = barangay;
 
             return true;
-        }catch(IllegalArgumentException e){
+        }catch(IllegalArgumentException | SecurityException e){
             Util.printMessage(e.getMessage());
         }
 
@@ -75,16 +76,21 @@ public class RegisterBrgyController {
         try{
             registerBrgyService.addBarangay(this.newBarangay);
             return true;
-        }catch (OperationFailedException e){
+        }catch (OperationFailedException | ServiceException e){
             Util.printException(e.getMessage());
         }
 
         return false;
     }
 
-    protected int getNewBarangayId(){
-        return this.registerBrgyService
-                .getNewBarangayId(this.newBarangay);
+    protected void printNewBarangayId(){
+        try {
+            int barangayId = registerBrgyService.getNewBarangayId(this.newBarangay);
+
+            Util.printInformation("Barangay ID : " + barangayId);
+        }catch (ServiceException e){
+            Util.printException(e.getMessage());
+        }
     }
 
     protected static String[] getBrgyInfoNeeds(){

@@ -5,7 +5,10 @@ import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocFileDeletionFa
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.doc_Id_Validation.ValidDocIDProvider;
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.dao.DocumentDao;
+import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 
 public class DeletingDocService {
     private final DocumentDao documentDao;
@@ -21,8 +24,14 @@ public class DeletingDocService {
     }
 
     public void deletePerformed(int barangayId, int documentId) throws OperationFailedException{
-        if(!docManageDao.isDeleteSuccess(barangayId, documentId)){
-            throw new OperationFailedException("Error to Delete the Document! Please try again.");
+        try {
+            if (!docManageDao.deleteDocument(barangayId, documentId)) {
+                throw new OperationFailedException("Failed to Delete the Document! Please try again.");
+            }
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to delete document with document ID : " + documentId);
         }
     }
 

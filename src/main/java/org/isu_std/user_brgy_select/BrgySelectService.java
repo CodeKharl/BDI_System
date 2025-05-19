@@ -18,7 +18,7 @@ public class BrgySelectService {
     }
 
     public int getUserBarangayId(Barangay barangay){
-        int barangayId = barangayDao.getBarangayId(barangay);
+        int barangayId = barangayDao.findBarangayId(barangay);
 
         if(barangayId == 0){
             throw new NotFoundException("The Barangay you entered is not exist! Please try again.");

@@ -1,7 +1,9 @@
 package org.isu_std.config;
 
 import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.NotFoundException;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -14,34 +16,29 @@ import java.util.Properties;
 public class MySQLDBConfig {
     private final static String DB_FILE_NAME = "db.properties";
 
-    private static Properties dbProperties;
+    private final Properties dbProperties;
 
-    private MySQLDBConfig(){}
+    public MySQLDBConfig(){
+        dbProperties = new Properties();
 
-    public static Connection getConnection() throws SQLException {
-        if(dbProperties == null){
-            dbProperties = new Properties();
-            setDbProperties();
+        try(InputStream inputStream = MySQLDBConfig.class
+                .getClassLoader().getResourceAsStream(DB_FILE_NAME)
+        ){
+            if(inputStream == null){
+                throw new NotFoundException(DB_FILE_NAME + "not found");
+            }
+
+            dbProperties.load(inputStream);
+        }catch (IOException | NotFoundException e){
+            SystemLogger.logException(MySQLDBConfig.class, e.getMessage(), e);
         }
+    }
 
+    public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
                 dbProperties.getProperty("db.url"),
                 dbProperties.getProperty("db.username"),
                 dbProperties.getProperty("db.password")
         );
-    }
-
-    private static void setDbProperties(){
-        try(InputStream inputStream = MySQLDBConfig.class
-                .getClassLoader().getResourceAsStream(DB_FILE_NAME)
-        ){
-            if(inputStream == null){
-                throw new RuntimeException("Failed to load " + DB_FILE_NAME);
-            }
-
-            dbProperties.load(inputStream);
-        }catch (IOException e){
-            throw new RuntimeException("Error loading " + DB_FILE_NAME);
-        }
     }
 }

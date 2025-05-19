@@ -11,9 +11,10 @@ import org.isu_std.admin.admin_main.AdminUIFactory;
 import org.isu_std.client_context.AdminContext;
 import org.isu_std.dao.*;
 import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
-import org.isu_std.models.Admin;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.Barangay;
 
 import java.util.Optional;
@@ -58,7 +59,7 @@ public class AdminBrgyService {
         );
     }
 
-    protected AdminUI getAdminUi(AdminContext adminContext) throws OperationFailedException{
+    protected AdminUI getAdminUi(AdminContext adminContext){
         AdminUIFactory adminUIFactory = AdminUIFactory.getInstance(
                 docManageDao,
                 documentDao,
@@ -67,22 +68,26 @@ public class AdminBrgyService {
                 paymentDao
         );
 
-        try {
-            return adminUIFactory.createAdmin(
+        return adminUIFactory.createAdmin(
                     adminContext, getBarangay(adminContext)
-            );
-        }catch (NotFoundException e){
-            throw new OperationFailedException("Failed to create and get admin contents!", e);
-        }
+        );
     }
 
     private Barangay getBarangay(AdminContext adminContext){
-        Optional<Barangay> optionalBarangay = barangayDao.getOptionalBarangay(
-                adminContext.getAdmin().barangayId()
-        );
+        int barangayId = adminContext.getAdmin().barangayId();
 
-        return optionalBarangay.orElseThrow(
-                () -> new NotFoundException("Barangay not found!")
-        );
+        try {
+            Optional<Barangay> optionalBarangay = barangayDao.findOptionalBarangay(barangayId);
+
+            return optionalBarangay.orElseThrow(
+                    () -> new NotFoundException("Barangay not found!")
+            );
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException(
+                    "Failed to fetch barangay with barangay ID : " + barangayId
+            );
+        }
     }
 }

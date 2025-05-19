@@ -1,6 +1,7 @@
 package org.isu_std.login_signup.admin_signup;
 
 import org.isu_std.io.Util;
+import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.model_builders.AdminBuilder;
 
@@ -44,13 +45,13 @@ public class AdminSignupController {
     protected boolean adminSignupProcessComplete(){
         try {
             adminSignupService.insertingAdminData(adminBuilder.build());
+            int adminId = adminSignupService.getAdminId(adminBuilder.getAdminName());
+
             Util.printMessage("You successfully created your admin account!");
-            Util.printMessage(
-                    "Your ADMIN ID : " + adminSignupService.getAdminId(adminBuilder.getAdminName())
-            );
+            Util.printMessage("Your ADMIN ID : " + adminId);
 
             return true;
-        }catch (OperationFailedException e){
+        }catch (OperationFailedException | NotFoundException e){
             Util.printException(e.getMessage());
         }
 

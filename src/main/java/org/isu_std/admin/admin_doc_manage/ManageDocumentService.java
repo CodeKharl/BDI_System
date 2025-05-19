@@ -13,7 +13,7 @@ public class ManageDocumentService {
     }
 
     protected ManageDocumentImpl[] getAdminDocumentImplArr(int barangayId){
-        ManageDocImplFactory manageDocImplFactory = new ManageDocImplFactory(docManageDao, documentDao);
+        var manageDocImplFactory = new ManageDocImplFactory(docManageDao, documentDao);
         return manageDocImplFactory.createAdminDocumentMap(barangayId);
     }
 }

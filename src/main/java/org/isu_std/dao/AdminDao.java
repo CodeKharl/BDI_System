@@ -5,8 +5,8 @@ import org.isu_std.models.Admin;
 import java.util.Optional;
 
 public interface AdminDao {
-    int getAdminID(String input);
+    Optional<Integer> findAdminIDByName(String adminName);
     boolean insertAdmin(Admin admin);
-    Optional<Admin> getOptionalAdmin(int adminId);
-    boolean setAdminBarangayId(int barangayId, int adminId);
+    Optional<Admin> findOptionalAdmin(int adminId);
+    boolean updateAdminBrgyId(int barangayId, int adminId);
 }

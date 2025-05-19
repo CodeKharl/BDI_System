@@ -30,7 +30,7 @@ public class PaymentManageService {
     }
 
     protected double getResultedDocumentPrice(int barangayId, int documentId){
-        double documentPrice = documentDao.getDocumentPrice(barangayId, documentId);
+        double documentPrice = documentDao.findDocumentPrice(barangayId, documentId);
 
         if(documentPrice == 0){
             throw new NotFoundException("The document price is not found! Please report this to the admin");

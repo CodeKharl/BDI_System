@@ -2,38 +2,38 @@ package org.isu_std.dao;
 
 // Class that manages connectors for the connection of database with the UI (front <-> back).
 
-import org.isu_std.dao.mysqldao.*;
+import org.isu_std.dao.mysql_dao.*;
 
 public class DaoFactory {
     public UserDao createUserDao(){
-        return new MySqlUser();
+        return new MySqlUserDao();
     }
 
     public BarangayDao createBrgyDao(){
-        return new MySqlBarangay();
+        return new MySqlBarangayDao();
     }
 
     public DocumentDao getDocumentDao(){
-        return new MySqlDocument();
+        return new MySqlDocumentDao();
     }
 
     public AdminDao createAdminDao(){
-        return new MySqlAdmin();
+        return new MySqlAdminDao();
     }
 
     public DocManageDao getDocManageDao(){
-        return new MySqlDocument();
+        return new MySqlDocumentDao();
     }
 
     public UserPersonalDao getPersonalDao(){
-        return new MySqlUser();
+        return new MySqlUserDao();
     }
 
     public DocumentRequestDao getDocumentRequestDao(){
-        return new MySqlDocumentRequest();
+        return new MySqlDocumentRequestDao();
     }
 
     public PaymentDao paymentDao(){
-        return new MySqlPayment();
+        return new MySqlPaymentDao();
     }
 }

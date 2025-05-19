@@ -1,7 +1,10 @@
 package org.isu_std.admin.admin_brgy_manage.linkacc;
 
+import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.Admin;
 import org.isu_std.models.model_builders.AdminBuilder;
 import org.isu_std.models.Barangay;
@@ -44,13 +47,22 @@ public class LinkBrgyService {
     }
 
     protected Barangay getBarangay(int barangayId){
-        Optional<Barangay> optionalBarangay = barangayDao.getOptionalBarangay(barangayId);
+        try {
+            Optional<Barangay> optionalBarangay = barangayDao.findOptionalBarangay(barangayId);
 
-        return optionalBarangay.orElseThrow(
-                () -> new NotFoundException(
-                        InputMessageCollection.INPUT_OBJECT_NOT_EXIST.getFormattedMessage("Barangay")
-                )
-        );
+            return optionalBarangay.orElseThrow(
+                    () -> new NotFoundException(
+                            InputMessageCollection.INPUT_OBJECT_NOT_EXIST.getFormattedMessage("Barangay")
+                    )
+            );
+
+        }catch(DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException(
+                    "Failed to retrieve barangay with barangay ID : " + barangayId
+            );
+        }
     }
 
     protected void checkBarangayPin(int actualBrgyPin, int brgyInputPin){
@@ -62,9 +74,17 @@ public class LinkBrgyService {
     }
 
     protected void setAdminBarangayId(int barangayId, int adminId) throws OperationFailedException {
-        if(!adminDao.setAdminBarangayId(barangayId, adminId)){
-            throw new OperationFailedException(
-                    "Failed to link your account to the barangay! Please try again."
+        try {
+            if (!adminDao.updateAdminBrgyId(barangayId, adminId)) {
+                throw new OperationFailedException(
+                        "Failed to link your account to the barangay! Please try again."
+                );
+            }
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException(
+                    "Failed to update barangay ID with new barangay ID : " + barangayId
             );
         }
     }

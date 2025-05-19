@@ -14,9 +14,9 @@ import java.util.Optional;
 import java.util.Set;
 
 public class DocumentFileManager {
-    public static Optional<File> getOptionalDocFile(){
+    public static Optional<File> getOptionalDocFile() throws IOException{
         while(true) {
-            Util.printSubSectionTitle("Choosing File Document");
+            Util.printSubSectionTitle("Choosing Document File");
             Util.printMessage(DocxMessage.NEED_DOCX_FILE_MESSAGE.getMessage());
 
             Optional<File> optionalFile = getOptionalFile();
@@ -24,19 +24,22 @@ public class DocumentFileManager {
                 return Optional.empty();
             }
 
-            File file = optionalFile.get();
-            if(!DocxFileManager.isDocxFile(file)){
-                Util.printMessage(DocxMessage.NOT_DOCX_FILE_MESSAGE.getMessage());
-                continue;
-            }
-
-            if(isValidationSuccess(file)){
-                return Optional.of(file);
+            if(validationPerform(optionalFile.get())){
+                return optionalFile;
             }
         }
     }
 
-    private static boolean isValidationSuccess(File docxFile){
+    private static boolean validationPerform(File file) throws IOException{
+        if(!DocxFileManager.isDocxFile(file)){
+            Util.printMessage(DocxMessage.NOT_DOCX_FILE_MESSAGE.getMessage());
+            return false;
+        }
+
+        return isValidationSuccess(file);
+    }
+
+    private static boolean isValidationSuccess(File docxFile) throws IOException{
         if(validationDocumentProcess(docxFile)){
             Util.printMessage("Document file accepted!");
             return true;
@@ -65,7 +68,7 @@ public class DocumentFileManager {
         );
     }
 
-    private static boolean validationDocumentProcess(File documentFile){
+    private static boolean validationDocumentProcess(File documentFile) throws IOException{
         Set<String> placeHolders = DocOutFileContext.getPlaceHolderSet();
 
         DocOutFileContext.printAvailableTextPlaceHolders(placeHolders);
@@ -79,15 +82,13 @@ public class DocumentFileManager {
         return isDocumentFileAccepted(documentFile, placeHolders);
     }
 
-    private static boolean isDocumentFileAccepted(File documentFile, Set<String> placeHolders){
-        try{
-            if(!DocxFileManager.containsPlaceHoldersInParagraphs(documentFile, placeHolders)){
-                Util.printMessage("File has no placeholders!");
-                return false;
-            }
-        }catch(IOException e){
-            Util.printException(e.getMessage());
+    private static boolean isDocumentFileAccepted(File documentFile, Set<String> placeHolders)
+            throws IOException{
+        if(!DocxFileManager.containsPlaceHoldersInParagraphs(documentFile, placeHolders)){
+            Util.printMessage("File has no placeholders!");
+            return false;
         }
+
         return true;
     }
 

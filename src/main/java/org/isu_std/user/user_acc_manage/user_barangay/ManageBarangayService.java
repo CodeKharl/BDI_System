@@ -31,7 +31,7 @@ public class ManageBarangayService {
     }
 
     protected Barangay getBarangay(int barangayId){
-        Optional<Barangay> optionalBarangay = barangayDao.getOptionalBarangay(barangayId);
+        Optional<Barangay> optionalBarangay = barangayDao.findOptionalBarangay(barangayId);
 
         return optionalBarangay.orElseThrow(
             () -> new NotFoundException("Barangay Information not found!")

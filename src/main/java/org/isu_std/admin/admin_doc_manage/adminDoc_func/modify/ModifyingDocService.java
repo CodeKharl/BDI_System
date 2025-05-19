@@ -4,14 +4,18 @@ import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.*;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.doc_Id_Validation.ValidDocIDProvider;
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.dao.DocumentDao;
+import org.isu_std.io.SystemLogger;
 import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.io.Validation;
+import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.io.file_setup.FileChooser;
 import org.isu_std.io.file_setup.DocxFileManager;
 import org.isu_std.models.model_builders.BuilderFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 public class ModifyingDocService {
@@ -36,11 +40,19 @@ public class ModifyingDocService {
     }
 
     protected final boolean modifyPerformed(ModifyDocumentContext modifyDocumentContext) throws OperationFailedException{
-        if(docManageDao.modify(modifyDocumentContext)){
-            return true;
-        }
+        try {
+            if (docManageDao.updateDocument(modifyDocumentContext)) {
+                return true;
+            }
 
-        throw new OperationFailedException("Failed to modify the document.");
+            throw new OperationFailedException("Failed to modify the document.");
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException(
+                    "Failed to update document with document ID : " + modifyDocumentContext.getDocumentId()
+            );
+        }
     }
 
     protected final void checkDocumentName(String documentName){
@@ -72,10 +84,15 @@ public class ModifyingDocService {
     }
 
     protected Optional<File> getOptionalDocumentFile(){
-        Optional<File> optionalFile = FileChooser.getOptionalDocFile("Document File");
-        optionalFile.ifPresent(DocxFileManager::docxFileOrThrow);
+        try {
+            return DocumentFileManager.getOptionalDocFile();
+        }catch (IOException e){
+            SystemLogger.log(e.getMessage(), e);
 
-        return optionalFile;
+            throw new ServiceException(
+                    "There some problem on getting document file, Please take some and try again"
+            );
+        }
     }
 
     protected void openDocumentFile(File file){

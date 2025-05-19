@@ -1,8 +1,11 @@
 package org.isu_std.admin.admin_brgy_manage.linkacc;
 
 import org.isu_std.client_context.AdminContext;
+import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.Admin;
 import org.isu_std.models.Barangay;
 import org.isu_std.io.Util;
@@ -30,10 +33,11 @@ public class LinkBrgyController {
             }
 
             return true;
-        }catch (IllegalArgumentException | NotFoundException e){
+        }catch (IllegalArgumentException | NotFoundException | ServiceException e){
             Util.printException(e.getMessage());
-            return false;
         }
+
+        return false;
     }
 
     protected boolean setBarangayConnection(){
@@ -53,7 +57,7 @@ public class LinkBrgyController {
             Util.printMessage("Your account is connected to the Barangay.");
 
             return true;
-        }catch (OperationFailedException e){
+        }catch (OperationFailedException | ServiceException e) {
             Util.printException(e.getMessage());
         }
 

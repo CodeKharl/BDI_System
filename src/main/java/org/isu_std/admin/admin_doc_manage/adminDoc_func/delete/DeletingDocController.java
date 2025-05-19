@@ -2,6 +2,7 @@ package org.isu_std.admin.admin_doc_manage.adminDoc_func.delete;
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 
 public class DeletingDocController {
     private final DeletingDocService deletingDocService;
@@ -29,7 +30,7 @@ public class DeletingDocController {
             deletingDocService.deleteDocFile(barangayId, selectedDocumentId);
             deletingDocService.deletePerformed(barangayId, selectedDocumentId);
             Util.printMessage("Document deleted successfully");
-        }catch (OperationFailedException e){
+        }catch (OperationFailedException | ServiceException e){
             Util.printMessage(e.getMessage());
         }
     }

@@ -60,6 +60,7 @@ public class ManageDocImplFactory {
         );
 
         var deletingDocController = new DeletingDocController(deletingDocService, barangayId);
+
         return new DeletingDocument(deletingDocController);
     }
 
@@ -74,6 +75,7 @@ public class ManageDocImplFactory {
 
     private ValidDocIDProvider getValidDocIDProvider(int barangayId){
         var validDocIdProviderFactory = new ValidDocIDProviderFactory(documentDao);
+
         return validDocIdProviderFactory.createValidDocIdProvider(barangayId);
     }
 }

@@ -15,7 +15,7 @@ public class AdminLoginService{
     }
 
     protected Admin getAdmin(int adminId){
-         Optional<Admin> optionalAdmin = adminDao.getOptionalAdmin(adminId);
+         Optional<Admin> optionalAdmin = adminDao.findOptionalAdmin(adminId);
          return optionalAdmin.orElseThrow(() -> new NotFoundException(
                          InputMessageCollection.INPUT_OBJECT_NOT_EXIST.getFormattedMessage("Admin")
                  )

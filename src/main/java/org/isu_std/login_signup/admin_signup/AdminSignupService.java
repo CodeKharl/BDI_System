@@ -3,10 +3,13 @@ package org.isu_std.login_signup.admin_signup;
 import org.isu_std.dao.AdminDao;
 import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.io.Validation;
+import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.models.Admin;
 import org.isu_std.models.model_builders.AdminBuilder;
 import org.isu_std.models.model_builders.BuilderFactory;
+
+import java.util.Optional;
 
 public class AdminSignupService {
     private final static int MIN_NAME_LENGTH = 8;
@@ -22,7 +25,7 @@ public class AdminSignupService {
         return BuilderFactory.createAdminBuilder();
     }
 
-    public void checkAdminName(String adminName){
+    protected void checkAdminName(String adminName){
         // Checks whether the admin name that inputs is accepted or not.
         if(!Validation.isInputLengthAccepted(MIN_NAME_LENGTH,adminName)){
             throw new IllegalArgumentException(
@@ -31,7 +34,7 @@ public class AdminSignupService {
         }
     }
 
-    public void checkAdminPin(String strPin){
+    protected void checkAdminPin(String strPin){
         if(!Validation.isInputLengthAccepted(MIN_PIN_LENGTH, strPin)){
             throw new IllegalArgumentException(
                     InputMessageCollection.INPUT_SHORT.getFormattedMessage("pin")
@@ -45,15 +48,17 @@ public class AdminSignupService {
         }
     }
 
-    public void insertingAdminData(Admin admin) throws OperationFailedException{
+    protected void insertingAdminData(Admin admin) throws OperationFailedException{
         if(!adminDao.insertAdmin(admin)){
             throw new OperationFailedException("Failed to create the admin account.");
         }
     }
 
-    public void checkAdminIdExist(String adminName){
+    protected void checkAdminIdExist(String adminName){
         // Values can be 0 or the id of admin.
-        if(getAdminId(adminName) != 0){
+        Optional<Integer> optionalId = adminDao.findAdminIDByName(adminName);
+
+        if(optionalId.isPresent()){
             throw new IllegalArgumentException(
                     "The username (%s) is already exists! Please enter a unique name.".formatted(adminName)
             );
@@ -61,7 +66,11 @@ public class AdminSignupService {
     }
 
     public int getAdminId(String adminName){
-        return adminDao.getAdminID(adminName);
+        Optional<Integer> optionalAdminId = adminDao.findAdminIDByName(adminName);
+
+        return optionalAdminId.orElseThrow(
+                () -> new NotFoundException("Theres no existing admin_id for ")
+        );
     }
 
     public static int getMinNameLength(){

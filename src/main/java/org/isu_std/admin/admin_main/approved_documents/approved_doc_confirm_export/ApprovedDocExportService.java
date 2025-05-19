@@ -2,7 +2,10 @@ package org.isu_std.admin.admin_main.approved_documents.approved_doc_confirm_exp
 
 import org.isu_std.admin.admin_main.RequestDocumentContext;
 import org.isu_std.dao.DocumentRequestDao;
+import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.io.folder_setup.FolderChooser;
 import org.isu_std.io.folder_setup.FolderManager;
 import org.isu_std.models.DocumentRequest;
@@ -29,7 +32,7 @@ public class ApprovedDocExportService {
         return Path.of(targetDirectory.toString(), file.getName());
     }
 
-    protected void docFileMoveDirPerformed(File docFile, Path targetDirectory) throws OperationFailedException{
+    protected void docFileMoveDirPerformed(File docFile, Path targetDirectory){
         try {
             Path docSourcePath = docFile.toPath();
             Path newFilePath = createNewFilePath(targetDirectory, docFile);
@@ -37,18 +40,21 @@ public class ApprovedDocExportService {
             FolderManager.setFileDirectory(targetDirectory);
             Files.move(docSourcePath, newFilePath, StandardCopyOption.REPLACE_EXISTING);
         }catch (IOException e){
-            throw new OperationFailedException(
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException(
                     "Failed to export the document file! Reason : " + e.getMessage()
             );
         }
     }
 
-    protected void addReceipt(Path targetDirectory, RequestDocumentContext requestDocumentContext)
-            throws OperationFailedException{
+    protected void addReceipt(Path targetDirectory, RequestDocumentContext requestDocumentContext) {
         try {
             ReceiptCreator.createReceiptFile(targetDirectory, requestDocumentContext);
         }catch (IOException e){
-            throw new OperationFailedException(
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException(
                     "Failed to add receipt file to the target path! Reason : " + e.getMessage()
             );
         }
@@ -56,10 +62,16 @@ public class ApprovedDocExportService {
 
     protected void deleteApprovedReqPerform(RequestDocumentContext requestDocumentContext)
             throws OperationFailedException{
-        DocumentRequest approvedRequest = requestDocumentContext.documentRequest();
+        String referenceId = requestDocumentContext.documentRequest().referenceId();
 
-        if(!documentRequestDao.deleteDocRequest(approvedRequest)){
-            throw new OperationFailedException("Failed to delete the request! Please try again!");
+        try {
+            if (!documentRequestDao.deleteDocRequest(referenceId)) {
+                throw new OperationFailedException("Failed to delete the request! Please try again!");
+            }
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to delete request : " + referenceId);
         }
     }
 }

@@ -46,7 +46,7 @@ public class ApprovedDocExportController {
 
             approvedDocExportService.deleteApprovedReqPerform(requestDocumentContext);
             return true;
-        }catch(OperationFailedException e) {
+        }catch(OperationFailedException | SecurityException e) {
             Util.printException(e.getMessage());
         }
 
