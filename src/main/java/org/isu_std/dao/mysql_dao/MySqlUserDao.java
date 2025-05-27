@@ -24,7 +24,7 @@ public class MySqlUserDao implements UserDao, UserPersonalDao {
     }
 
     @Override
-    public Optional<Integer> getUserId(String username) {
+    public Optional<Integer> findUserId(String username) {
         var query = "SELECT user_id FROM user WHERE username = ? LIMIT 1";
 
         try{

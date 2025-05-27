@@ -17,8 +17,11 @@ import org.isu_std.admin.admin_main.requested_documents.req_decline.RequestDecli
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.dao.UserPersonalDao;
+import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
 import org.isu_std.models.UserPersonal;
@@ -35,36 +38,57 @@ public class RequestedDocumentService {
     }
 
     protected List<DocumentRequest> getDocumentReqList(int barangayId){
-        List<DocumentRequest> documentReqList = documentRequestDao.getBrgyDocReqPendingList(barangayId);
+        try {
+            List<DocumentRequest> documentReqList = documentRequestDao
+                    .getBrgyDocReqPendingList(barangayId);
 
-        if(documentReqList.isEmpty()){
-            throw new NotFoundException("There are currently no pending document requests.");
+            if (documentReqList.isEmpty()) {
+                throw new NotFoundException("There are currently no pending document requests.");
+            }
+
+            return documentReqList;
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException(
+                    "Failed to fetch document request list with barangay_id : " + barangayId
+            );
         }
-
-        return documentReqList;
     }
 
-    protected RequestDocumentContext getReqDocsContext(DocumentRequest documentRequest) throws OperationFailedException{
+    protected RequestDocumentContext getReqDocsContext(DocumentRequest documentRequest){
         var reqDocsManagerBuilder = new ReqDocsManagerBuilder(documentRequest);
+
+        try {
+            setReqDocsManagerBuilder(reqDocsManagerBuilder, documentRequest);
+
+            return reqDocsManagerBuilder.build();
+        }catch (DataAccessException | NotFoundException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException(
+                    "Failed to setup document request with : " + documentRequest
+            );
+        }
+    }
+
+    private void setReqDocsManagerBuilder(
+            ReqDocsManagerBuilder reqDocsManagerBuilder,
+            DocumentRequest documentRequest
+    ){
         var reqDocsManagerProvider = new ReqDocsManagerProvider(
                 userPersonalDao, documentDao, null
         );
 
-        try {
-            UserPersonal userPersonal = reqDocsManagerProvider
-                    .getUserPersonal(documentRequest.userId());
+        UserPersonal userPersonal = reqDocsManagerProvider
+                .getUserPersonal(documentRequest.userId());
 
-            Document document = reqDocsManagerProvider
-                    .getDocument(documentRequest.barangayId(), documentRequest.documentId());
+        Document document = reqDocsManagerProvider
+                .getDocument(documentRequest.barangayId(), documentRequest.documentId());
 
-            reqDocsManagerBuilder
-                    .userPersonal(userPersonal)
-                    .document(document);
-
-            return reqDocsManagerBuilder.build();
-        }catch (NotFoundException e){
-            throw new OperationFailedException("Failed to get the requested information!", e);
-        }
+        reqDocsManagerBuilder
+                .userPersonal(userPersonal)
+                .document(document);
     }
 
     protected RequirementFilesView getReqFilesView(List<File> requirmentFileList){
@@ -81,8 +105,8 @@ public class RequestedDocumentService {
     }
 
     protected RequestDecline createRequestDecline(DocumentRequest documentRequest){
-        RequestDeclineService requestDeclineService = new RequestDeclineService(documentRequestDao);
-        RequestDeclineController requestDeclineController = new RequestDeclineController(
+        var requestDeclineService = new RequestDeclineService(documentRequestDao);
+        var requestDeclineController = new RequestDeclineController(
                 requestDeclineService, documentRequest
         );
 

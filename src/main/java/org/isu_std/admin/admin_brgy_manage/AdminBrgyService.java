@@ -13,7 +13,6 @@ import org.isu_std.dao.*;
 import org.isu_std.io.SystemLogger;
 import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.NotFoundException;
-import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.Barangay;
 
@@ -29,8 +28,12 @@ public class AdminBrgyService {
     private final PaymentDao paymentDao;
 
     protected AdminBrgyService(
-            BarangayDao barangayDao, AdminDao adminDao, DocManageDao docManageDao,
-            DocumentDao documentDao, UserPersonalDao userPersonalDao, DocumentRequestDao documentRequestDao,
+            BarangayDao barangayDao,
+            AdminDao adminDao,
+            DocManageDao docManageDao,
+            DocumentDao documentDao,
+            UserPersonalDao userPersonalDao,
+            DocumentRequestDao documentRequestDao,
             PaymentDao paymentDao
     ){
         this.barangayDao = barangayDao;
@@ -43,24 +46,21 @@ public class AdminBrgyService {
     }
 
     protected RegisterBarangay createRegisterBrgy(){
-        return new RegisterBarangay(
-                new RegisterBrgyController(
-                        RegisterBrgyService.getInstance(barangayDao)
-                )
-        );
+        var registerBarangayService = new RegisterBrgyService(barangayDao);
+        var registerBarangayController = new RegisterBrgyController(registerBarangayService);
+
+        return new RegisterBarangay(registerBarangayController);
     }
 
     protected LinkBarangay createLinkBrgy(AdminContext adminContext){
-        return new LinkBarangay(
-                new LinkBrgyController(
-                        LinkBrgyService.getInstance(barangayDao, adminDao),
-                        adminContext
-                )
-        );
+        var linkBarangayService = new LinkBrgyService(barangayDao, adminDao);
+        var linkBarangayController = new LinkBrgyController(linkBarangayService, adminContext);
+
+        return new LinkBarangay(linkBarangayController);
     }
 
-    protected AdminUI getAdminUi(AdminContext adminContext){
-        AdminUIFactory adminUIFactory = AdminUIFactory.getInstance(
+    protected AdminUI getAdminUI(AdminContext adminContext){
+        var adminUIFactory = new AdminUIFactory(
                 docManageDao,
                 documentDao,
                 documentRequestDao,

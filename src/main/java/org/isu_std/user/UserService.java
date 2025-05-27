@@ -57,12 +57,18 @@ public class UserService {
     }
 
     private UserManageAcc getUserManageAcc(UserContext userContext){
-        UserManageAccFactory userManageAccFactory = new UserManageAccFactory(userPersonalDao, barangayDao, userDao);
+        var userManageAccFactory = new UserManageAccFactory(
+                userPersonalDao, barangayDao, userDao
+        );
+
         return userManageAccFactory.createUserManageAcc(userContext);
     }
 
     private CheckRequest getCheckRequest(UserContext userContext){
-        CheckRequestFactory checkRequestFactory = new CheckRequestFactory(documentDao, documentRequestDao, paymentDao);
+        var checkRequestFactory = new CheckRequestFactory(
+                documentDao, documentRequestDao, paymentDao
+        );
+
         return checkRequestFactory.create(userContext);
     }
 }

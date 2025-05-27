@@ -3,6 +3,7 @@ package org.isu_std.login_signup.admin_login;
 import org.isu_std.client_context.AdminContext;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.ServiceException;
 
 public class AdminLoginController {
     private final AdminLoginService adminLoginService;
@@ -27,7 +28,7 @@ public class AdminLoginController {
             }
 
             return true;
-        }catch (IllegalArgumentException | NotFoundException e){
+        }catch (ServiceException | IllegalArgumentException | NotFoundException e){
             Util.printException(e.getMessage());
         }
 

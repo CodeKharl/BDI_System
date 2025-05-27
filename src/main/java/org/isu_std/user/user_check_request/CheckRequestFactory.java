@@ -19,8 +19,8 @@ public class CheckRequestFactory {
     }
 
     public CheckRequest create(UserContext userContext){
-        CheckRequestService service = new CheckRequestService(documentRequestDao, documentDao, paymentDao);
-        CheckRequestController controller = new CheckRequestController(service, userContext);
+        var service = new CheckRequestService(documentRequestDao, documentDao, paymentDao);
+        var controller = new CheckRequestController(service, userContext);
 
         return new CheckRequest(controller);
     }

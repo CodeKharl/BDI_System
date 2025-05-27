@@ -2,10 +2,10 @@ package org.isu_std.user.user_acc_manage.user_personal.personalcreation;
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
 import org.isu_std.models.model_builders.UserPersonalBuilder;
-import org.isu_std.user.user_acc_manage.user_personal.ManagePersonalService;
 import org.isu_std.user.user_acc_manage.user_personal.PersonalInfoSetter;
 
 public class CreatePersonalController {
@@ -57,13 +57,13 @@ public class CreatePersonalController {
         return false;
     }
 
-    protected boolean createPerform(){
+    protected boolean savePersonalInfo(){
         try{
             UserPersonal userPersonal = userPersonalBuilder.build();
-            createPersonalService.savePersonalInfo(user.userId(), userPersonal);
+            createPersonalService.savePersonalInfoPerform(user.userId(), userPersonal);
 
             return true;
-        }catch (OperationFailedException e){
+        }catch (ServiceException | OperationFailedException e){
             Util.printException(e.getMessage());
         }
 
@@ -73,5 +73,4 @@ public class CreatePersonalController {
     protected void printUserPersonalInfo(){
         userPersonalBuilder.printPersonalStats();
     }
-
 }

@@ -1,8 +1,7 @@
-package org.isu_std.doc_output_file_provider;
+package org.isu_std.doc_output_file_manager;
 
 import org.isu_std.admin.admin_main.RequestDocumentContext;
 import org.isu_std.io.DateTime;
-import org.isu_std.io.Util;
 import org.isu_std.io.file_setup.DocxFileManager;
 import org.isu_std.models.UserPersonal;
 
@@ -22,7 +21,7 @@ public class DocOutputFileAttributeProvider {
     }
 
     private static Set<String> getUserPersonalPlaceHolders(){
-        Set<String> placeHolderSet = new LinkedHashSet<>();
+        var placeHolderSet = new LinkedHashSet<String>();
 
         // Main information for the output document file. E.g. name, age, sex, etc.
         RecordComponent[] recordComponents = UserPersonal.class.getRecordComponents();
@@ -43,7 +42,8 @@ public class DocOutputFileAttributeProvider {
     }
 
     protected static Map<String, String> getValuesWithPlaceHolderMap(RequestDocumentContext requestDocumentContext){
-         Map<String, String> valuesMap = new HashMap<>();
+         var valuesMap = new HashMap<String, String>();
+
          putUserValuesWithHolders(valuesMap, requestDocumentContext.userPersonal());
          putDateWithHolder(valuesMap);
 
@@ -53,9 +53,11 @@ public class DocOutputFileAttributeProvider {
     private static void putUserValuesWithHolders(Map<String, String> valuesMap, UserPersonal userPersonal){
         String[] values = userPersonal.valueToStringArr();
         Set<String> placeHolder = getUserPersonalPlaceHolders();
-        AtomicInteger count = new AtomicInteger();
+
+        var count = new AtomicInteger();
         placeHolder.forEach((holder) -> {
             String value = values[count.getAndIncrement()];
+
             valuesMap.put(holder, value);
         });
     }
@@ -63,6 +65,7 @@ public class DocOutputFileAttributeProvider {
     private static void putDateWithHolder(Map<String, String> valuesMap){
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMMM, dd, yyyy");
         String date = DateTime.localDateTimeStr(dateTimeFormatter);
+
         valuesMap.put(getDatePlaceHolder(), date);
     }
 }

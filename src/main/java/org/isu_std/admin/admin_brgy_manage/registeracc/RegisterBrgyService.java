@@ -18,20 +18,8 @@ import java.util.Optional;
 public class RegisterBrgyService {
     private final BarangayDao barangayDao;
 
-    private RegisterBrgyService(BarangayDao barangayDao){
+    public RegisterBrgyService(BarangayDao barangayDao){
         this.barangayDao = barangayDao;
-    }
-
-    protected final static class Holder{
-        private static RegisterBrgyService instance;
-    }
-
-    public static RegisterBrgyService getInstance(BarangayDao barangayDao){
-        if(Holder.instance == null){
-            Holder.instance = new RegisterBrgyService(barangayDao);
-        }
-
-        return Holder.instance;
     }
 
     protected BarangayBuilder getAdminBuilder(){

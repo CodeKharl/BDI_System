@@ -4,6 +4,7 @@ import org.isu_std.client_context.UserContext;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.Barangay;
 import org.isu_std.models.User;
 import org.isu_std.models.model_builders.BarangayBuilder;
@@ -25,7 +26,7 @@ public class ManageBarangayController {
             int barangayId = userContext.getUser().barangayId();
             Barangay barangay = manageBarangayService.getBarangay(barangayId);
             barangay.printFullBrgyNameOnly();
-        }catch (NotFoundException e){
+        }catch (SecurityException | NotFoundException e){
             Util.printException(e.getMessage());
         }
     }
@@ -48,13 +49,13 @@ public class ManageBarangayController {
             User newUser = manageBarangayService.createNewUser(user, barangay);
 
             // Update on database
-            manageBarangayService.changeBrgyPerform(newUser);
+            manageBarangayService.updateBrgyPerform(newUser);
 
             // Update on Object
             this.userContext.setUser(newUser);
 
             return true;
-        }catch (OperationFailedException e){
+        }catch (ServiceException | OperationFailedException e){
             Util.printException(e.getMessage());
         }
 

@@ -3,6 +3,7 @@ package org.isu_std.user.user_acc_manage.user_account;
 import org.isu_std.client_context.UserContext;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.User;
 import org.isu_std.models.model_builders.UserBuilder;
 
@@ -43,7 +44,9 @@ public class ManageAccInfoController {
         try{
             String chosenDetail = accountInfoContext.getChosenDetail();
             UserBuilder userBuilder = accountInfoContext.getUserBuilder();
+
             setUserBuilderValues(chosenDetail, userBuilder, input);
+
             return true;
         }catch(IllegalArgumentException e){
             Util.printException(e.getMessage());
@@ -61,7 +64,7 @@ public class ManageAccInfoController {
         } else if(chosenDetail.equals(userDetails[1])){
             manageAccInfoService.checkInputPassword(input);
             userBuilder.password(input);
-        }else {
+        } else {
             throw new IllegalStateException(
                     "The string arr user details doesn't contain the chosen detail : " + chosenDetail
             );
@@ -73,7 +76,7 @@ public class ManageAccInfoController {
         UserBuilder userBuilder = accountInfoContext.getUserBuilder();
         User actualUser = accountInfoContext.getUserContext().getUser();
 
-        if(launchUserUpdate(chosenDetail, actualUser, userBuilder)){
+        if(updateUser(chosenDetail, actualUser, userBuilder)){
             // Update on active user object
             actualUser = manageAccInfoService.createNewUser(actualUser, userBuilder);
 
@@ -87,7 +90,7 @@ public class ManageAccInfoController {
         return false;
     }
 
-    protected boolean launchUserUpdate(String chosenDetail, User actualUser, UserBuilder userBuilder){
+    protected boolean updateUser(String chosenDetail, User actualUser, UserBuilder userBuilder){
         try{
             // Update on the database
             User incompletedUser = userBuilder
@@ -96,7 +99,7 @@ public class ManageAccInfoController {
             
             this.manageAccInfoService.updateUserPerform(chosenDetail, incompletedUser);
             return true;
-        }catch (OperationFailedException e){
+        }catch (ServiceException | OperationFailedException e){
             Util.printException(e.getMessage());
         }
 

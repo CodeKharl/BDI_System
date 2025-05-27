@@ -13,7 +13,7 @@ public class UserDeleteRequest {
 
     public boolean requestDeletePerform(){
         boolean isDeleteProcessSuccess = isRequestCancellationConfirmed() &&
-                userDeleteReqController.requestCancellationProcess();
+                userDeleteReqController.isRequestCancellationSuccess();
 
         if(isDeleteProcessSuccess){
             Util.printMessage("Request deletion completed successfully.");

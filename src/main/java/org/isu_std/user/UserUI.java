@@ -17,14 +17,14 @@ public class UserUI implements PostLoginNavigator {
 
     @Override
     public void navigateToSection() {
+        int backValue = USER_UI_CONTENTS.length;
+
         while(true) {
             printTitleAndContents();
 
-            int choice = SystemInput.getIntChoice(
-                    "Enter your choice : ", USER_UI_CONTENTS.length
-            );
+            int choice = SystemInput.getIntChoice("Enter your choice : ", backValue);
 
-            if(choice == USER_UI_CONTENTS.length){
+            if(choice == backValue){
                 return;
             }
 

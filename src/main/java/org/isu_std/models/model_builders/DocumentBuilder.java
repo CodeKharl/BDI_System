@@ -56,4 +56,17 @@ public class DocumentBuilder {
     public File getDocumentFile() {
         return documentFile;
     }
+
+    public Object[] getValues(){
+        return new Object[]{
+                documentName, price, requirements, documentFile
+        };
+    }
+
+    public void resetValues(){
+        this.documentName = null;
+        this.price = 0.0;
+        this.requirements = null;
+        this.documentFile = null;
+    }
 }

@@ -3,8 +3,11 @@ package org.isu_std.user.user_document_request;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.dao.UserPersonalDao;
+import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.Document;
 import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.models.DocumentRequest;
@@ -45,38 +48,44 @@ public class UserDocRequestService {
         return new UserInfoContext(user);
     }
 
-    UserPersonal getUserPersonal(int userId){
-        Optional<UserPersonal> optionalUserPersonal = userPersonalDao.getOptionalUserPersonal(userId);
+    protected UserPersonal getUserPersonal(int userId){
+        try {
+            Optional<UserPersonal> optionalUserPersonal = userPersonalDao.getOptionalUserPersonal(userId);
 
-        return optionalUserPersonal.orElseThrow(
-                () -> new NotFoundException(
-                        "Theres no existing personal information of your account!"
-                )
-        );
+            return optionalUserPersonal.orElseThrow(
+                    () -> new NotFoundException(
+                            "Theres no existing personal information of your account!"
+                    )
+            );
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to fetch user personal info with user_id : " + userId);
+        }
     }
 
     private Map<Integer, Document> getBrgyDocsMap(int barangayId){
-        Map<Integer, Document> docsHolder = documentDao.getDocumentMap(barangayId);
+        try {
+            Map<Integer, Document> docsHolder = documentDao.getDocumentMap(barangayId);
 
-        if(docsHolder.isEmpty()){
-            throw new NotFoundException(
-                    "There's no existing documents! Please cooperate to the admin of your barangay."
+            if (docsHolder.isEmpty()) {
+                throw new NotFoundException(
+                        "There's no existing documents! Please cooperate to the admin of your barangay."
+                );
+            }
+
+            return docsHolder;
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException(
+                    "Failed to fetch barangay document map with barangay_id : " + barangayId
             );
         }
-
-        return docsHolder;
     }
 
     protected DocRequestContext createDocRequestMod(){
         return new DocRequestContext();
-    }
-
-    protected void checkDocumentChoice(int brgyDocMapLength, int choice){
-        if(choice < 1 || choice > brgyDocMapLength){
-            throw new IllegalArgumentException(
-                    InputMessageCollection.INPUT_INVALID.getFormattedMessage("choice")
-            );
-        }
     }
 
     protected DocRequirementProvider createDocRequirement(String[] requirementsInfo){
@@ -104,17 +113,41 @@ public class UserDocRequestService {
     }
 
     protected void checkDocRequestIfUnique(DocumentRequest documentRequest){
-        int docRequestCount = documentRequestDao.getUserDocRequestCount(documentRequest);
+        int docRequestCount = getDocRequestCount(documentRequest);
+
         if(docRequestCount > 0){
-            throw new IllegalArgumentException("Duplicate document request! Request will cancelled.");
+            throw new IllegalArgumentException(
+                    "Duplicate document request! Request will cancelled."
+            );
+        }
+    }
+
+    private int getDocRequestCount(DocumentRequest documentRequest){
+        try {
+            Optional<Integer> docRequestCount = documentRequestDao
+                    .getUserDocRequestCount(documentRequest);
+
+            return docRequestCount.orElseThrow(
+                    () -> new NotFoundException("Document requests not found")
+            );
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to fetch request count by : " + documentRequest);
         }
     }
 
     protected void addDocumentRequest(DocumentRequest documentRequest) throws OperationFailedException{
-        if(!documentRequestDao.addDocRequest(documentRequest)){
-            throw new OperationFailedException(
-                    "Request Failed! Please try again."
-            );
+        try {
+            if (!documentRequestDao.addDocRequest(documentRequest)) {
+                throw new OperationFailedException(
+                        "Request Failed! Please try again."
+                );
+            }
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to insert document request : " + documentRequest);
         }
     }
 }

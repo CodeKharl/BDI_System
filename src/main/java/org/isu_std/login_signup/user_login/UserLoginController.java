@@ -4,6 +4,7 @@ import org.isu_std.client_context.AdminContext;
 import org.isu_std.client_context.UserContext;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.ServiceException;
 
 public class UserLoginController {
     private final UserLoginService userLoginService;
@@ -34,7 +35,7 @@ public class UserLoginController {
             }
 
             return true;
-        }catch (IllegalArgumentException | NotFoundException e){
+        }catch (ServiceException | IllegalArgumentException | NotFoundException e){
             Util.printException(e.getMessage());
         }
 

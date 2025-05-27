@@ -4,7 +4,6 @@ import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.io.Validation;
 
 public class NameCreationService {
-
     protected StringBuilder createNameBuilderIns(){
         return new StringBuilder();
     }

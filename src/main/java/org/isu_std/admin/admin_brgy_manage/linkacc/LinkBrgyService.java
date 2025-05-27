@@ -19,21 +19,9 @@ public class LinkBrgyService {
     private final BarangayDao barangayDao;
     private final AdminDao adminDao;
 
-    private LinkBrgyService(BarangayDao barangayDao, AdminDao adminDao){
+    public LinkBrgyService(BarangayDao barangayDao, AdminDao adminDao){
         this.barangayDao = barangayDao;
         this.adminDao = adminDao;
-    }
-
-    private static final class Holder{
-        private static LinkBrgyService instance;
-    }
-
-    public static LinkBrgyService getInstance(BarangayDao barangayDao, AdminDao adminDao){
-        if(Holder.instance == null){
-            Holder.instance = new LinkBrgyService(barangayDao, adminDao);
-        }
-
-        return Holder.instance;
     }
 
     protected Admin buildAdminWithId(Admin prevAdmin, Barangay barangay){

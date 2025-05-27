@@ -7,6 +7,7 @@ import org.isu_std.admin.admin_main.requested_documents.req_decline.RequestDecli
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.Barangay;
 import org.isu_std.models.DocumentRequest;
 
@@ -27,8 +28,9 @@ public class RequestedDocumentController {
     protected boolean isThereExistingRequest(){
         try{
             documentRequestList = reqDocService.getDocumentReqList(barangay.barangayId());
+
             return true;
-        }catch (NotFoundException e){
+        }catch (ServiceException | NotFoundException e){
             Util.printException(e.getMessage());
         }
 
@@ -45,10 +47,11 @@ public class RequestedDocumentController {
         try{
             int index = docChoice - 1;
             DocumentRequest documentRequest = documentRequestList.get(index);
+
             this.requestDocumentContext = reqDocService.getReqDocsContext(documentRequest);
 
             return true;
-        }catch (OperationFailedException e){
+        }catch (ServiceException e){
             Util.printException(e.getMessage());
         }
 

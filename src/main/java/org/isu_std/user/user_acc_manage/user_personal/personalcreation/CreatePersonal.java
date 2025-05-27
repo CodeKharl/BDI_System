@@ -64,7 +64,7 @@ public class CreatePersonal{
                 "Confirmation", ChoiceCollection.CONFIRM.getValue(),
                 ChoiceCollection.SUB_CANCEL.getValue()
         )){
-            return createPersonalController.createPerform();
+            return createPersonalController.savePersonalInfo();
         }
 
         return false;

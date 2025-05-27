@@ -1,7 +1,6 @@
 package org.isu_std.dao.jdbc_helper;
 
 import org.isu_std.config.MySQLDBConfig;
-import org.isu_std.models.Document;
 
 import java.io.*;
 import java.sql.Connection;
@@ -25,6 +24,21 @@ public class JDBCHelper {
         ){
             setParameters(preStatement, params);
             return preStatement.executeUpdate();
+        }
+    }
+
+    public int executeUpdateWithFiles(String sql, Object... params) throws SQLException, IOException{
+        InputStream inputStream = null;
+
+        try(Connection connection = mySQLDBConfig.getConnection();
+            PreparedStatement preStatement = connection.prepareStatement(sql);
+
+        ){
+            inputStream = getAlreadySetParamWithFiles(preStatement, params);
+
+            return preStatement.executeUpdate();
+        }finally {
+            closeInputStream(inputStream);
         }
     }
 
@@ -64,7 +78,8 @@ public class JDBCHelper {
         }
     }
 
-    private void setParameters(PreparedStatement preStatement, Object... params) throws SQLException, IOException{
+    private void setParameters(PreparedStatement preStatement, Object... params)
+            throws SQLException{
         int paramIndex = 1;
 
         for(Object param : params){
@@ -72,30 +87,63 @@ public class JDBCHelper {
                 continue;
             }
 
-            String paramStr = String.valueOf(param);
-            if(Integer.parseInt(paramStr) == 0 || paramStr.isBlank()){
+            if(isParameterSet(preStatement, paramIndex, param)){
+                paramIndex++;
+            }
+        }
+    }
+
+    private boolean isParameterSet(PreparedStatement preStatement, int paramIndex, Object param)
+            throws SQLException{
+
+        String paramStr = param.toString();
+        if(!paramStr.isBlank()){
+            preStatement.setObject(paramIndex, paramStr);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private InputStream getAlreadySetParamWithFiles(PreparedStatement preStatement, Object... params)
+            throws SQLException, IOException{
+        int paramIndex = 1;
+        InputStream inputStream = null;
+
+        for(Object param : params){
+            if(param == null){
                 continue;
             }
 
-            setParameter(preStatement, paramIndex, param);
-            paramIndex++;
+            inputStream = getFileParameterSet(preStatement, paramIndex, param);
+
+            if(inputStream != null || isParameterSet(preStatement, paramIndex, param)){
+                paramIndex++;
+            }
         }
+
+        return inputStream;
     }
 
-    private void setParameter(PreparedStatement preStatement, int paramIndex, Object param)
-            throws SQLException, IOException{
+    private InputStream getFileParameterSet(
+            PreparedStatement preStatement,
+            int paramIndex,
+            Object param
+    ) throws IOException, SQLException {
         if(param instanceof File file){
-            setFileParameter(preStatement, paramIndex, file);
-            return;
+            InputStream inputStream = new FileInputStream(file);
+            preStatement.setBinaryStream(paramIndex, inputStream);
+
+            return inputStream;
         }
 
-        preStatement.setObject(paramIndex, param);
+        return null;
     }
 
-    private void setFileParameter(PreparedStatement preStatement, int paramIndex, File file)
-            throws IOException, SQLException {
-        try(InputStream inputStream = new FileInputStream(file)){
-            preStatement.setBinaryStream(paramIndex, inputStream, file.length());
+    private void closeInputStream(InputStream inputStream) throws IOException{
+        if(inputStream != null){
+            inputStream.close();
         }
     }
 }

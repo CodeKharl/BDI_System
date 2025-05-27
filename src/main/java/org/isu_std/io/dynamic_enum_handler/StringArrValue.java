@@ -11,6 +11,7 @@ public final class StringArrValue implements ConfigValue{
         return this.value;
     }
 
+    @Override
     public Object get(){
         return this.value;
     }

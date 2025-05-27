@@ -3,6 +3,7 @@ package org.isu_std.user.user_check_request;
 import org.isu_std.client_context.UserContext;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
 import org.isu_std.models.User;
@@ -30,11 +31,12 @@ public class CheckRequestController {
         try{
             List<DocumentRequest> userDocReqList = checkRequestService
                     .getUserDocReqMap(user.userId(), user.barangayId());
-            this.requestInfoContext.setRefWithDocIDMap(userDocReqList);
 
+            requestInfoContext.setRefWithDocIDMap(userDocReqList);
             setDocumentDetailMap(userDocReqList);
+
             return true;
-        }catch (NotFoundException e){
+        }catch (ServiceException | NotFoundException e){
             Util.printException(e.getMessage());
         }
 
@@ -94,17 +96,25 @@ public class CheckRequestController {
 
         checkRequestStatus.checkRequestStatus();
     }
+
     private void paymentManage(){
         String referenceId = requestSelectContext.getSelectedDocRequest().referenceId();
 
-        if(!checkRequestService.isRequestApproved(referenceId)){
-            Util.printMessage("You cannot proceed in this section!");
-            Util.printMessage("Please wait for the admin request approval.");
-            return;
-        }
+        try {
+            if (!checkRequestService.isRequestApproved(referenceId)) {
+                Util.printMessage("You cannot proceed in this section!");
+                Util.printMessage("Please wait for the admin request approval.");
+                return;
+            }
 
-        PaymentManage paymentManage = checkRequestService.createPaymentManage(requestSelectContext);
-        paymentManage.sectionPerformed();
+            PaymentManage paymentManage = checkRequestService.createPaymentManage(
+                    requestSelectContext
+            );
+
+            paymentManage.sectionPerformed();
+        }catch (ServiceException e){
+            Util.printException(e.getMessage());
+        }
     }
 
     protected boolean deleteRequest(){

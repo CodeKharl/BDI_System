@@ -2,9 +2,12 @@ package org.isu_std.user.user_acc_manage.user_personal;
 
 import org.isu_std.dao.BarangayDao;
 import org.isu_std.dao.UserPersonalDao;
+import org.isu_std.io.SystemLogger;
 import org.isu_std.io.Validation;
 import org.isu_std.io.collections_enum.InputMessageCollection;
+import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.io.dynamic_enum_handler.*;
 import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
@@ -31,10 +34,16 @@ public class ManagePersonalService {
     }
 
     protected UserPersonal getUserPersonal(int userId){
-        Optional<UserPersonal> userPersonal = userPersonalDao.getOptionalUserPersonal(userId);
-        return userPersonal.orElseThrow(
-                () -> new NotFoundException("Theres no existing personal information of your account.")
-        );
+        try {
+            Optional<UserPersonal> userPersonal = userPersonalDao.getOptionalUserPersonal(userId);
+            return userPersonal.orElseThrow(
+                    () -> new NotFoundException("Theres no existing personal information of your account.")
+            );
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to get user personal with user_id : " + userId);
+        }
     }
 
     protected CreatePersonal createPersonal(User user){
@@ -88,7 +97,6 @@ public class ManagePersonalService {
         throw new IllegalArgumentException(
                 "The input is not a valid sex! Please enter a choice from the question guide"
         );
-
     }
 
     public int getCheckedAge(String strAge){

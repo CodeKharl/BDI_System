@@ -2,6 +2,7 @@ package org.isu_std.admin.admin_main.requested_documents.req_decline;
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.DocumentRequest;
 
 public class RequestDeclineController {
@@ -17,7 +18,7 @@ public class RequestDeclineController {
         try{
             requestDeclineService.deleteRequestPerformed(documentRequest);
             return true;
-        }catch (OperationFailedException e){
+        }catch (ServiceException | OperationFailedException e){
             Util.printMessage(e.getMessage());
         }
 

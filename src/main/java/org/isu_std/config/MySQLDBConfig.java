@@ -25,12 +25,14 @@ public class MySQLDBConfig {
                 .getClassLoader().getResourceAsStream(DB_FILE_NAME)
         ){
             if(inputStream == null){
-                throw new NotFoundException(DB_FILE_NAME + "not found");
+                throw new RuntimeException(DB_FILE_NAME + "not found");
             }
 
             dbProperties.load(inputStream);
-        }catch (IOException | NotFoundException e){
-            SystemLogger.logException(MySQLDBConfig.class, e.getMessage(), e);
+        }catch (IOException | RuntimeException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new RuntimeException("Failed to load Sql Data Base Connection!");
         }
     }
 

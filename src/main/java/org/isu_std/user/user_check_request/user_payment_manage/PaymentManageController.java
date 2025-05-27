@@ -3,6 +3,7 @@ package org.isu_std.user.user_check_request.user_payment_manage;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.Payment;
 import org.isu_std.models.model_builders.PaymentBuilder;
 import org.isu_std.user.user_check_request.RequestSelectContext;
@@ -33,10 +34,10 @@ public class PaymentManageController {
     }
 
     protected boolean settingUpPayment(String input){
-        try{
-            int barangayId = requestSelectContext.getSelectedDocRequest().barangayId();
-            int documentId = requestSelectContext.getSelectedDocRequest().documentId();
+        int barangayId = requestSelectContext.getSelectedDocRequest().barangayId();
+        int documentId = requestSelectContext.getSelectedDocRequest().documentId();
 
+        try{
             double documentCost = paymentManageService.getResultedDocumentPrice(barangayId, documentId);
             String paymentDateTime = paymentManageService.getPaymentTime();
 
@@ -47,7 +48,7 @@ public class PaymentManageController {
                     .paymentDateTime(paymentDateTime);
 
             return true;
-        }catch (NotFoundException e){
+        }catch (ServiceException | NotFoundException e){
             Util.printException(e.getMessage());
         }
 
@@ -55,13 +56,14 @@ public class PaymentManageController {
     }
 
     protected boolean isAddPaymentSuccess(){
+        String referenceId = requestSelectContext.getSelectedDocRequest().referenceId();
+        Payment payment = paymentBuilder.build();
+
         try{
-            String referenceId = requestSelectContext.getSelectedDocRequest().referenceId();
-            Payment payment = paymentBuilder.build();
             paymentManageService.addPaymentPerformed(referenceId, payment);
 
             return true;
-        }catch (OperationFailedException e){
+        }catch (ServiceException | OperationFailedException e){
             Util.printException(e.getMessage());
         }
 

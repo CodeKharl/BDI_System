@@ -1,7 +1,10 @@
 package org.isu_std.user.user_acc_manage.user_personal.personalmodify;
 
 import org.isu_std.dao.UserPersonalDao;
+import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
 import org.isu_std.models.model_builders.UserBuilder;
@@ -43,10 +46,16 @@ public class ModifyPersonalService {
         String chosenDetail = modifyPersonalContext.getChosenDetail();
         UserPersonal userPersonal = modifyPersonalContext.getUserPersonalBuilder().build();
 
-        if(!userPersonalDao.modifyUserPersonal(userId, chosenDetail, userPersonal)){
-            throw new OperationFailedException(
-                    "Failed to modify personal information. Please try again."
-            );
+        try {
+            if (!userPersonalDao.modifyUserPersonal(userId, chosenDetail, userPersonal)) {
+                throw new OperationFailedException(
+                        "Failed to modify personal information. Please try again."
+                );
+            }
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to update user personal by : " + chosenDetail);
         }
     }
 }

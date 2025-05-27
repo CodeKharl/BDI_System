@@ -9,10 +9,10 @@ public class DocInfoContext {
     private final Map<Integer, Document> barangayDocumentsMap;
     private final Integer[] documentKeys;
 
-    public DocInfoContext(@NotNull Map<Integer, Document> barangayDocumentsMap){
-        this.barangayDocumentsMap = barangayDocumentsMap;
+    public DocInfoContext(@NotNull Map<Integer, Document> brgyDocsMap){
+        this.barangayDocumentsMap = brgyDocsMap;
 
-        this.documentKeys = barangayDocumentsMap
+        this.documentKeys = brgyDocsMap
                 .keySet()
                 .toArray(new Integer[]{});
     }

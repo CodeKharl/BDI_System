@@ -12,10 +12,6 @@ public final class Validation {
         Regex(String regexType){
             this.regexType = regexType;
         }
-
-        private String getRegexType(){
-            return this.regexType;
-        }
     }
 
     public static boolean isInputLengthAccepted(int validLength, String type, String input){
@@ -111,14 +107,5 @@ public final class Validation {
             return false;
         }
         return true;
-    }
-
-    public static <T> boolean ObjectEquals(T type, T matches, String addMessage){
-        if (type.equals(matches)) {
-            return true;
-        }
-
-        Util.printMessage("Wrong %s! Please try again.".formatted(addMessage));
-        return false;
     }
 }

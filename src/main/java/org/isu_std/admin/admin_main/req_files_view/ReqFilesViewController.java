@@ -1,9 +1,9 @@
 package org.isu_std.admin.admin_main.req_files_view;
 
 import org.isu_std.io.Util;
+import org.isu_std.io.custom_exception.ServiceException;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -16,30 +16,28 @@ public class ReqFilesViewController {
         this.requirementFileList = requirementFileList;
     }
 
-    protected void printChoiceReqDocFiles(){
+    protected void printChoiceReqFiles(){
         Util.printSubSectionTitle("User Requirement Files");
 
-        AtomicInteger count = new AtomicInteger();
-        requirementFileList.forEach(
-                (file) -> Util.printChoice(
-                        "%d. %s".formatted(count.getAndIncrement() + 1, file.getName())
-                )
-        );
+        for(int i = 0; i < requirementFileList.size(); i++){
+            File file = requirementFileList.get(i);
+
+            Util.printChoice("%d. %s".formatted(i + 1, file.getName()));
+        }
     }
 
     protected int getFileListLength(){
         return this.requirementFileList.size();
     }
 
-    protected void reqFileViewPerformed(int index){
+    protected void reqFileViewPerform(int choice){
         try{
-            File requirmentFile = requirementFileList.get(index - 1);
-            Util.printMessage("Opening the %s...".formatted(requirmentFile.getName()));
+            File requirementFile = requirementFileList.get(choice - 1);
 
-            reqFilesViewService.reqDocViewPerformed(requirmentFile);
-        }catch (IOException e){
+            Util.printMessage("Opening the %s...".formatted(requirementFile.getName()));
+            reqFilesViewService.reqFileViewPerform(requirementFile);
+        }catch (ServiceException e){
             Util.printException(e.getMessage());
         }
-
     }
 }

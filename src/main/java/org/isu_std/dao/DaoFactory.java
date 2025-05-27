@@ -2,38 +2,49 @@ package org.isu_std.dao;
 
 // Class that manages connectors for the connection of database with the UI (front <-> back).
 
+import org.isu_std.dao.jdbc_helper.JDBCHelper;
 import org.isu_std.dao.mysql_dao.*;
 
 public class DaoFactory {
+    private final JDBCHelper jdbcHelper;
+
+    public DaoFactory(JDBCHelper jdbcHelper){
+        this.jdbcHelper = jdbcHelper;
+    }
+
     public UserDao createUserDao(){
-        return new MySqlUserDao();
+        return new MySqlUserDao(jdbcHelper);
     }
 
     public BarangayDao createBrgyDao(){
-        return new MySqlBarangayDao();
+        return new MySqlBarangayDao(jdbcHelper);
     }
 
     public DocumentDao getDocumentDao(){
-        return new MySqlDocumentDao();
+        return new MySqlDocumentDao(jdbcHelper, createDeletedDocumentDao());
     }
 
     public AdminDao createAdminDao(){
-        return new MySqlAdminDao();
+        return new MySqlAdminDao(jdbcHelper);
     }
 
     public DocManageDao getDocManageDao(){
-        return new MySqlDocumentDao();
+        return new MySqlDocumentDao(jdbcHelper, createDeletedDocumentDao());
     }
 
     public UserPersonalDao getPersonalDao(){
-        return new MySqlUserDao();
+        return new MySqlUserDao(jdbcHelper);
     }
 
     public DocumentRequestDao getDocumentRequestDao(){
-        return new MySqlDocumentRequestDao();
+        return new MySqlDocumentRequestDao(jdbcHelper);
     }
 
     public PaymentDao paymentDao(){
-        return new MySqlPaymentDao();
+        return new MySqlPaymentDao(jdbcHelper);
+    }
+
+    private MySqlDeletedDocumentDao createDeletedDocumentDao(){
+        return new MySqlDeletedDocumentDao(jdbcHelper);
     }
 }

@@ -2,6 +2,7 @@ package org.isu_std.user.user_acc_manage.user_personal.personalmodify;
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.User;
 import org.isu_std.user.user_acc_manage.user_personal.PersonalInfoSetter;
 
@@ -11,9 +12,7 @@ public class ModifyPersonalController {
     private final ModifyPersonalContext modifyPersonalContext;
     private final PersonalInfoSetter personalInfoSetter;
 
-    public ModifyPersonalController(
-            ModifyPersonalService modifyPersonalService, User user
-    ){
+    public ModifyPersonalController(ModifyPersonalService modifyPersonalService, User user){
         this.modifyPersonalService = modifyPersonalService;
 
         this.modifyPersonalContext = modifyPersonalService.createPersonalModifierContext(
@@ -71,7 +70,7 @@ public class ModifyPersonalController {
             modifyPersonalService.saveModifiedPersonalInfo(this.modifyPersonalContext);
             modifyPersonalContext.getUserPersonalBuilder().resetValues();
             return true;
-        }catch (OperationFailedException e){
+        }catch (ServiceException | OperationFailedException e){
             Util.printException(e.getMessage());
         }
 

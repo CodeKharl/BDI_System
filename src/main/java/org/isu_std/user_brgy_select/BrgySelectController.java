@@ -2,6 +2,7 @@ package org.isu_std.user_brgy_select;
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.model_builders.BarangayBuilder;
 
 public class BrgySelectController {
@@ -23,8 +24,10 @@ public class BrgySelectController {
 
     protected int getBarangayID(){
         try {
-            return brgySelectService.getUserBarangayId(barangayBuilder.build());
-        }catch (NotFoundException e){
+            return brgySelectService.getUserBarangayId(
+                    barangayBuilder.build()
+            );
+        }catch (ServiceException | NotFoundException e){
             Util.printException(e.getMessage());
         }
 

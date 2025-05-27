@@ -3,7 +3,10 @@ package org.isu_std.user.user_check_request;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.dao.PaymentDao;
+import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
 import org.isu_std.models.User;
@@ -39,38 +42,48 @@ public class CheckRequestService {
     }
 
     protected List<DocumentRequest> getUserDocReqMap(int userId, int barangayId){
-        List<DocumentRequest> userDocReqList = documentRequestDao.getUserReqDocList(userId, barangayId);
+        try {
+            List<DocumentRequest> userDocReqList = documentRequestDao.getUserReqDocList(userId, barangayId);
 
-        if(userDocReqList.isEmpty()){
-            throw new NotFoundException("Theres no existing request found!");
+            if (userDocReqList.isEmpty()) {
+                throw new NotFoundException("Theres no existing request found!");
+            }
+
+            return userDocReqList;
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to fetch list of user requested document with user_id : " + userId);
         }
-
-        return userDocReqList;
     }
 
     protected Map<Integer, Document> getDocumentDetailMap(int barangayId, List<DocumentRequest> userDocReqList){
-        Map<Integer, Document> documentDetailList = new HashMap<>();
+        Map<Integer, Document> documentDetailMap = new HashMap<>();
 
-        userDocReqList.forEach((docReq) -> {
-            int documentId = docReq.documentId();
-            Optional<Document> optionalDocDetail = documentDao.getOptionalDocument(barangayId, documentId);
+        setDocDetailMap(documentDetailMap, userDocReqList, barangayId);
 
-            optionalDocDetail.ifPresent(
-                    (docDetail) -> documentDetailList.put(documentId, docDetail)
-            );
-        });
-
-        if(documentDetailList.isEmpty()){
+        if(documentDetailMap.isEmpty()){
             throw new NotFoundException(
                     "Theres no existing document detail for the existing request."
             );
         }
 
-        return documentDetailList;
+        return documentDetailMap;
+    }
+
+    private void setDocDetailMap(Map<Integer, Document> docDetailMap, List<DocumentRequest> userDocReqList, int barangayId){
+        userDocReqList.forEach((docReq) -> {
+            int documentId = docReq.documentId();
+            Optional<Document> optionalDocDetail = documentDao.getOptionalDocument(barangayId, documentId);
+
+            optionalDocDetail.ifPresent(
+                    (docDetail) -> docDetailMap.put(documentId, docDetail)
+            );
+        });
     }
 
     protected CheckRequestStatus createCheckRequestStatus(DocumentRequest documentRequest){
-        var checkReqStatusService = new CheckReqStatusService(documentRequestDao);
+        var checkReqStatusService = new CheckReqStatusService(this, documentRequestDao);
         var checkReqStatusController = new CheckReqStatusController(
                 checkReqStatusService, documentRequest
         );
@@ -93,11 +106,20 @@ public class CheckRequestService {
                 userDeleteReqService, requestSelectContext
         );
 
-
         return new UserDeleteRequest(userDeleteReqController);
     }
 
-    protected boolean isRequestApproved(String referenceId){
-        return documentRequestDao.isRequestApproved(referenceId);
+    public boolean isRequestApproved(String referenceId){
+        try {
+            Optional<Boolean> optionalDecision = documentRequestDao.isRequestApproved(referenceId);
+
+            return optionalDecision.orElseThrow(
+                    () -> new NotFoundException("Request status not found! Please try again!")
+            );
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to fetch request status with reference_id : " + referenceId);
+        }
     }
 }

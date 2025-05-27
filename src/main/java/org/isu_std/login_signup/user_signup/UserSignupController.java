@@ -2,7 +2,7 @@ package org.isu_std.login_signup.user_signup;
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
-import org.isu_std.user_brgy_select.BarangaySelect;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.model_builders.UserBuilder;
 
 public class UserSignupController {
@@ -28,7 +28,7 @@ public class UserSignupController {
             }
 
             return true;
-        }catch (IllegalArgumentException e){
+        }catch (ServiceException | IllegalArgumentException e){
             Util.printException(e.getMessage());
         }
 
@@ -36,8 +36,7 @@ public class UserSignupController {
     }
 
     protected boolean setBarangayId(){
-        BarangaySelect barangaySelect = userSignupService.createBrgySelection();
-        int barangayId = barangaySelect.getBarangayID();
+        int barangayId = userSignupService.getSelectedBarangayId();
 
         if(barangayId != 0){
             userBuilder.barangayId(barangayId);
@@ -51,8 +50,9 @@ public class UserSignupController {
         try{
             userSignupService.addingUser(userBuilder.build());
             Util.printMessage("The account was successfully created.");
+
             return true;
-        }catch (OperationFailedException e){
+        }catch (ServiceException | OperationFailedException e){
             Util.printException(e.getMessage());
         }
 

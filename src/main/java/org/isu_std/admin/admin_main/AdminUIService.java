@@ -16,7 +16,7 @@ public class AdminUIService {
     private final UserPersonalDao userPersonalDao;
     private final PaymentDao paymentDao;
 
-    public AdminUIService(
+    protected AdminUIService(
             DocManageDao docManageDao,
             DocumentDao documentDao,
             DocumentRequestDao documentRequestDao,
@@ -30,13 +30,13 @@ public class AdminUIService {
         this.paymentDao = paymentDao;
     }
 
-    protected ManageDocumentUI getManageDocumentUI(int barangayID){
-        ManageDocumentFactory manageDocumentFactory = new ManageDocumentFactory(
+    protected ManageDocumentUI getManageDocument(int barangayId){
+        var manageDocumentFactory = new ManageDocumentFactory(
                 docManageDao,
                 documentDao
         );
 
-        return manageDocumentFactory.createManageDocument(barangayID);
+        return manageDocumentFactory.createManageDocument(barangayId);
     }
 
     protected RequestedDocument getRequestedDocument(Barangay barangay){
@@ -47,7 +47,7 @@ public class AdminUIService {
     }
 
     protected ApprovedDocument getApprovedDocsRequest(Barangay barangay){
-        ApprovedDocumentFactory approvedDocumentFactory = new ApprovedDocumentFactory(
+        var approvedDocumentFactory = new ApprovedDocumentFactory(
                 documentRequestDao, documentDao, userPersonalDao, paymentDao
         );
 

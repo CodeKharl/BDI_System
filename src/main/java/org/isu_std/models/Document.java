@@ -17,7 +17,7 @@ public record Document(String documentName, double price, String requirements, F
     }
 
     public void printDetailsWithDocumentFile() {
-        Util.printSectionTitle("Document Information");
+        Util.printSubSectionTitle("Document Information");
         Util.printInformation("Document Name -> %s".formatted(documentName));
         Util.printInformation("Price -> %.2f".formatted(price));
         Util.printInformation("Requirements -> %s".formatted(requirements));

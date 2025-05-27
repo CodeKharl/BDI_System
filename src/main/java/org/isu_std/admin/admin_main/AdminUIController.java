@@ -1,7 +1,6 @@
 package org.isu_std.admin.admin_main;
 
 import org.isu_std.client_context.AdminContext;
-import org.isu_std.models.Admin;
 import org.isu_std.models.Barangay;
 
 public class AdminUIController {
@@ -35,9 +34,9 @@ public class AdminUIController {
             case 2 -> adminUIService.getApprovedDocsRequest(barangay)
                     .approvedDocView();
 
-            case 3 -> adminUIService.getManageDocumentUI(
-                    adminContext.getAdmin().barangayId()
-                    ).manageMenu();
+            case 3 -> adminUIService
+                    .getManageDocument(adminContext.getAdmin().barangayId())
+                    .manageMenu();
 
             case 4 -> {}
         };

@@ -12,7 +12,7 @@ public class AdminBrgyAccFactory {
     }
 
     public AdminBrgyAccUI createAdminBrgyAcc(AdminContext adminContext){
-        AdminBrgyService adminBrgyService = new AdminBrgyService(
+        var adminBrgyService = new AdminBrgyService(
                 daoFactory.createBrgyDao(),
                 daoFactory.createAdminDao(),
                 daoFactory.getDocManageDao(),
@@ -22,7 +22,7 @@ public class AdminBrgyAccFactory {
                 daoFactory.paymentDao()
         );
 
-        AdminBrgyAccController adminBrgyAccController = new AdminBrgyAccController(
+        var adminBrgyAccController = new AdminBrgyAccController(
                 adminContext, adminBrgyService
         );
 

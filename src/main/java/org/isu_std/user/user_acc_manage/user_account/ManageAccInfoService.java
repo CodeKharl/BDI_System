@@ -2,7 +2,10 @@ package org.isu_std.user.user_acc_manage.user_account;
 
 import org.isu_std.client_context.UserContext;
 import org.isu_std.dao.UserDao;
+import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.io.dynamic_enum_handler.EnumValueProvider;
 import org.isu_std.models.User;
 import org.isu_std.models.model_builders.BuilderFactory;
@@ -62,10 +65,16 @@ public class ManageAccInfoService {
     }
 
     protected void updateUserPerform(String chosenDetail, User user) throws OperationFailedException{
-        if(!userDao.updateUserInfo(chosenDetail, user)){
-            throw new OperationFailedException(
-                    "Failed to update account info! Please try again."
-            );
+        try {
+            if (!userDao.updateUserInfo(chosenDetail, user)) {
+                throw new OperationFailedException(
+                        "Failed to update account info! Please try again."
+                );
+            }
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to update user by %s".formatted(chosenDetail));
         }
     }
 }

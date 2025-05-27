@@ -16,7 +16,7 @@ public class ModifyingDocController {
     public ModifyingDocController(ModifyingDocService modifyingDocService, int barangayId){
         this.modifyingDocService = modifyingDocService;
         this.document_info = modifyingDocService.getDocumentArrInfo();
-        this.modifyDocumentContext = modifyingDocService.createModDocModel(barangayId);
+        this.modifyDocumentContext = modifyingDocService.createModDocContext(barangayId);
     }
 
     protected final boolean setValidDocumentId(){
@@ -131,7 +131,7 @@ public class ModifyingDocController {
         return false;
     }
 
-    public final void modifyProcess(){
+    protected final void modifyProcess(){
         try{
             if(modifyingDocService.isDocumentFileModify(modifyDocumentContext)){
                modifyingDocService.deletePrevDocFile(modifyDocumentContext);
@@ -143,6 +143,8 @@ public class ModifyingDocController {
         }catch (OperationFailedException | ServiceException e){
             Util.printException(e.getMessage());
         }
+
+        modifyDocumentContext.getDocumentBuilder().resetValues();
     }
 
     protected void printDocDetail(){

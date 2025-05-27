@@ -15,7 +15,7 @@ public class FileChooser {
     private FileChooser(){}
 
     public static Optional<File> getOptionalDocFile(String fileType){
-        JFileChooser jFileChooser = new JFileChooser();
+        var jFileChooser = new JFileChooser();
         jFileChooser.setDialogTitle("Select the %s file".formatted(fileType));
 
         JDialog jDialog = new JDialog();
@@ -28,11 +28,7 @@ public class FileChooser {
         return Optional.empty();
     }
 
-    public static void openFile(File file){
-        try {
-            Desktop.getDesktop().open(file);
-        }catch (IOException e){
-            Util.printException(e.getMessage());
-        }
+    public static void openFile(File file) throws IOException{
+        Desktop.getDesktop().open(file);
     }
 }

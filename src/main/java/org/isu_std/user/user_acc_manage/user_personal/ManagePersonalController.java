@@ -2,6 +2,7 @@ package org.isu_std.user.user_acc_manage.user_personal;
 
 import org.isu_std.client_context.UserContext;
 import org.isu_std.io.custom_exception.NotFoundException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
 import org.isu_std.io.Util;
@@ -21,8 +22,9 @@ public class ManagePersonalController {
         try{
             int userId = userContext.getUser().userId();
             this.userPersonal = managePersonalService.getUserPersonal(userId);
+
             return true;
-        }catch (NotFoundException e){
+        }catch (ServiceException | NotFoundException e){
             Util.printException(e.getMessage());
         }
 

@@ -10,8 +10,6 @@ import org.isu_std.io.Validation;
 import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.custom_exception.ServiceException;
-import org.isu_std.io.file_setup.FileChooser;
-import org.isu_std.io.file_setup.DocxFileManager;
 import org.isu_std.models.model_builders.BuilderFactory;
 
 import java.io.File;
@@ -31,7 +29,7 @@ public class ModifyingDocService {
         this.validDocIDProvider = validDocIDProvider;
     }
 
-    protected ModifyDocumentContext createModDocModel(int barangayID){
+    protected ModifyDocumentContext createModDocContext(int barangayID){
         return new ModifyDocumentContext(barangayID, BuilderFactory.createDocumentBuilder());
     }
 
@@ -93,10 +91,6 @@ public class ModifyingDocService {
                     "There some problem on getting document file, Please take some and try again"
             );
         }
-    }
-
-    protected void openDocumentFile(File file){
-        FileChooser.openFile(file);
     }
 
     protected boolean isDocumentFileModify(ModifyDocumentContext modifyDocumentContext){

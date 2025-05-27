@@ -2,8 +2,11 @@ package org.isu_std.user.user_acc_manage.user_barangay;
 
 import org.isu_std.dao.BarangayDao;
 import org.isu_std.dao.UserDao;
+import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.Barangay;
 import org.isu_std.models.User;
 import org.isu_std.models.model_builders.BarangayBuilder;
@@ -11,6 +14,7 @@ import org.isu_std.models.model_builders.BuilderFactory;
 import org.isu_std.user_brgy_select.BarangaySelect;
 import org.isu_std.user_brgy_select.BrgySelectFactory;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public class ManageBarangayService {
@@ -31,18 +35,30 @@ public class ManageBarangayService {
     }
 
     protected Barangay getBarangay(int barangayId){
-        Optional<Barangay> optionalBarangay = barangayDao.findOptionalBarangay(barangayId);
+        try {
+            Optional<Barangay> optionalBarangay = barangayDao.findOptionalBarangay(barangayId);
 
-        return optionalBarangay.orElseThrow(
-            () -> new NotFoundException("Barangay Information not found!")
-        );
+            return optionalBarangay.orElseThrow(
+                    () -> new NotFoundException("Barangay Information not found!")
+            );
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to fetch barangay by barangay_id : " + barangayId);
+        }
     }
 
-    protected void changeBrgyPerform(User newUser) throws OperationFailedException{
-        if(!userDao.updateUserBarangay(newUser)){
-            throw new OperationFailedException(
-                    "Failed to change your barangay! Please try again."
-            );
+    protected void updateBrgyPerform(User newUser) throws OperationFailedException{
+        try {
+            if (!userDao.updateUserBarangay(newUser)) {
+                throw new OperationFailedException(
+                        "Failed to change your barangay! Please try again."
+                );
+            }
+        }catch (ServiceException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to update barangay with barangay_id : " + newUser.barangayId());
         }
     }
 

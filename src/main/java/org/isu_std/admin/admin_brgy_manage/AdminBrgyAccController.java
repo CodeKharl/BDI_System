@@ -4,7 +4,6 @@ import org.isu_std.client_context.AdminContext;
 import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
-import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.custom_exception.ServiceException;
 
 public class AdminBrgyAccController {
@@ -42,7 +41,7 @@ public class AdminBrgyAccController {
 
     protected void launchAdminUI(){
         try {
-            adminBrgyService.getAdminUi(adminContext).adminMenu();
+            adminBrgyService.getAdminUI(adminContext).adminMenu();
         }catch (NotFoundException | ServiceException e){
             Util.printException(e.getMessage());
         }

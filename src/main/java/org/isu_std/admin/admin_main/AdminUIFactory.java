@@ -12,7 +12,7 @@ public class AdminUIFactory {
     private final UserPersonalDao userPersonalDao;
     private final PaymentDao paymentDao;
 
-    private AdminUIFactory(
+    public AdminUIFactory(
             DocManageDao docManageDao,
             DocumentDao documentDao,
             DocumentRequestDao documentRequestDao,
@@ -26,33 +26,17 @@ public class AdminUIFactory {
         this.paymentDao = paymentDao;
     }
 
-    private static class Holder{
-        private static AdminUIFactory instance;
-    }
-
-    public static AdminUIFactory getInstance(
-            DocManageDao docManageDao,
-            DocumentDao documentDao,
-            DocumentRequestDao documentRequestDao,
-            UserPersonalDao userPersonalDao,
-            PaymentDao paymentDao
-    ){
-        if(Holder.instance == null){
-            Holder.instance = new AdminUIFactory(
-                    docManageDao,
-                    documentDao,
-                    documentRequestDao,
-                    userPersonalDao,
-                    paymentDao
-            );
-        }
-
-        return Holder.instance;
-    }
-
     public AdminUI createAdmin(AdminContext adminContext, Barangay barangay){
-        AdminUIController adminUIController = new AdminUIController(
-                new AdminUIService(docManageDao, documentDao, documentRequestDao, userPersonalDao, paymentDao),
+        var adminUIService = new AdminUIService(
+                docManageDao,
+                documentDao,
+                documentRequestDao,
+                userPersonalDao,
+                paymentDao
+        );
+
+        var adminUIController = new AdminUIController(
+                adminUIService,
                 adminContext,
                 barangay
         );

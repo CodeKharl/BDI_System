@@ -4,6 +4,7 @@ import org.isu_std.client_context.UserContext;
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.DocumentRequest;
 import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
@@ -38,7 +39,7 @@ public class UserDocRequestController {
             userInfoContext.setUserPersonal(userPersonal);
 
             return true;
-        }catch (NotFoundException e){
+        }catch (ServiceException | NotFoundException e){
             Util.printException(e.getMessage());
         }
 
@@ -51,7 +52,7 @@ public class UserDocRequestController {
                     .createUserReqModel(userInfoContext.getUser().barangayId());
 
             return true;
-        } catch (NotFoundException e){
+        } catch (ServiceException | NotFoundException e){
             Util.printException(e.getMessage());
         }
 
@@ -61,7 +62,7 @@ public class UserDocRequestController {
     protected void printAvailableDocs(){
         Util.printMessage("Available Documents : Document Name - Price - Requirements");
 
-        AtomicInteger count = new AtomicInteger();
+        var count = new AtomicInteger();
         docInfoContext.getBarangayDocumentsMap()
                 .forEach((_,document) -> {
                     Util.printChoice(
@@ -84,19 +85,6 @@ public class UserDocRequestController {
 
     protected String getDocumentName(){
         return docRequestContext.getDocument().documentName();
-    }
-
-    protected boolean isDocumentChoiceAccepted(int choice){
-        try{
-            int brgyDocMapLength = docInfoContext.getBarangayDocumentsMap().size();
-            userDocRequestService.checkDocumentChoice(brgyDocMapLength, choice);
-
-            return true;
-        }catch (IllegalArgumentException e){
-            Util.printException(e.getMessage());
-        }
-
-        return false;
     }
 
     protected boolean setDocUserRequirements(){
@@ -140,13 +128,31 @@ public class UserDocRequestController {
                     docRequestContext.getDocRequirementFiles()
             );
 
-            userDocRequestService.checkDocRequestIfUnique(documentRequest);
-            userDocRequestService.addDocumentRequest(documentRequest);
-            return true;
-        }catch (OperationFailedException | IllegalArgumentException e){
+            if(isRequestValid(documentRequest)){
+                userDocRequestService.addDocumentRequest(documentRequest);
+
+                return true;
+            }
+        }catch (ServiceException | OperationFailedException e){
             Util.printException(e.getMessage());
         }
 
         return false;
+    }
+
+    private boolean isRequestValid(DocumentRequest documentRequest){
+        try {
+            userDocRequestService.checkDocRequestIfUnique(documentRequest);
+
+            return true;
+        }catch (IllegalArgumentException | NotFoundException e){
+            Util.printException(e.getMessage());
+        }
+
+        return false;
+    }
+
+    protected int getBrgyDocsMapSize(){
+        return docInfoContext.getBarangayDocumentsMap().size();
     }
 }

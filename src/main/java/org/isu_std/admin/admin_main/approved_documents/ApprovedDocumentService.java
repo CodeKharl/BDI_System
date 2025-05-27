@@ -12,9 +12,11 @@ import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.DocumentRequestDao;
 import org.isu_std.dao.PaymentDao;
 import org.isu_std.dao.UserPersonalDao;
-import org.isu_std.doc_output_file_provider.DocOutFileManager;
+import org.isu_std.doc_output_file_manager.DocOutFileManager;
+import org.isu_std.io.SystemLogger;
+import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.NotFoundException;
-import org.isu_std.io.custom_exception.OperationFailedException;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.io.file_setup.FileChooser;
 import org.isu_std.models.Document;
 import org.isu_std.models.DocumentRequest;
@@ -22,6 +24,7 @@ import org.isu_std.models.Payment;
 import org.isu_std.models.UserPersonal;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class ApprovedDocumentService {
@@ -30,7 +33,12 @@ public class ApprovedDocumentService {
     private final UserPersonalDao userPersonalDao;
     private final PaymentDao paymentDao;
 
-    protected ApprovedDocumentService(DocumentRequestDao documentRequestDao, DocumentDao documentDao, UserPersonalDao userPersonalDao, PaymentDao paymentDao){
+    protected ApprovedDocumentService(
+            DocumentRequestDao documentRequestDao,
+            DocumentDao documentDao,
+            UserPersonalDao userPersonalDao,
+            PaymentDao paymentDao
+    ){
         this.documentRequestDao = documentRequestDao;
         this.documentDao = documentDao;
         this.userPersonalDao = userPersonalDao;
@@ -38,43 +46,56 @@ public class ApprovedDocumentService {
     }
 
     protected List<DocumentRequest> getApproveDocList(int barangayId){
-        List<DocumentRequest> approvedDodList = documentRequestDao.getApprovedDocList(barangayId);
+        try {
+            List<DocumentRequest> approvedDodList = documentRequestDao.getApprovedDocList(barangayId);
 
-        if(approvedDodList.isEmpty()){
-            throw new NotFoundException("Theres no existing approved request!");
+            if (approvedDodList.isEmpty()) {
+                throw new NotFoundException("Theres no existing approved request!");
+            }
+
+            return approvedDodList;
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to fetch approved document list by barangay_id : " + barangayId);
         }
-
-        return approvedDodList;
     }
 
-    protected RequestDocumentContext getRequestDocContext(DocumentRequest documentRequest)
-            throws OperationFailedException {
+    protected RequestDocumentContext getRequestDocContext(DocumentRequest documentRequest){
         var reqDocsManagerBuilder = new ReqDocsManagerBuilder(documentRequest);
+
+        try {
+            setReqDocsManagerBuilder(reqDocsManagerBuilder, documentRequest);
+
+            return reqDocsManagerBuilder.build();
+        }catch (NotFoundException | DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to fetch approved request information");
+        }
+    }
+
+    private void setReqDocsManagerBuilder(
+            ReqDocsManagerBuilder reqDocsManagerBuilder,
+            DocumentRequest documentRequest
+    ){
         var reqDocsManagerProvider = new ReqDocsManagerProvider(
                 userPersonalDao, documentDao, paymentDao
         );
 
-        try {
-            UserPersonal userPersonal = reqDocsManagerProvider
-                    .getUserPersonal(documentRequest.userId());
+        UserPersonal userPersonal = reqDocsManagerProvider
+                .getUserPersonal(documentRequest.userId());
 
-            Document document = reqDocsManagerProvider
-                    .getDocument(documentRequest.barangayId(), documentRequest.documentId());
+        Document document = reqDocsManagerProvider
+                .getDocument(documentRequest.barangayId(), documentRequest.documentId());
 
-            Payment payment = reqDocsManagerProvider
-                    .getPayment(documentRequest.referenceId());
+        Payment payment = reqDocsManagerProvider
+                .getPayment(documentRequest.referenceId());
 
-            reqDocsManagerBuilder
-                    .userPersonal(userPersonal)
-                    .document(document)
-                    .payment(payment);
-
-            return reqDocsManagerBuilder.build();
-        }catch (NotFoundException e){
-            throw new OperationFailedException(
-                    "Failed to get the approved request information", e
-            );
-        }
+        reqDocsManagerBuilder
+                .userPersonal(userPersonal)
+                .document(document)
+                .payment(payment);
     }
 
     protected RequirementFilesView getReqFilesView(List<File> requirementFiles){
@@ -85,7 +106,7 @@ public class ApprovedDocumentService {
         String outputDocFilePathName = DocOutFileManager
                 .getOutputDocFilePathName(requestDocumentContext);
 
-        File outputFile = new File(outputDocFilePathName);
+        var outputFile = new File(outputDocFilePathName);
 
         if(outputFile.exists()){
             return outputFile;
@@ -103,8 +124,8 @@ public class ApprovedDocumentService {
     }
 
     protected ApprovedDocExport createApprovedDocExport(RequestDocumentContext requestDocumentContext, File outputDocumentFile){
-        ApprovedDocExportService approvedDocExportService = new ApprovedDocExportService(documentRequestDao);
-        ApprovedDocExportController approvedDocExportController = new ApprovedDocExportController(
+        var approvedDocExportService = new ApprovedDocExportService(documentRequestDao);
+        var approvedDocExportController = new ApprovedDocExportController(
                 approvedDocExportService, requestDocumentContext, outputDocumentFile
         );
 
@@ -112,6 +133,12 @@ public class ApprovedDocumentService {
     }
 
     protected void openDocFile(File file){
-        FileChooser.openFile(file);
+        try {
+            FileChooser.openFile(file);
+        }catch (IOException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to open document file : " + file.getName());
+        }
     }
 }

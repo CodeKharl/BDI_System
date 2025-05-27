@@ -29,7 +29,6 @@ public class UserDocumentRequest implements UserProcess {
     }
 
     private void documentProcess(){
-        userDocRequestController.printAvailableDocs();
         if(!setDocument()){
             return;
         }
@@ -46,20 +45,18 @@ public class UserDocumentRequest implements UserProcess {
     }
 
     private boolean setDocument() {
-        while(true){
-            int choice = SystemInput.getIntInput(
-                    "Enter choice (%d == cancel) : ".formatted(ChoiceCollection.EXIT_INT_CODE.getIntValue())
-            );
+        int cancellationValue = userDocRequestController.getBrgyDocsMapSize() + 1;
 
-            if (choice == ChoiceCollection.EXIT_INT_CODE.getIntValue()) {
-                return false;
-            }
+        userDocRequestController.printAvailableDocs();
+        Util.printChoice("%d. cancel".formatted(cancellationValue));
 
-            if(userDocRequestController.isDocumentChoiceAccepted(choice)){
-                userDocRequestController.setChoiceDocument(choice);
-                break;
-            }
+        int choice = SystemInput.getIntInput("Enter choice : ");
+
+        if (choice == cancellationValue) {
+            return false;
         }
+
+        userDocRequestController.setChoiceDocument(choice);
 
         return isSelectedDocConfirm();
     }

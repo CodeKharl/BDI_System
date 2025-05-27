@@ -1,4 +1,4 @@
-package org.isu_std.doc_output_file_provider;
+package org.isu_std.doc_output_file_manager;
 
 import org.isu_std.admin.admin_main.RequestDocumentContext;
 import org.isu_std.io.Util;

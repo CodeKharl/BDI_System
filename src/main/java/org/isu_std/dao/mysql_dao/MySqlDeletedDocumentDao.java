@@ -9,13 +9,15 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
-// Class that handles the deleted documents.
-// Doesn't need to create object. Functional programming was used in this class.
+/**
+ * Class that handles the deleted documents.
+ * Doesn't need to create object. Functional programming was used in this class.
+ */
 
 public class MySqlDeletedDocumentDao {
     private final JDBCHelper jdbcHelper;
 
-    protected MySqlDeletedDocumentDao(JDBCHelper jdbcHelper){
+    public MySqlDeletedDocumentDao(JDBCHelper jdbcHelper){
         this.jdbcHelper = jdbcHelper;
     }
 
@@ -42,6 +44,21 @@ public class MySqlDeletedDocumentDao {
     private boolean deleteStoredDocumentId(int barangayId, int documentId) throws SQLException, IOException{
         // Delete the stored document id once it used.
         String query = "DELETE FROM deleted_documents WHERE barangay_id = ? AND document_id = ?";
+
         return jdbcHelper.executeUpdate(query, barangayId, documentId) == 1;
+    }
+
+    /**
+     * Delete and return a stored Document ID.
+     * @param barangayId of a Barangay.
+     * @return a stored Document ID.
+     */
+    protected Optional<Integer> getAndDeleteStoredDocId(int barangayId) throws SQLException, IOException{
+        Optional<Integer> storedDocId = findStoredDocumentId(barangayId);
+
+        boolean isProcessSuccess = storedDocId.isPresent() &&
+                deleteStoredDocumentId(barangayId, storedDocId.get());
+
+        return isProcessSuccess ? storedDocId : Optional.empty();
     }
 }

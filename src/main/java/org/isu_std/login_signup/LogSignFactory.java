@@ -31,34 +31,42 @@ public final class LogSignFactory {
     }
 
     public Login createLoginInsType(int type, AdminContext adminContext, UserContext userContext){
-        if(type == ClientManager.ADMIN_VAL){
-            var adminLoginService = new AdminLoginService(adminDao);
-            var adminLoginController = new AdminLoginController(adminLoginService, adminContext);
+        return switch (type){
+            case ClientManager.ADMIN_VAL -> {
+                var adminLoginService = new AdminLoginService(adminDao);
+                var adminLoginController = new AdminLoginController(adminLoginService, adminContext);
 
-            return new AdminLogin(adminLoginController);
-        } else if(type == ClientManager.USER_VAL){
-            var userLoginService = new UserLoginService(userDao);
-            var userLoginController = new UserLoginController(userLoginService, userContext);
+                yield  new AdminLogin(adminLoginController);
+            }
 
-            return new UserLogin(userLoginController);
-        }
+            case ClientManager.USER_VAL -> {
+                var userLoginService = new UserLoginService(userDao);
+                var userLoginController = new UserLoginController(userLoginService, userContext);
 
-        throw new IllegalStateException("Unexpected Value : " + type);
+                yield new UserLogin(userLoginController);
+            }
+
+            default -> throw new IllegalStateException("Unexpected Value : " + type);
+        };
     }
 
     public Signup createSignupInsType(int type){
-        if(type == ClientManager.ADMIN_VAL){
-            var adminSignupService = new AdminSignupService(adminDao);
-            var adminLoginController = new AdminSignupController(adminSignupService);
+        return switch (type){
+            case ClientManager.ADMIN_VAL -> {
+                var adminSignupService = new AdminSignupService(adminDao);
+                var adminLoginController = new AdminSignupController(adminSignupService);
 
-            return new AdminSignup(adminLoginController);
-        } else if(type == ClientManager.USER_VAL){
-            var userSignupService = new UserSignupService(userDao, barangayDao);
-            var userSignupController = new UserSignupController(userSignupService);
+                yield  new AdminSignup(adminLoginController);
+            }
 
-            return new UserSignup(userSignupController);
-        }
+            case ClientManager.USER_VAL -> {
+                var userSignupService = new UserSignupService(userDao, barangayDao);
+                var userSignupController = new UserSignupController(userSignupService);
 
-        throw new IllegalStateException("Unexpected Value : " + type);
+                yield new UserSignup(userSignupController);
+            }
+
+            default -> throw new IllegalStateException("Unexpected Value : " + type);
+        };
     }
 }

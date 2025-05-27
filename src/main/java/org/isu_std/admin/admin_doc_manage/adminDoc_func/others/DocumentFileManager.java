@@ -1,6 +1,6 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.others;
 
-import org.isu_std.doc_output_file_provider.DocOutFileContext;
+import org.isu_std.doc_output_file_manager.DocOutFileContext;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 import org.isu_std.io.collections_enum.ChoiceCollection;

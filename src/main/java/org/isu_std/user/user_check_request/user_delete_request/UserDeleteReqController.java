@@ -2,7 +2,7 @@ package org.isu_std.user.user_check_request.user_delete_request;
 
 import org.isu_std.io.Util;
 import org.isu_std.io.custom_exception.OperationFailedException;
-import org.isu_std.models.DocumentRequest;
+import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.user.user_check_request.RequestSelectContext;
 
 public class UserDeleteReqController {
@@ -14,11 +14,11 @@ public class UserDeleteReqController {
         this.requestSelectContext = requestSelectContext;
     }
 
-    protected boolean requestCancellationProcess(){
+    protected boolean isRequestCancellationSuccess(){
         try{
             userDeleteReqService.deleteRequestPerform(requestSelectContext);
             return true;
-        }catch (OperationFailedException e){
+        }catch (ServiceException | OperationFailedException e){
             Util.printException(e.getMessage());
         }
 

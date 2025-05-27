@@ -63,13 +63,13 @@ public final class Util{
         System.out.printf("%s%s", symbols.getType(), str);
     }
 
-    public static void printChoices(String[] contents){
+    public static <T> void printChoices(T[] contents){
         for(int i = 0; i < contents.length; i++){
             Util.printChoice("%d. %s".formatted(i + 1, contents[i]));
         }
     }
 
-    public static <T> void printInformation(String format, T[] types, String[] labels, String title){
+    public static <T, L> void printInformation(String format, T[] types, L[] labels, String title){
         Util.printSectionTitle(title);
 
         for (int i = 0; i < types.length; i++) {

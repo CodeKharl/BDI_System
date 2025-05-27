@@ -9,13 +9,14 @@ import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.folder_setup.FolderManager;
 import org.isu_std.io.folder_setup.FolderConfig;
 import org.isu_std.models.Document;
+import org.isu_std.models.model_builders.BarangayBuilder;
+import org.isu_std.models.model_builders.DocumentBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-
 
 public class MySqlDocumentDao implements DocManageDao, DocumentDao{
     private final JDBCHelper jdbcHelper;
@@ -33,7 +34,7 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
                 "VALUES(?, ?, ?, ?, ?, ?, ?)";
 
         try{
-            int rowsAffected = jdbcHelper.executeUpdate(
+            int rowsAffected = jdbcHelper.executeUpdateWithFiles(
                     query,
                     barangayId,
                     getDocumentId(barangayId),
@@ -52,16 +53,16 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
 
     private int getDocumentId(int barangayId) throws SQLException, IOException{
         // Checks first if there's a stored document id.
-        Optional<Integer> storedDocumentId = mySqlDeletedDocumentDao.findStoredDocumentId(barangayId);
+        Optional<Integer> storedDocumentId = mySqlDeletedDocumentDao.getAndDeleteStoredDocId(barangayId);
 
         // empty indicates that there's no stored id.
-
         return storedDocumentId.orElse(getCreatedDocumentId(barangayId));
     }
 
     private int getCreatedDocumentId(int barangayId) throws SQLException, IOException{
         // Default value = barangayId;
-        StringBuilder strDocIdBuilder = new StringBuilder();
+        var strDocIdBuilder = new StringBuilder();
+
         strDocIdBuilder
                 .append(barangayId)
                 .append(0);
@@ -100,34 +101,57 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
         try{
             //If the document file is modify
             File documentFile = modifyDocumentContext.getDocumentBuilder().getDocumentFile();
+
             if(documentFile != null){
                 return updateDocumentFile(modifyDocumentContext);
             }
 
             //Rest of Information
-            return modifyDocumentInfo(modifyDocumentContext);
+            return updateDocumentInfo(modifyDocumentContext);
         }catch (SQLException | IOException e){
             throw new DataAccessException(e.getMessage(), e);
         }
     }
 
-    private boolean modifyDocumentInfo(ModifyDocumentContext modifyDocumentContext)
+    private boolean updateDocumentInfo(ModifyDocumentContext modifyDocumentContext)
             throws SQLException, IOException {
         String query = "UPDATE document SET %s = ? WHERE barangay_id = ? AND document_id = ?"
                 .formatted(modifyDocumentContext.getDocumentDetail());
-
-        Document document = modifyDocumentContext.getDocumentBuilder().build();
+        Object infoValue = getChosenDocumentInfo(modifyDocumentContext);
 
         int rowsAffected = jdbcHelper.executeUpdate(
                 query,
-                document.documentName(),
-                document.price(),
-                document.requirements(),
+                infoValue,
                 modifyDocumentContext.getBarangayId(),
                 modifyDocumentContext.getDocumentId()
         );
 
         return rowsAffected == 1;
+    }
+
+    private Object getChosenDocumentInfo(ModifyDocumentContext modifyDocumentContext){
+        Object[] infoValues = modifyDocumentContext
+                .getDocumentBuilder().getValues();
+
+        for (Object value : infoValues){
+            if(isDocValueExist(value)){
+                return value;
+            }
+        }
+
+        throw new NullPointerException("Document Builder has no values");
+    }
+
+    private boolean isDocValueExist(Object value){
+        if(value == null || value instanceof File){
+            return false;
+        }
+
+        if(value instanceof Double dobVal){
+            return dobVal > 0;
+        }
+
+        return !value.toString().isBlank();
     }
 
     private boolean updateDocumentFile(ModifyDocumentContext modifyDocumentContext) throws SQLException, IOException{
@@ -136,7 +160,7 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
 
         File docFile = modifyDocumentContext.getDocumentBuilder().getDocumentFile();
 
-        int rowsAffected = jdbcHelper.executeUpdate(
+        int rowsAffected = jdbcHelper.executeUpdateWithFiles(
                 query,
                 docFile.getName(),
                 docFile,
@@ -170,7 +194,7 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
             throws SQLException, IOException{
         Map<Integer, Document> documentMap = new HashMap<>();
 
-        while(resultSet.next()){
+        do {
             int documentId = resultSet.getInt(1);
             Document document = new Document(
                     resultSet.getString(2),
@@ -183,7 +207,7 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
             );
 
             documentMap.put(documentId, document);
-        }
+        }while (resultSet.next());
 
         return documentMap;
     }
@@ -238,6 +262,7 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
         try{
             if(!mySqlDeletedDocumentDao.storeDocumentId(barangayId, documentId)){
                 SystemLogger.logWarning(MySqlDocumentDao.class, "Failed to store the documentID");
+
                 return false;
             }
 
