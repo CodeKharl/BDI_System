@@ -1,6 +1,6 @@
 package org.isu_std.admin.admin_doc_manage.adminDoc_func.add;
 
-import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentFileManager;
+import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.doc_file_deletion.DocumentFileManager;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentConfig;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentManageCodes;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.RequirementProvider;
@@ -32,18 +32,6 @@ public class AddingDocService {
 
     protected DocumentBuilder getDocumentBuilder(){
         return BuilderFactory.createDocumentBuilder();
-    }
-
-    protected void addPerform(int barangayId, Document document) throws OperationFailedException{
-        try {
-            if (!docManageDao.addDocument(barangayId, document)) {
-                throw new OperationFailedException("Failed to add the document! Please try again.");
-            }
-        }catch (DataAccessException e){
-            SystemLogger.log(e.getMessage(), e);
-
-            throw new ServiceException("Failed to insert document : " + document);
-        }
     }
 
     protected void checkedDocName(String documentName) {
@@ -79,6 +67,18 @@ public class AddingDocService {
             throw new ServiceException(
                     "There some problem on getting your document file! Please try again some time"
             );
+        }
+    }
+
+    protected void addPerform(int barangayId, Document document){
+        try {
+            if (!docManageDao.addDocument(barangayId, document)) {
+                throw new OperationFailedException("Failed to add the document! Please try again.");
+            }
+        }catch (DataAccessException e){
+            SystemLogger.log(e.getMessage(), e);
+
+            throw new ServiceException("Failed to insert document : " + document);
         }
     }
 }

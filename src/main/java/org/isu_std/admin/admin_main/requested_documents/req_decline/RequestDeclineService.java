@@ -16,7 +16,7 @@ public class RequestDeclineService {
         this.documentRequestDao = documentRequestDao;
     }
 
-    protected void deleteRequestPerformed(DocumentRequest documentRequest) throws OperationFailedException{
+    protected void deleteRequestPerformed(DocumentRequest documentRequest){
         try {
             String referenceId = documentRequest.referenceId();
 

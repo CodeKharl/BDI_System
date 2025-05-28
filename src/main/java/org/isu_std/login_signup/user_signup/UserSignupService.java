@@ -36,7 +36,7 @@ public class UserSignupService{
         return UserInfoManager.getUserDetailWithSpecs();
     }
 
-    protected void addingUser(User user) throws OperationFailedException{
+    protected void addingUser(User user){
         try {
             if (!userDao.addUser(user)) {
                 throw new OperationFailedException(

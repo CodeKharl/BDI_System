@@ -2,6 +2,9 @@ package org.isu_std.admin.admin_doc_manage.adminDoc_func.modify;
 
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.*;
 import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.doc_Id_Validation.ValidDocIDProvider;
+import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.doc_file_deletion.DocFileDeletionFactory;
+import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.doc_file_deletion.DocumentFileDeletion;
+import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.doc_file_deletion.DocumentFileManager;
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.io.SystemLogger;

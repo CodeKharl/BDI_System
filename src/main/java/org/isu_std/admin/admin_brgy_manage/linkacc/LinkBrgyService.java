@@ -61,7 +61,7 @@ public class LinkBrgyService {
         }
     }
 
-    protected void setAdminBarangayId(int barangayId, int adminId) throws OperationFailedException {
+    protected void setAdminBarangayId(int barangayId, int adminId){
         try {
             if (!adminDao.updateAdminBrgyId(barangayId, adminId)) {
                 throw new OperationFailedException(

@@ -36,6 +36,7 @@ public class ManagePersonalService {
     protected UserPersonal getUserPersonal(int userId){
         try {
             Optional<UserPersonal> userPersonal = userPersonalDao.getOptionalUserPersonal(userId);
+
             return userPersonal.orElseThrow(
                     () -> new NotFoundException("Theres no existing personal information of your account.")
             );
@@ -157,6 +158,7 @@ public class ManagePersonalService {
 
     public void checkPhoneNum(String phoneNumber){
         String phoneNumFormat = EnumValueProvider.getStringValue(PersonalInfoConfig.PHONE_NUMBER_FORMAT.getValue());
+
         if(phoneNumber.matches(phoneNumFormat)){
             return;
         }

@@ -60,8 +60,7 @@ public class ApprovedDocExportService {
         }
     }
 
-    protected void deleteApprovedReqPerform(RequestDocumentContext requestDocumentContext)
-            throws OperationFailedException{
+    protected void deleteApprovedReqPerform(RequestDocumentContext requestDocumentContext) {
         String referenceId = requestDocumentContext.documentRequest().referenceId();
 
         try {

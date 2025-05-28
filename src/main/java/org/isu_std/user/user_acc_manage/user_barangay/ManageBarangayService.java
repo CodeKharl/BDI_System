@@ -48,7 +48,7 @@ public class ManageBarangayService {
         }
     }
 
-    protected void updateBrgyPerform(User newUser) throws OperationFailedException{
+    protected void updateBrgyPerform(User newUser){
         try {
             if (!userDao.updateUserBarangay(newUser)) {
                 throw new OperationFailedException(

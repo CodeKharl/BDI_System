@@ -52,7 +52,7 @@ public class PaymentManageService {
         return DateTime.localDateTimeStr(dateTimeFormatter);
     }
 
-    protected void addPaymentPerformed(String referenceId, Payment payment) throws OperationFailedException{
+    protected void addPaymentPerformed(String referenceId, Payment payment){
         try {
             if (!paymentDao.addPayment(referenceId, payment)) {
                 throw new OperationFailedException(

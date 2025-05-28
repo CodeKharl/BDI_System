@@ -1,4 +1,4 @@
-package org.isu_std.admin.admin_doc_manage.adminDoc_func.others;
+package org.isu_std.admin.admin_doc_manage.adminDoc_func.others.doc_file_deletion;
 
 import org.isu_std.dao.DocumentDao;
 

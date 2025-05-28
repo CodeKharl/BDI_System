@@ -37,12 +37,14 @@ public class UserManageAccService {
     private ManagePersonal createManagePersonal(UserContext userContext){
         var managePersonalService = new ManagePersonalService(userPersonalDao);
         var managePersonalController = new ManagePersonalController(managePersonalService, userContext);
+
         return new ManagePersonal(managePersonalController);
     }
 
     private ManageAccountInfo createManageAccountInfo(UserContext userContext){
         var manageAccountInfoService = new ManageAccInfoService(userDao);
         var manageAccountInfoController = new ManageAccInfoController(manageAccountInfoService, userContext);
+
         return new ManageAccountInfo(manageAccountInfoController);
     }
 

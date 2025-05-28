@@ -137,7 +137,7 @@ public class UserDocRequestService {
         }
     }
 
-    protected void addDocumentRequest(DocumentRequest documentRequest) throws OperationFailedException{
+    protected void addDocumentRequest(DocumentRequest documentRequest){
         try {
             if (!documentRequestDao.addDocRequest(documentRequest)) {
                 throw new OperationFailedException(

@@ -17,8 +17,7 @@ public class RequestApproveService {
         this.documentRequestDao = documentRequestDao;
     }
 
-    protected void requestApprovePerformed(RequestDocumentContext requestDocumentContext)
-            throws OperationFailedException{
+    protected void requestApprovePerformed(RequestDocumentContext requestDocumentContext){
         String referenceId = requestDocumentContext
                 .documentRequest()
                 .referenceId();

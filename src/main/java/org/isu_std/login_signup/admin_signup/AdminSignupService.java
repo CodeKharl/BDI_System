@@ -51,7 +51,7 @@ public class AdminSignupService {
         }
     }
 
-    protected void insertAdminPerform(Admin admin) throws OperationFailedException{
+    protected void insertAdminPerform(Admin admin){
         try {
             if (!adminDao.insertAdmin(admin)) {
                 throw new OperationFailedException("Failed to create the admin account.");

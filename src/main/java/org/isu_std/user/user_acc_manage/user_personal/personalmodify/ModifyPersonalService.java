@@ -41,7 +41,7 @@ public class ModifyPersonalService {
         return this.managePersonalService.createPersonalInfoSetter(userPersonalBuilder);
     }
 
-    protected void saveModifiedPersonalInfo(ModifyPersonalContext modifyPersonalContext) throws OperationFailedException{
+    protected void saveModifiedPersonalInfo(ModifyPersonalContext modifyPersonalContext){
         int userId = modifyPersonalContext.getUser().userId();
         String chosenDetail = modifyPersonalContext.getChosenDetail();
         UserPersonal userPersonal = modifyPersonalContext.getUserPersonalBuilder().build();

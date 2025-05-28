@@ -35,7 +35,7 @@ public class CreatePersonalService {
         return this.managePersonalService.createPersonalInfoSetter(userPersonalBuilder);
     }
 
-    protected void savePersonalInfoPerform(int userId, UserPersonal userPersonal) throws OperationFailedException{
+    protected void savePersonalInfoPerform(int userId, UserPersonal userPersonal){
         try {
             if (!userPersonalDao.addUserPersonal(userId, userPersonal)) {
                 throw new OperationFailedException(

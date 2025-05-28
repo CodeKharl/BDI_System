@@ -1,4 +1,4 @@
-package org.isu_std.admin.admin_doc_manage.adminDoc_func.others;
+package org.isu_std.admin.admin_doc_manage.adminDoc_func.others.doc_file_deletion;
 
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.io.SystemLogger;
@@ -19,7 +19,7 @@ public class DocumentFileDeletion {
         this.documentDao = documentDao;
     }
 
-    public void deletePerform(int barangayId, int documentId) throws OperationFailedException {
+    public void deletePerform(int barangayId, int documentId){
         try {
             String docFileName = getDocFileName(barangayId, documentId);
             String documentDirectory = FolderConfig.DOC_DOCUMENT_DIRECTORY.getDirectory();

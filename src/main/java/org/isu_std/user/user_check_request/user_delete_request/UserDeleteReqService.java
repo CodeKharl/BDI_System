@@ -16,7 +16,7 @@ public class UserDeleteReqService {
         this.documentRequestDao = documentRequestDao;
     }
 
-    protected void deleteRequestPerform(RequestSelectContext requestSelectContext) throws OperationFailedException{
+    protected void deleteRequestPerform(RequestSelectContext requestSelectContext){
         String referenceId = requestSelectContext.getSelectedDocRequest().referenceId();
 
         try {

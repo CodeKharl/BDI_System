@@ -103,7 +103,7 @@ public class RegisterBrgyService {
         return new ServiceException("Failed to fetch barangay id with barangay : " + barangay);
     }
 
-    protected void addBarangay(Barangay barangay) throws OperationFailedException{
+    protected void addBarangay(Barangay barangay){
         try {
             if (!barangayDao.insertBarangay(barangay)) {
                 throw new OperationFailedException("Failed to add the barangay! Please try again.");
