@@ -8,9 +8,10 @@ public record UserPersonal(
 ){
     public void printPersonalStats() {
         String[] attributes = getAttributesStrArr();
-        String[] values = valueToStringArr();
+        Object[] values = getValues();
 
         Util.printSubSectionTitle("Personal Information");
+
         for(int i = 0; i < attributes.length; i++){
             Util.printInformation(
                     "%s : %s".formatted(attributes[i], values[i])
@@ -31,11 +32,11 @@ public record UserPersonal(
         };
     }
 
-    public String[] valueToStringArr() {
-        return new String[]{
+    public Object[] getValues(){
+        return new Object[]{
                 name,
-                String.valueOf(sex),
-                String.valueOf(age),
+                sex,
+                age,
                 birthDate,
                 birthPlace,
                 civilStatus,

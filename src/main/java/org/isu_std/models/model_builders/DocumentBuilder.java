@@ -1,7 +1,5 @@
 package org.isu_std.models.model_builders;
 
-import org.isu_std.admin.admin_doc_manage.adminDoc_func.others.DocumentManageCodes;
-import org.isu_std.io.Util;
 import org.isu_std.models.Document;
 
 import java.io.File;
@@ -55,12 +53,6 @@ public class DocumentBuilder {
 
     public File getDocumentFile() {
         return documentFile;
-    }
-
-    public Object[] getValues(){
-        return new Object[]{
-                documentName, price, requirements, documentFile
-        };
     }
 
     public void resetValues(){

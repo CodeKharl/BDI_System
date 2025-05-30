@@ -66,7 +66,9 @@ public class MySqlDocumentRequestDao implements DocumentRequestDao {
                 "(reference_id, doc_requirement_name, doc_requirement_file) " +
                 "values(?, ?, ?)";
 
-        return jdbcHelper.executeUpdateWithFiles(query, referenceId, file) == 1;
+        return jdbcHelper.executeUpdateWithFiles(
+                query, referenceId, file.getName(), file
+        ) == 1;
     }
 
     @Override

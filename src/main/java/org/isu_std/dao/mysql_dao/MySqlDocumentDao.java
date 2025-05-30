@@ -1,6 +1,5 @@
 package org.isu_std.dao.mysql_dao;
 
-import org.isu_std.admin.admin_doc_manage.adminDoc_func.modify.ModifyDocumentContext;
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.dao.DocumentDao;
 import org.isu_std.dao.jdbc_helper.JDBCHelper;
@@ -9,8 +8,7 @@ import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.folder_setup.FolderManager;
 import org.isu_std.io.folder_setup.FolderConfig;
 import org.isu_std.models.Document;
-import org.isu_std.models.model_builders.BarangayBuilder;
-import org.isu_std.models.model_builders.DocumentBuilder;
+import org.isu_std.models.ModelHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -97,75 +95,53 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
     }
 
     @Override
-    public boolean updateDocument(ModifyDocumentContext modifyDocumentContext) {
+    public boolean updateDocument(String chosenDetail, Document document, int barangayId, int documentId) {
         try{
             //If the document file is modify
-            File documentFile = modifyDocumentContext.getDocumentBuilder().getDocumentFile();
+            Object infoValue = ModelHelper.getFirstExistingValue(document.getValues());
 
-            if(documentFile != null){
-                return updateDocumentFile(modifyDocumentContext);
+            if(infoValue instanceof File documentFile){
+                return updateDocumentFile(documentFile, barangayId, documentId);
             }
 
             //Rest of Information
-            return updateDocumentInfo(modifyDocumentContext);
+            return updateDocumentInfo(chosenDetail, infoValue, barangayId, documentId);
         }catch (SQLException | IOException e){
             throw new DataAccessException(e.getMessage(), e);
         }
     }
 
-    private boolean updateDocumentInfo(ModifyDocumentContext modifyDocumentContext)
+    private boolean updateDocumentInfo(String chosenDetail, Object infoValue, int barangayId, int documentId)
             throws SQLException, IOException {
-        String query = "UPDATE document SET %s = ? WHERE barangay_id = ? AND document_id = ?"
-                .formatted(modifyDocumentContext.getDocumentDetail());
-        Object infoValue = getChosenDocumentInfo(modifyDocumentContext);
+        String query = getUpdateDocInfoQuery(chosenDetail);
 
         int rowsAffected = jdbcHelper.executeUpdate(
                 query,
                 infoValue,
-                modifyDocumentContext.getBarangayId(),
-                modifyDocumentContext.getDocumentId()
+                barangayId,
+                documentId
         );
 
         return rowsAffected == 1;
     }
 
-    private Object getChosenDocumentInfo(ModifyDocumentContext modifyDocumentContext){
-        Object[] infoValues = modifyDocumentContext
-                .getDocumentBuilder().getValues();
-
-        for (Object value : infoValues){
-            if(isDocValueExist(value)){
-                return value;
-            }
-        }
-
-        throw new NullPointerException("Document Builder has no values");
+    private String getUpdateDocInfoQuery(String chosenDetail){
+        return "UPDATE document SET %s = ? WHERE barangay_id = ? AND document_id = ?"
+                .formatted(chosenDetail);
     }
 
-    private boolean isDocValueExist(Object value){
-        if(value == null || value instanceof File){
-            return false;
-        }
 
-        if(value instanceof Double dobVal){
-            return dobVal > 0;
-        }
 
-        return !value.toString().isBlank();
-    }
-
-    private boolean updateDocumentFile(ModifyDocumentContext modifyDocumentContext) throws SQLException, IOException{
+    private boolean updateDocumentFile(File docFile, int barangayId, int documentId) throws SQLException, IOException{
         var query = "UPDATE document SET doc_file_name = ?, document_file = ? " +
                 "WHERE barangay_id = ? AND document_id = ?";
-
-        File docFile = modifyDocumentContext.getDocumentBuilder().getDocumentFile();
 
         int rowsAffected = jdbcHelper.executeUpdateWithFiles(
                 query,
                 docFile.getName(),
                 docFile,
-                modifyDocumentContext.getBarangayId(),
-                modifyDocumentContext.getDocumentId()
+                barangayId,
+                documentId
         );
 
         return rowsAffected == 1;

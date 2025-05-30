@@ -22,6 +22,7 @@ public class UserDeleteReqService {
         try {
             if (documentRequestDao.deleteDocRequest(referenceId)) {
                 DocOutFileManager.deleteOutputDocFile(requestSelectContext);
+                return;
             }
 
             throw new OperationFailedException(

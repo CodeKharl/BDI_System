@@ -140,9 +140,7 @@ public class UserDocRequestService {
     protected void addDocumentRequest(DocumentRequest documentRequest){
         try {
             if (!documentRequestDao.addDocRequest(documentRequest)) {
-                throw new OperationFailedException(
-                        "Request Failed! Please try again."
-                );
+                throw new OperationFailedException("Request Failed! Please try again.");
             }
         }catch (DataAccessException e){
             SystemLogger.log(e.getMessage(), e);

@@ -48,9 +48,9 @@ public class UserDocumentRequest implements UserProcess {
         int cancellationValue = userDocRequestController.getBrgyDocsMapSize() + 1;
 
         userDocRequestController.printAvailableDocs();
-        Util.printChoice("%d. cancel".formatted(cancellationValue));
+        Util.printChoice("%d. Back to User Menu.".formatted(cancellationValue));
 
-        int choice = SystemInput.getIntInput("Enter choice : ");
+        int choice = SystemInput.getIntChoice("Enter choice : ", cancellationValue);
 
         if (choice == cancellationValue) {
             return false;

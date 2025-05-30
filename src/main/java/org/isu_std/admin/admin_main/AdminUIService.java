@@ -1,11 +1,11 @@
 package org.isu_std.admin.admin_main;
 
-import org.isu_std.admin.admin_doc_manage.ManageDocumentFactory;
-import org.isu_std.admin.admin_doc_manage.ManageDocumentUI;
-import org.isu_std.admin.admin_main.approved_documents.ApprovedDocument;
-import org.isu_std.admin.admin_main.approved_documents.ApprovedDocumentFactory;
-import org.isu_std.admin.admin_main.requested_documents.RequestedDocument;
-import org.isu_std.admin.admin_main.requested_documents.RequestedDocumentFactory;
+import org.isu_std.admin.admin_main.admin_doc_manage.ManageDocumentFactory;
+import org.isu_std.admin.admin_main.admin_doc_manage.ManageDocumentUI;
+import org.isu_std.admin.admin_main.admin_approved_documents.ApprovedDocument;
+import org.isu_std.admin.admin_main.admin_approved_documents.ApprovedDocumentFactory;
+import org.isu_std.admin.admin_main.admin_requested_documents.RequestedDocument;
+import org.isu_std.admin.admin_main.admin_requested_documents.RequestedDocumentFactory;
 import org.isu_std.dao.*;
 import org.isu_std.models.Barangay;
 

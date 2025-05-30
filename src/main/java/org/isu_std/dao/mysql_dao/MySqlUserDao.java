@@ -2,16 +2,13 @@ package org.isu_std.dao.mysql_dao;
 
 import org.isu_std.dao.UserDao;
 import org.isu_std.dao.UserPersonalDao;
-import org.isu_std.config.MySQLDBConfig;
 import org.isu_std.dao.jdbc_helper.JDBCHelper;
-import org.isu_std.io.SystemLogger;
 import org.isu_std.io.custom_exception.DataAccessException;
+import org.isu_std.models.ModelHelper;
 import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
@@ -136,20 +133,14 @@ public class MySqlUserDao implements UserDao, UserPersonalDao {
     }
 
     @Override
-    public boolean modifyUserPersonal(int userId, String chosenDetail, UserPersonal userPersonal){
-        var query = getModifyQuery(chosenDetail);
+    public boolean updateUserPersonal(int userId, String chosenDetail, UserPersonal userPersonal){
+        var query = getUpdateUserPerQuery(chosenDetail);
+        Object userValue = ModelHelper.getFirstExistingValue(userPersonal.getValues());
 
         try{
             int rowsAffected = jdbcHelper.executeUpdate(
                     query,
-                    userPersonal.name(),
-                    userPersonal.sex(),
-                    userPersonal.age(),
-                    userPersonal.birthDate(),
-                    userPersonal.birthPlace(),
-                    userPersonal.civilStatus(),
-                    userPersonal.nationality(),
-                    userPersonal.phoneNumber(),
+                    userValue,
                     userId
             );
 
@@ -159,7 +150,7 @@ public class MySqlUserDao implements UserDao, UserPersonalDao {
         }
     }
 
-    private String getModifyQuery(String chosenDetail){
+    private String getUpdateUserPerQuery(String chosenDetail){
         return "UPDATE user_personal SET %s = ? WHERE user_id = ?"
                 .formatted(chosenDetail);
     }
@@ -189,7 +180,8 @@ public class MySqlUserDao implements UserDao, UserPersonalDao {
             int rowsAffected = jdbcHelper.executeUpdate(
                     query,
                     user.username(),
-                    user.password()
+                    user.password(),
+                    user.userId()
             );
 
             return rowsAffected == 1;

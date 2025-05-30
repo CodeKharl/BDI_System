@@ -84,6 +84,8 @@ public class ManageAccInfoController {
                     .getUserContext()
                     .setUser(actualUser);
 
+            accountInfoContext.getUserBuilder().resetAllValues();
+
             return true;
         }
 

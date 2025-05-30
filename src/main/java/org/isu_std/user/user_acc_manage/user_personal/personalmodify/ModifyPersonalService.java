@@ -7,7 +7,6 @@ import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.User;
 import org.isu_std.models.UserPersonal;
-import org.isu_std.models.model_builders.UserBuilder;
 import org.isu_std.models.model_builders.UserPersonalBuilder;
 import org.isu_std.user.user_acc_manage.user_personal.ManagePersonalService;
 import org.isu_std.user.user_acc_manage.user_personal.PersonalInfoSetter;
@@ -47,7 +46,7 @@ public class ModifyPersonalService {
         UserPersonal userPersonal = modifyPersonalContext.getUserPersonalBuilder().build();
 
         try {
-            if (!userPersonalDao.modifyUserPersonal(userId, chosenDetail, userPersonal)) {
+            if (!userPersonalDao.updateUserPersonal(userId, chosenDetail, userPersonal)) {
                 throw new OperationFailedException(
                         "Failed to modify personal information. Please try again."
                 );

@@ -33,4 +33,10 @@ public record Document(String documentName, double price, String requirements, F
     public String[] getRequirementsArr() {
         return requirements.split(" : ");
     }
+
+    public Object[] getValues(){
+        return new Object[]{
+                documentName, price, requirements, documentFile
+        };
+    }
 }

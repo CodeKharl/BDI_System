@@ -51,14 +51,14 @@ public class DocOutputFileAttributeProvider {
     }
 
     private static void putUserValuesWithHolders(Map<String, String> valuesMap, UserPersonal userPersonal){
-        String[] values = userPersonal.valueToStringArr();
+        Object[] values = userPersonal.getValues();
         Set<String> placeHolder = getUserPersonalPlaceHolders();
 
         var count = new AtomicInteger();
         placeHolder.forEach((holder) -> {
-            String value = values[count.getAndIncrement()];
+            String strValue = values[count.getAndIncrement()].toString();
 
-            valuesMap.put(holder, value);
+            valuesMap.put(holder, strValue);
         });
     }
 
