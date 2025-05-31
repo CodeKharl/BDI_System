@@ -17,7 +17,7 @@ import org.isu_std.admin.admin_main.admin_doc_manage.adminDoc_func.others.doc_Id
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.dao.DocumentDao;
 
-public class ManageDocImplFactory {
+class ManageDocImplFactory {
     private final DocManageDao docManageDao;
     private final DocumentDao documentDao;
 

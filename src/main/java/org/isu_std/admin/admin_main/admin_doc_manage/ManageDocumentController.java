@@ -1,23 +1,19 @@
 package org.isu_std.admin.admin_main.admin_doc_manage;
 
-public class ManageDocumentController {
-    private final ManageDocumentService manageDocumentService;
-    private final int barangayId;
+import org.isu_std.models.Barangay;
 
-    private ManageDocumentImpl[] adminDocumentImplArr;
+class ManageDocumentController {
+    private final ManageDocumentImpl[] manageDocumentImpls;
 
-    protected ManageDocumentController(ManageDocumentService manageDocumentService, int barangayId){
-        this.manageDocumentService = manageDocumentService;
-        this.barangayId = barangayId;
+    protected ManageDocumentController(ManageDocumentService manageDocumentService, Barangay barangay){
+        this.manageDocumentImpls = manageDocumentService
+                .getAdminDocumentImplArr(barangay.barangayId());
     }
 
-    protected void startManageDocFunc(int choice){
-        if(adminDocumentImplArr == null){
-            adminDocumentImplArr = manageDocumentService
-                    .getAdminDocumentImplArr(barangayId);
-        }
-
+    protected void startManageDocFunc(String[] manageDocMenu, int choice){
         int index = choice - 1;
-        adminDocumentImplArr[index].manageProcess();
+        String manageTitle = manageDocMenu[index];
+
+        manageDocumentImpls[index].manageProcess(manageTitle);
     }
 }

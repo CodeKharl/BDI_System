@@ -2,6 +2,7 @@ package org.isu_std.admin.admin_main.admin_doc_manage;
 
 import org.isu_std.dao.DocManageDao;
 import org.isu_std.dao.DocumentDao;
+import org.isu_std.models.Barangay;
 
 public class ManageDocumentFactory {
     private final DocManageDao docManageDao;
@@ -12,13 +13,13 @@ public class ManageDocumentFactory {
         this.documentDao = documentDao;
     }
 
-    public ManageDocumentUI createManageDocument(int barangayId){
+    public ManageDocumentUI createManageDocument(Barangay barangay){
         var manageDocumentService = new ManageDocumentService(
                 documentDao, docManageDao
         );
 
         var manageDocumentController = new ManageDocumentController(
-                manageDocumentService, barangayId
+                manageDocumentService, barangay
         );
 
         return new ManageDocumentUI(manageDocumentController);

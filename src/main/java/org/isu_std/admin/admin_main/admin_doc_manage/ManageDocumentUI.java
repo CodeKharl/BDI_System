@@ -1,21 +1,26 @@
 package org.isu_std.admin.admin_main.admin_doc_manage;
 
+import org.isu_std.admin.admin_main.AdminSection;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
+import org.isu_std.login_signup.admin_login.AdminLogin;
 
-public class ManageDocumentUI {
+import java.awt.event.ActionListener;
+
+public class ManageDocumentUI implements AdminSection {
     private final String[] MANAGE_CONTENTS = {"Add Document", "Modify Document",
             "Delete Document", "Display Document", "Back to Admin Menu"};
 
     private final ManageDocumentController manageDocumentController;
 
-    public ManageDocumentUI(ManageDocumentController manageDocumentController){
+    ManageDocumentUI(ManageDocumentController manageDocumentController){
         this.manageDocumentController = manageDocumentController;
     }
 
-    public final void manageMenu(){
+    @Override
+    public void run(String sectionTitle){
         while(true){
-            Util.printSectionTitle("Manage Document");
+            Util.printSectionTitle(sectionTitle);
             Util.printChoices(MANAGE_CONTENTS);
 
             int choice = SystemInput.getIntChoice(
@@ -27,10 +32,9 @@ public class ManageDocumentUI {
                 return; // Back to admin menu.
             }
 
-            manageDocumentController.startManageDocFunc(choice);
+            manageDocumentController.startManageDocFunc(MANAGE_CONTENTS, choice);
         }
     }
-
 }
 
 

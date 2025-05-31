@@ -14,7 +14,7 @@ public class DeletingDocController {
         this.barangayId = barangayId;
     }
 
-    protected final boolean setDocumentId(){
+    protected boolean setDocumentId(){
         int documentId = deletingDocService.getDocIDValidation();
 
         if(documentId != 0){

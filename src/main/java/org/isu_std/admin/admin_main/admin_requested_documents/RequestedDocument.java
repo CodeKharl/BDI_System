@@ -1,9 +1,10 @@
 package org.isu_std.admin.admin_main.admin_requested_documents;
 
+import org.isu_std.admin.admin_main.AdminSection;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 
-public class RequestedDocument {
+public class RequestedDocument implements AdminSection{
     private final RequestedDocumentController reqDocController;
     private final String[] REQUEST_VIEW_CONTENTS = {
             "Approve the Request", "Decline the Request", "Display Requested Document",
@@ -14,14 +15,16 @@ public class RequestedDocument {
         this.reqDocController = reqDocController;
     }
 
-    public void requestedDocSection(){
-        while(true){
-            Util.printSectionTitle("Requested Document Section (Pending)");
+    @Override
+    public void run(String sectionTitle) {
+        while (true) {
+            Util.printSectionTitle(sectionTitle);
+
             if (!reqDocController.isThereExistingRequest()) {
                 return;
             }
 
-            if(!setRequestedDocChoice()) {
+            if (!setRequestedDocChoice()) {
                 return;
             }
 

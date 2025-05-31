@@ -1,9 +1,10 @@
 package org.isu_std.admin.admin_main.admin_approved_documents;
 
+import org.isu_std.admin.admin_main.AdminSection;
 import org.isu_std.io.SystemInput;
 import org.isu_std.io.Util;
 
-public class ApprovedDocument {
+public class ApprovedDocument implements AdminSection {
     private final String[] APPROVE_SECTION_CONTENTS = {
             "Confirm and Export the File", "Open Approved Document File", "View Payment Method",
             "Display Document Details", "Display User Details", "Open Requirement Files",
@@ -16,9 +17,10 @@ public class ApprovedDocument {
         this.approvedDocumentController = approvedDocumentController;
     }
 
-    public void approvedDocView(){
+    @Override
+    public void run(String sectionTitle){
         while(true) {
-            Util.printSectionTitle("Requested Documents (Approved)");
+            Util.printSectionTitle(sectionTitle);
             if (!approvedDocumentController.isThereExistingApprovedRequests()) {
                 return;
             }

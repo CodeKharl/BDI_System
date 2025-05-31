@@ -14,11 +14,11 @@ public class AddingDocument implements ManageDocumentImpl {
     }
 
     @Override
-    public void manageProcess(){
+    public void manageProcess(String manageTitle){
         while(true) {
             Util.printSectionTitle(
-                    "Add Document : (%c == Back to Manage Document Menu)"
-                            .formatted(ChoiceCollection.EXIT_CODE.getValue()
+                    "%s : (%c == Back to Manage Document Menu)"
+                            .formatted(manageTitle, ChoiceCollection.EXIT_CODE.getValue()
                     )
             );
 

@@ -21,9 +21,9 @@ public class ModifyingDocument implements ManageDocumentImpl {
     }
 
     @Override
-    public void manageProcess(){
+    public void manageProcess(String manageTitle){
         while(true) {
-            Util.printSectionTitle("Modify Document");
+            Util.printSectionTitle(manageTitle);
 
             if(!modifyingDocController.setValidDocumentId()){
                 return;

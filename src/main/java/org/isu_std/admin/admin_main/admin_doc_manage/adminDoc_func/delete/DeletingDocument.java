@@ -14,9 +14,9 @@ public class DeletingDocument implements ManageDocumentImpl {
     }
 
     @Override
-    public void manageProcess() {
+    public void manageProcess(String manageTitle) {
         while(true) {
-            Util.printSectionTitle("Delete Document"); // Print Delete Title with exit key.
+            Util.printSectionTitle(manageTitle); // Print Delete Title with exit key.
 
             if(!deletingDocController.setDocumentId()){
                 return;

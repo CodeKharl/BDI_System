@@ -7,7 +7,7 @@ import org.isu_std.io.Util;
 
 import java.util.Map;
 
-public final class DisplayingDocController {
+public class DisplayingDocController {
     private final DisplayingDocService displayingDocService;
     private final int barangayId;
 
@@ -18,7 +18,7 @@ public final class DisplayingDocController {
         this.barangayId = barangayId;
     }
 
-    public boolean isThereExistingDocs(){
+    protected boolean isThereExistingDocs(){
         try{
             this.documentMap = displayingDocService.getDocumentMap(
                     this.barangayId
@@ -32,8 +32,10 @@ public final class DisplayingDocController {
         return false;
     }
 
-    public void printDocs(){
-        Util.printSectionTitle("Existing Documents : Doc ID -> Document Name - Price - Requirements -> Document File");
+    protected void printDocs(){
+        Util.printSubSectionTitle(
+                "Existing Documents : Doc ID -> Document Name - Price - Requirements -> Document File"
+        );
 
         documentMap.forEach((key, document) -> {
             Util.printInformation(

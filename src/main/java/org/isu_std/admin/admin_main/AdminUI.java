@@ -11,7 +11,7 @@ import org.isu_std.io.Util;
 
 public class AdminUI {
     private final String[] ADMIN_UI_CONTENTS = {
-            "Pending/Processed Document Requests", "Approved Documents", "Manage Documents",
+            "Pending/Processed Document Requests", "Approved Requested Documents", "Manage Documents",
             "Account Settings", "Sign-out"
     };
 
@@ -28,6 +28,7 @@ public class AdminUI {
             );
 
             Util.printChoices(ADMIN_UI_CONTENTS);
+
             int choice = SystemInput.getIntChoice(
                     "Enter your choice : ",
                     ADMIN_UI_CONTENTS.length
@@ -38,7 +39,7 @@ public class AdminUI {
                 return;
             }
 
-            adminUIController.adminOnProcess(choice);
+            adminUIController.adminOnProcess(ADMIN_UI_CONTENTS, choice);
         }
     }
 }

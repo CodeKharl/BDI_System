@@ -4,14 +4,14 @@ import org.isu_std.client_context.AdminContext;
 import org.isu_std.models.Barangay;
 
 public class AdminUIController {
-    private final AdminUIService adminUIService;
     private final AdminContext adminContext;
     private final Barangay barangay;
+    private final AdminSection[] adminSections;
 
     public AdminUIController(AdminUIService adminUIService, AdminContext adminContext, Barangay barangay){
-        this.adminUIService = adminUIService;
         this.adminContext = adminContext;
         this.barangay = barangay;
+        this.adminSections = adminUIService.getAdminSections(barangay);
     }
 
     protected String getAdminName(){
@@ -26,19 +26,9 @@ public class AdminUIController {
         );
     }
 
-    protected void adminOnProcess(int choice){
-        switch(choice){
-            case 1 -> adminUIService.getRequestedDocument(barangay)
-                    .requestedDocSection();
-
-            case 2 -> adminUIService.getApprovedDocsRequest(barangay)
-                    .approvedDocView();
-
-            case 3 -> adminUIService
-                    .getManageDocument(adminContext.getAdmin().barangayId())
-                    .manageMenu();
-
-            case 4 -> {}
-        };
+    protected void adminOnProcess(String[] adminMenu, int choice){
+        int index = choice - 1;
+        String sectionTitle = adminMenu[index];
+        adminSections[index].run(sectionTitle);
     }
 }

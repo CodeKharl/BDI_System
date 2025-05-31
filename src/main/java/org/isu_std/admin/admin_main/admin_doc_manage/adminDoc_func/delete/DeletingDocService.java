@@ -27,8 +27,10 @@ public class DeletingDocService {
         return this.validDocIDProvider.getValidatedId();
     }
 
-    protected void deleteDocFile(int barangayId, int documentId) throws OperationFailedException{
-        DocumentFileDeletion documentFileDeletion = DocFileDeletionFactory.createDocFileDeletion(documentDao);
+    protected void deleteDocFile(int barangayId, int documentId){
+        DocumentFileDeletion documentFileDeletion = DocFileDeletionFactory
+                .createDocFileDeletion(documentDao);
+
         documentFileDeletion.deletePerform(barangayId, documentId);
     }
 

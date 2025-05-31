@@ -1,5 +1,6 @@
 package org.isu_std.admin.admin_main;
 
+import org.isu_std.admin.admin_main.admin_account_setting.AdminAccountSetting;
 import org.isu_std.admin.admin_main.admin_doc_manage.ManageDocumentFactory;
 import org.isu_std.admin.admin_main.admin_doc_manage.ManageDocumentUI;
 import org.isu_std.admin.admin_main.admin_approved_documents.ApprovedDocument;
@@ -30,27 +31,15 @@ public class AdminUIService {
         this.paymentDao = paymentDao;
     }
 
-    protected ManageDocumentUI getManageDocument(int barangayId){
-        var manageDocumentFactory = new ManageDocumentFactory(
+    protected AdminSection[] getAdminSections(Barangay barangay){
+        var adminSectionFactory = new AdminSectionFactory(
                 docManageDao,
-                documentDao
+                documentDao,
+                documentRequestDao,
+                userPersonalDao,
+                paymentDao
         );
 
-        return manageDocumentFactory.createManageDocument(barangayId);
-    }
-
-    protected RequestedDocument getRequestedDocument(Barangay barangay){
-        RequestedDocumentFactory reqDocFactory = RequestedDocumentFactory
-                .getInstance(documentRequestDao, documentDao, userPersonalDao);
-
-        return reqDocFactory.createRequestedDocument(barangay);
-    }
-
-    protected ApprovedDocument getApprovedDocsRequest(Barangay barangay){
-        var approvedDocumentFactory = new ApprovedDocumentFactory(
-                documentRequestDao, documentDao, userPersonalDao, paymentDao
-        );
-
-        return approvedDocumentFactory.createApprovedDocument(barangay);
+        return adminSectionFactory.createAdminSections(barangay);
     }
 }
