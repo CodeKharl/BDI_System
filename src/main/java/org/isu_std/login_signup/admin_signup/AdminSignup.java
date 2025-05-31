@@ -17,7 +17,7 @@ public class AdminSignup implements Signup {
         while(true) {
             Util.printSectionTitle("Admin Signup");
 
-            if(!setAdminInformations(adminSignupController.getInfoAttributes())){
+            if(!setAdminInformations(adminSignupController.getInfoAttributesWithSpecs())){
                 return;
             }
 

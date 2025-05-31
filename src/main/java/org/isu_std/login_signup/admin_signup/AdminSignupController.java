@@ -7,11 +7,6 @@ import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.models.model_builders.AdminBuilder;
 
 public class AdminSignupController {
-    private final String[] INFORMATION_ATTRIBUTES = {
-            "Admin Name (Min. %d)".formatted(AdminSignupService.getMinNameLength()),
-            "Pin (Min. %d)".formatted(AdminSignupService.getMinPinLength())
-    };
-
     private final AdminSignupService adminSignupService;
     private final AdminBuilder adminBuilder;
 
@@ -25,7 +20,6 @@ public class AdminSignupController {
             switch (count) {
                 case 0 -> {
                     adminSignupService.checkAdminName(input);
-                    adminSignupService.checkAdminIdExist(input);
                     adminBuilder.adminName(input);
                 }
 
@@ -59,7 +53,7 @@ public class AdminSignupController {
         return false;
     }
 
-    protected String[] getInfoAttributes(){
-        return this.INFORMATION_ATTRIBUTES;
+    protected String[] getInfoAttributesWithSpecs(){
+        return this.adminSignupService.getAdminAttributesWithSpecs();
     }
 }

@@ -1,18 +1,8 @@
 package org.isu_std.io.dynamic_enum_handler;
 
-public final class StringArrValue implements ConfigValue{
-    private final String[] value;
-
-    public StringArrValue(String[] value){
-        this.value = value;
-    }
-
-    public String[] getValue(){
-        return this.value;
-    }
-
+public record StringArrValue(String[] value) implements ConfigValue {
     @Override
-    public Object get(){
+    public Object get() {
         return this.value;
     }
 }
