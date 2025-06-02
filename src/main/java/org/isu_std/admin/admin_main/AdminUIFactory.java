@@ -6,6 +6,7 @@ import org.isu_std.models.Admin;
 import org.isu_std.models.Barangay;
 
 public class AdminUIFactory {
+    private final AdminDao adminDao;
     private final DocManageDao docManageDao;
     private final DocumentDao documentDao;
     private final DocumentRequestDao documentRequestDao;
@@ -13,12 +14,14 @@ public class AdminUIFactory {
     private final PaymentDao paymentDao;
 
     public AdminUIFactory(
+            AdminDao adminDao,
             DocManageDao docManageDao,
             DocumentDao documentDao,
             DocumentRequestDao documentRequestDao,
             UserPersonalDao userPersonalDao,
             PaymentDao paymentDao
     ){
+        this.adminDao = adminDao;
         this.docManageDao = docManageDao;
         this.documentDao = documentDao;
         this.documentRequestDao = documentRequestDao;
@@ -28,6 +31,7 @@ public class AdminUIFactory {
 
     public AdminUI createAdmin(AdminContext adminContext, Barangay barangay){
         var adminUIService = new AdminUIService(
+                adminDao,
                 docManageDao,
                 documentDao,
                 documentRequestDao,
@@ -37,8 +41,8 @@ public class AdminUIFactory {
 
         var adminUIController = new AdminUIController(
                 adminUIService,
-                adminContext,
-                barangay
+                barangay,
+                adminContext
         );
 
         return new AdminUI(adminUIController);

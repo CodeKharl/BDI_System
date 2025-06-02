@@ -11,27 +11,27 @@ import org.isu_std.io.dynamic_enum_handler.EnumValueProvider;
 import java.util.Optional;
 
 public class UserInfoManager {
-    public static String[] getUserDetailWithSpecs(){
-        String[] userDetails = EnumValueProvider.getStringArrValue(
-                UserInfoConfig.USER_DETAILS.getValue()
-        );
+    public static String[] getUserAttrNamesWithSpecs(){
+        String[] attributes = getUserAttributeNames();
 
-        String[] specs = EnumValueProvider.getStringArrValue(
-                UserInfoConfig.USER_DETAIL_SPECS.getValue()
-        );
+        String[] specs = getUserAttributeSpecs();
 
-        var newArr = new String[userDetails.length];
-
-        for(int i = 0; i < userDetails.length; i++){
-            newArr[i] = "%s (%s)".formatted(userDetails[i], specs[i]);
+        for(int i = 0; i < attributes.length; i++){
+            attributes[i] = "%s (%s)".formatted(attributes[i], specs[i]);
         }
 
-        return newArr;
+        return attributes;
     }
 
-    public static String[] getUserDetails(){
+    public static String[] getUserAttributeNames(){
         return EnumValueProvider.getStringArrValue(
-                UserInfoConfig.USER_DETAILS.getValue()
+                UserInfoConfig.USER_ATTRIBUTE_NAMES.getValue()
+        );
+    }
+
+    public static String[] getUserAttributeSpecs(){
+        return EnumValueProvider.getStringArrValue(
+                UserInfoConfig.USER_ATTRIBUTES_SPECIFICATIONS.getValue()
         );
     }
 

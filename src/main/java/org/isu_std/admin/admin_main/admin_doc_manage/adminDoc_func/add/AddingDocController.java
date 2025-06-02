@@ -19,8 +19,8 @@ public class AddingDocController {
         this.barangayId = barangayId;
     }
 
-    protected String[] getInfoArr(){
-        return this.addingDocService.getInfoArr();
+    protected String[] getDocumentAttributeNames(){
+        return this.addingDocService.getDocumentAttributeNames();
     }
 
     protected final boolean setDocumentInformation(int count, String input){

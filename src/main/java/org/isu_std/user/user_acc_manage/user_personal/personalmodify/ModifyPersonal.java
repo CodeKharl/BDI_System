@@ -12,10 +12,10 @@ public class ModifyPersonal {
     }
 
     public void modifyPerformed(){
-        String[] personalDetails = modifyPersonalController.getPersonalDetails();
+        String[] personalAttributeNames = modifyPersonalController.getPersonalAttributeNames();
 
         while(true){
-            if(!setDetailsToModify(personalDetails)){
+            if(!setDetailsToModify(personalAttributeNames)){
                 return;
             }
 
@@ -29,12 +29,12 @@ public class ModifyPersonal {
         }
     }
 
-    private boolean setDetailsToModify(String[] personalDetails){
-        int backValue = personalDetails.length + 1;
+    private boolean setDetailsToModify(String[] personalAttributeNames){
+        int backValue = personalAttributeNames.length + 1;
 
         while(true){
             Util.printSectionTitle("Personal Information Modification");
-            Util.printChoices(personalDetails);
+            Util.printChoices(personalAttributeNames);
             Util.printChoice("%d. Back to Manage Account Menu".formatted(backValue));
 
             int choice = SystemInput.getIntChoice(
@@ -45,7 +45,7 @@ public class ModifyPersonal {
                 return false;
             }
 
-            modifyPersonalController.setDetailToModify(personalDetails, choice);
+            modifyPersonalController.setDetailToModify(personalAttributeNames, choice);
             if(setDetailValue(choice)){
                 return true;
             }
@@ -62,15 +62,15 @@ public class ModifyPersonal {
     }
 
     private boolean setOtherDetailValue(int choice){
-        String personalDetail = modifyPersonalController.getChosenDetail();
-        String personalDetailSpec = modifyPersonalController.getPersonalDetailSpec(choice);
+        String personalAttributeName = modifyPersonalController.getChosenAttributeName();
+        String personalAttributeSpec = modifyPersonalController.getPersonalAttributeSpec(choice);
         char cancellationValue = ChoiceCollection.EXIT_CODE.getValue();
 
         while(true){
             String input = SystemInput.getStringInput(
                     "Enter your %s %s (%c == cancel): ".formatted(
-                            personalDetail,
-                            personalDetailSpec,
+                            personalAttributeName,
+                            personalAttributeSpec,
                             cancellationValue
                     )
             );

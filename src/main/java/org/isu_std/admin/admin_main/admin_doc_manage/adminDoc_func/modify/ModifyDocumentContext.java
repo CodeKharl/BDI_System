@@ -1,13 +1,12 @@
 package org.isu_std.admin.admin_main.admin_doc_manage.adminDoc_func.modify;
 
-import org.isu_std.models.Document;
 import org.isu_std.models.model_builders.DocumentBuilder;
 
 public class ModifyDocumentContext {
     private final int barangayId;
     private int documentId;
 
-    private String documentDetail;
+    private String chosenDocAttributeName;
     private final DocumentBuilder documentBuilder;
 
     protected ModifyDocumentContext(int barangayId, DocumentBuilder documentBuilder){
@@ -15,12 +14,12 @@ public class ModifyDocumentContext {
         this.documentBuilder = documentBuilder;
     }
 
-    public void setDocumentDetail(String documentDetail) {
-        this.documentDetail = documentDetail;
+    public void setChosenDocAttributeName(String chosenDocumentAttribute) {
+        this.chosenDocAttributeName = chosenDocumentAttribute;
     }
 
-    public String getDocumentDetail() {
-        return documentDetail;
+    public String getChosenDocAttributeName() {
+        return chosenDocAttributeName;
     }
 
     protected void setDocumentId(int documentId){

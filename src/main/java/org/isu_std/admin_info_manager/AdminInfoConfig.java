@@ -5,9 +5,9 @@ import org.isu_std.io.dynamic_enum_handler.IntValue;
 import org.isu_std.io.dynamic_enum_handler.StringArrValue;
 
 enum AdminInfoConfig {
-    INFO_ATTRIBUTES(
+    INFO_ATTRIBUTE_NAMES(
             new StringArrValue(
-                    new String[]{"Admin Name", "Pin"}
+                    new String[]{"Admin_Name", "Admin_Pin"}
             )
     ),
 

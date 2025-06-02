@@ -8,10 +8,10 @@ public class AdminUIController {
     private final Barangay barangay;
     private final AdminSection[] adminSections;
 
-    public AdminUIController(AdminUIService adminUIService, AdminContext adminContext, Barangay barangay){
+    public AdminUIController(AdminUIService adminUIService, Barangay barangay, AdminContext adminContext){
         this.adminContext = adminContext;
         this.barangay = barangay;
-        this.adminSections = adminUIService.getAdminSections(barangay);
+        this.adminSections = adminUIService.getAdminSections(adminContext, barangay);
     }
 
     protected String getAdminName(){

@@ -15,21 +15,27 @@ public class ModifyPersonalService {
     private final ManagePersonalService managePersonalService;
     private final UserPersonalDao userPersonalDao;
 
-    public ModifyPersonalService(ManagePersonalService managePersonalService, UserPersonalDao userPersonalDao){
+    public ModifyPersonalService(
+            ManagePersonalService managePersonalService,
+            UserPersonalDao userPersonalDao
+    ){
         this.managePersonalService = managePersonalService;
         this.userPersonalDao = userPersonalDao;
     }
 
-    protected ModifyPersonalContext createPersonalModifierContext(User user, UserPersonalBuilder userPersonalBuilder){
+    protected ModifyPersonalContext createPersonalModifierContext(
+            User user,
+            UserPersonalBuilder userPersonalBuilder
+    ){
         return new ModifyPersonalContext(user, userPersonalBuilder);
     }
 
-    protected String[] getPersonalDetails(){
-        return this.managePersonalService.getPersonalDetails();
+    protected String[] getPersonalAttributeNames(){
+        return this.managePersonalService.getPersonalAttributeNames();
     }
 
-    protected String[] getPersonalDetailSpecs(){
-        return this.managePersonalService.getPersonalDetailSpecs();
+    protected String[] getPersonalAttributeSpecs(){
+        return this.managePersonalService.getPersonalAttributeSpecs();
     }
 
     protected UserPersonalBuilder getUserPersonalBuilder(){
@@ -42,11 +48,11 @@ public class ModifyPersonalService {
 
     protected void saveModifiedPersonalInfo(ModifyPersonalContext modifyPersonalContext){
         int userId = modifyPersonalContext.getUser().userId();
-        String chosenDetail = modifyPersonalContext.getChosenDetail();
+        String chosenAttributeName = modifyPersonalContext.getChosenAttributeName();
         UserPersonal userPersonal = modifyPersonalContext.getUserPersonalBuilder().build();
 
         try {
-            if (!userPersonalDao.updateUserPersonal(userId, chosenDetail, userPersonal)) {
+            if (!userPersonalDao.updateUserPersonal(userId, chosenAttributeName, userPersonal)) {
                 throw new OperationFailedException(
                         "Failed to modify personal information. Please try again."
                 );
@@ -54,7 +60,7 @@ public class ModifyPersonalService {
         }catch (DataAccessException e){
             SystemLogger.log(e.getMessage(), e);
 
-            throw new ServiceException("Failed to update user personal by : " + chosenDetail);
+            throw new ServiceException("Failed to update user personal by : " + chosenAttributeName);
         }
     }
 }

@@ -48,7 +48,7 @@ public class MySqlUserDao implements UserDao, UserPersonalDao {
             );
 
             return affectedRows == 1;
-        }catch (SQLException | IOException e){
+        }catch (SQLException e){
             throw new DataAccessException(e.getMessage(), e);
         }
     }
@@ -127,14 +127,14 @@ public class MySqlUserDao implements UserDao, UserPersonalDao {
             );
 
             return rowsAffected == 1;
-        }catch (SQLException | IOException e){
+        }catch (SQLException e){
             throw new DataAccessException(e.getMessage(), e);
         }
     }
 
     @Override
-    public boolean updateUserPersonal(int userId, String chosenDetail, UserPersonal userPersonal){
-        var query = getUpdateUserPerQuery(chosenDetail);
+    public boolean updateUserPersonal(int userId, String chosenAttributeName, UserPersonal userPersonal){
+        var query = getUpdateUserPerQuery(chosenAttributeName);
         Object userValue = ModelHelper.getFirstExistingValue(userPersonal.getValues());
 
         try{
@@ -145,14 +145,14 @@ public class MySqlUserDao implements UserDao, UserPersonalDao {
             );
 
             return rowsAffected == 1;
-        }catch(SQLException | IOException e){
+        }catch(SQLException e){
             throw new DataAccessException(e.getMessage(), e);
         }
     }
 
-    private String getUpdateUserPerQuery(String chosenDetail){
+    private String getUpdateUserPerQuery(String chosenAttributeName){
         return "UPDATE user_personal SET %s = ? WHERE user_id = ?"
-                .formatted(chosenDetail);
+                .formatted(chosenAttributeName);
     }
 
     @Override
@@ -167,14 +167,14 @@ public class MySqlUserDao implements UserDao, UserPersonalDao {
             );
 
             return rowsAffected == 1;
-        }catch (SQLException | IOException e){
+        }catch (SQLException e){
             throw new DataAccessException(e.getMessage(), e);
         }
     }
 
     @Override
-    public boolean updateUserInfo(String chosenDetail, User user){
-        String query = getUpdateDetailQuery(chosenDetail);
+    public boolean updateUserInfo(String chosenAttributeName, User user){
+        String query = getUpdateDetailQuery(chosenAttributeName);
 
         try{
             int rowsAffected = jdbcHelper.executeUpdate(
@@ -185,12 +185,12 @@ public class MySqlUserDao implements UserDao, UserPersonalDao {
             );
 
             return rowsAffected == 1;
-        }catch (SQLException | IOException e){
+        }catch (SQLException e){
             throw new DataAccessException(e.getMessage(), e);
         }
     }
 
-    private String getUpdateDetailQuery(String chosenDetail){
-        return "UPDATE user SET %s = ? WHERE user_id = ?".formatted(chosenDetail);
+    private String getUpdateDetailQuery(String chosenAttributeName){
+        return "UPDATE user SET %s = ? WHERE user_id = ?".formatted(chosenAttributeName);
     }
 }

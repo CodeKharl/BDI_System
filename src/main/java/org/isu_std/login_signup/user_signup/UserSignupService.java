@@ -33,7 +33,7 @@ public class UserSignupService{
     }
 
     protected String[] getUserDetailsWithSpecs(){
-        return UserInfoManager.getUserDetailWithSpecs();
+        return UserInfoManager.getUserAttrNamesWithSpecs();
     }
 
     protected void addingUser(User user){

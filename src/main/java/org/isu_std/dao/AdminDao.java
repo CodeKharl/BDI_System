@@ -9,4 +9,6 @@ public interface AdminDao {
     boolean insertAdmin(Admin admin);
     Optional<Admin> findOptionalAdmin(int adminId);
     boolean updateAdminBrgyId(int barangayId, int adminId);
+    boolean updateAdminInfo(String chosenAttributeName, Admin admin);
+    boolean deleteAdmin(int adminId);
 }

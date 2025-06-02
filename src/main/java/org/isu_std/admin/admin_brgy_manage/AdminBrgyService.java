@@ -61,6 +61,7 @@ public class AdminBrgyService {
 
     protected AdminUI getAdminUI(AdminContext adminContext){
         var adminUIFactory = new AdminUIFactory(
+                adminDao,
                 docManageDao,
                 documentDao,
                 documentRequestDao,
@@ -69,7 +70,8 @@ public class AdminBrgyService {
         );
 
         return adminUIFactory.createAdmin(
-                    adminContext, getBarangay(adminContext)
+                adminContext,
+                getBarangay(adminContext)
         );
     }
 
@@ -77,7 +79,8 @@ public class AdminBrgyService {
         int barangayId = adminContext.getAdmin().barangayId();
 
         try {
-            Optional<Barangay> optionalBarangay = barangayDao.findOptionalBarangay(barangayId);
+            Optional<Barangay> optionalBarangay = this.barangayDao
+                    .findOptionalBarangay(barangayId);
 
             return optionalBarangay.orElseThrow(
                     () -> new NotFoundException("Barangay not found!")

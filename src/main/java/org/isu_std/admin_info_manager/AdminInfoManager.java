@@ -5,7 +5,6 @@ import org.isu_std.io.SystemLogger;
 import org.isu_std.io.Validation;
 import org.isu_std.io.collections_enum.InputMessageCollection;
 import org.isu_std.io.custom_exception.DataAccessException;
-import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.ServiceException;
 import org.isu_std.io.dynamic_enum_handler.EnumValueProvider;
 
@@ -18,17 +17,27 @@ public class AdminInfoManager {
         this.adminDao = adminDao;
     }
 
-    public String[] getAdminAttributesWithSpecs(){
-        String[] attributes = EnumValueProvider
-                .getStringArrValue(AdminInfoConfig.INFO_ATTRIBUTES.getConfigValue());
-        String[] specs = EnumValueProvider
-                .getStringArrValue(AdminInfoConfig.INFO_ATTRIBUTE_SPECIFICATIONS.getConfigValue());
+    public String[] getAdminAttrNamesWithSpecs(){
+        String[] attributes = getAdminAttributeNames();
+        String[] specs = getAdminAttributeSpecs();
 
         for(int i = 0; i < attributes.length; i++){
             attributes[i] = "%s (%s)".formatted(attributes[i], specs[i]);
         }
 
         return attributes;
+    }
+
+    public String[] getAdminAttributeNames(){
+        return EnumValueProvider.getStringArrValue(
+                AdminInfoConfig.INFO_ATTRIBUTE_NAMES.getConfigValue()
+        );
+    }
+
+    public String[] getAdminAttributeSpecs(){
+        return EnumValueProvider.getStringArrValue(
+                AdminInfoConfig.INFO_ATTRIBUTE_SPECIFICATIONS.getConfigValue()
+        );
     }
 
     public void checkAdminName(String adminName){

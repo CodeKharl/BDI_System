@@ -37,7 +37,7 @@ public class MySqlPaymentDao implements PaymentDao {
             );
 
             return rowsAffected == 1;
-        }catch (SQLException | IOException e){
+        }catch (SQLException e){
             throw new DataAccessException(e.getMessage(), e);
         }
     }

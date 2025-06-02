@@ -26,11 +26,11 @@ public class CreatePersonalController {
     }
 
     protected String[] getPersonalDetails(){
-        return this.createPersonalService.getPersonalDetails();
+        return this.createPersonalService.getPersonalAttributeNames();
     }
 
     protected String[] getPersonalDetailSpecs(){
-        return this.createPersonalService.getPersonalDetailSpecs();
+        return this.createPersonalService.getPersonalAttributeSpecs();
     }
 
     protected boolean setName(){

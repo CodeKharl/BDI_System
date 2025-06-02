@@ -3,16 +3,15 @@ package org.isu_std.user_info_manager;
 import org.isu_std.io.dynamic_enum_handler.ConfigValue;
 import org.isu_std.io.dynamic_enum_handler.IntValue;
 import org.isu_std.io.dynamic_enum_handler.StringArrValue;
-import org.isu_std.io.dynamic_enum_handler.StringValue;
 
 public enum UserInfoConfig{
-    USER_DETAILS(
+    USER_ATTRIBUTE_NAMES(
             new StringArrValue(
                     new String[]{"Username", "Password"}
             )
     ),
 
-    USER_DETAIL_SPECS(
+    USER_ATTRIBUTES_SPECIFICATIONS(
             new StringArrValue(
                     new String[]{"Min. 8", "Min. 6"}
             )

@@ -4,13 +4,10 @@ import org.isu_std.admin_info_manager.AdminInfoManager;
 import org.isu_std.admin_info_manager.AdminInfoManagerFactory;
 import org.isu_std.dao.AdminDao;
 import org.isu_std.io.SystemLogger;
-import org.isu_std.io.collections_enum.InputMessageCollection;
-import org.isu_std.io.Validation;
 import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.custom_exception.ServiceException;
-import org.isu_std.io.dynamic_enum_handler.EnumValueProvider;
 import org.isu_std.models.Admin;
 import org.isu_std.models.model_builders.AdminBuilder;
 import org.isu_std.models.model_builders.BuilderFactory;
@@ -31,7 +28,7 @@ public class AdminSignupService {
     }
 
     protected String[] getAdminAttributesWithSpecs(){
-        return adminInfoManager.getAdminAttributesWithSpecs();
+        return adminInfoManager.getAdminAttrNamesWithSpecs();
     }
 
     protected void checkAdminName(String adminName){

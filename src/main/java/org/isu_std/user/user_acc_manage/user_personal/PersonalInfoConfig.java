@@ -3,7 +3,7 @@ package org.isu_std.user.user_acc_manage.user_personal;
 import org.isu_std.io.dynamic_enum_handler.*;
 
 public enum PersonalInfoConfig {
-    PERSONAL_INFORMATIONS(
+    PERSONAL_ATTRIBUTE_NAMES(
             new StringArrValue(
                 new String[]{
                         "Name", "Sex","Age",
@@ -14,7 +14,7 @@ public enum PersonalInfoConfig {
             )
     ),
 
-    PERSONAL_SPECIFICATION(
+    PERSONAL_ATTRIBUTE_SPECIFICATIONS(
             new StringArrValue(
                 new String[]{
                         "", "(M == Male, F == Female)", " (min. 10)",

@@ -30,6 +30,7 @@ public class ManagePersonal implements UserManageProcess {
 
     protected void modifyInfoPerformed(){
         managePersonalController.printExistingInfos();
+
         if(isModifyConfirm()){
             managePersonalController.userPersonalModification();
         }

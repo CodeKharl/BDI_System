@@ -8,6 +8,6 @@ public interface UserDao {
     Optional<Integer> findUserId(String username);
     boolean addUser(User user);
     Optional<User> getOptionalUser(String username);
-    boolean updateUserInfo(String chosenDetail, User user);
+    boolean updateUserInfo(String chosenAttributeName, User user);
     boolean updateUserBarangay(User newUser);
 }

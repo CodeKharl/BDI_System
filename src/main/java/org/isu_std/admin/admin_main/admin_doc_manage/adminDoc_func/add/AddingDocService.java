@@ -26,8 +26,8 @@ public class AddingDocService {
         this.docManageDao = docManageDao;
     }
 
-    protected String[] getInfoArr(){
-        return DocumentManageCodes.DOCUMENT_INFO.getArrCode();
+    protected String[] getDocumentAttributeNames(){
+        return DocumentManageCodes.DOCUMENT_ATTRIBUTE_NAMES.getArrCode();
     }
 
     protected DocumentBuilder getDocumentBuilder(){

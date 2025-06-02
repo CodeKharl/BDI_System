@@ -4,11 +4,9 @@ import org.isu_std.io.SystemLogger;
 import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.NotFoundException;
 import org.isu_std.io.custom_exception.ServiceException;
-import org.isu_std.io.dynamic_enum_handler.EnumValueProvider;
 import org.isu_std.models.User;
 import org.isu_std.dao.UserDao;
 import org.isu_std.io.collections_enum.InputMessageCollection;
-import org.isu_std.user_info_manager.UserInfoConfig;
 import org.isu_std.user_info_manager.UserInfoManager;
 
 import java.util.Optional;
@@ -21,7 +19,7 @@ public class UserLoginService{
     }
 
     protected String[] getUserDetails(){
-        return UserInfoManager.getUserDetails();
+        return UserInfoManager.getUserAttributeNames();
     }
 
     protected User getUser(String userName){

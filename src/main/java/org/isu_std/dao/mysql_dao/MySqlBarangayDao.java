@@ -56,7 +56,7 @@ public class MySqlBarangayDao implements BarangayDao{
             );
 
             return rowsAffected == 1;
-        }catch(SQLException | IOException e){
+        }catch(SQLException e){
             throw new DataAccessException(e.getMessage(), e);
         }
     }

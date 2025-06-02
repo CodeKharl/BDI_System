@@ -36,11 +36,11 @@ public class ModifyingDocument implements ManageDocumentImpl {
 
     private void modifyDocumentProcess() {
         while(true){
-            if (!setDocumentDetail()) {
+            if (!setChosenDocAttributeName()) {
                 return;
             }
 
-            if(!isModifyDocumentInfoSet()){
+            if(!setChosenDocAttributeValue()){
                 continue;
             }
 
@@ -50,13 +50,13 @@ public class ModifyingDocument implements ManageDocumentImpl {
         }
     }
 
-    private boolean setDocumentDetail(){
+    private boolean setChosenDocAttributeName(){
         // Function that returning the specific document detail that the client wants to modify.
-        String[] documentDetails = modifyingDocController.getDocumentDetailArr();
-        int backValue = documentDetails.length + 1;
+        String[] documentAttributes = modifyingDocController.getDocAttributeNames();
+        int backValue = documentAttributes.length + 1;
 
         Util.printSubSectionTitle("Selection of Document Information to be Modify : ");
-        Util.printChoices(documentDetails);
+        Util.printChoices(documentAttributes);
         Util.printChoice("%d. Cancel Process".formatted(backValue));
 
         int inputChoice = SystemInput.getIntChoice(
@@ -67,43 +67,43 @@ public class ModifyingDocument implements ManageDocumentImpl {
             return false;
         }
 
-        modifyingDocController.setDocumentDetail(inputChoice);
+        modifyingDocController.setChosenDocAttributeName(inputChoice);
         return true;
     }
 
-    private boolean isModifyDocumentInfoSet(){
-        String documentDetail = modifyingDocController.getDocumentDetail();
-        String[] details = modifyingDocController.getDocumentDetailArr();
+    private boolean setChosenDocAttributeValue(){
+        String chosenDocAttributeName = modifyingDocController.getChosenDocAttributeName();
+        String[] docAttributeNames = modifyingDocController.getDocAttributeNames();
 
-        if(documentDetail.equals(details[0])){
-            return modifyingDocController.setDocName(getDocNameOrPrice(documentDetail));
+        if(chosenDocAttributeName.equals(docAttributeNames[0])){
+            return modifyingDocController.setDocName(getDocNameOrPrice(chosenDocAttributeName));
         }
 
-        if(documentDetail.equals(details[1])){
-            return modifyingDocController.setPrice(getDocNameOrPrice(documentDetail));
+        if(chosenDocAttributeName.equals(docAttributeNames[1])){
+            return modifyingDocController.setPrice(getDocNameOrPrice(chosenDocAttributeName));
         }
 
-        if(documentDetail.equals(details[2])){
+        if(chosenDocAttributeName.equals(docAttributeNames[2])){
             return modifyingDocController.setRequirement();
         }
 
         return modifyingDocController.setDocFile();
     }
 
-    private String getDocNameOrPrice(String documentDetail){
+    private String getDocNameOrPrice(String chosenDocAttributeName){
         char backValue = ChoiceCollection.EXIT_CODE.getValue();
 
         while(true) {
             String input = SystemInput.getStringInput(
                     "Enter %s (%c == return to doc id section) : "
-                            .formatted(documentDetail, backValue)
+                            .formatted(chosenDocAttributeName, backValue)
             );
 
             if(input.charAt(0) == backValue){
                 return null;
             }
 
-            if(modifyingDocController.isDocNameOrPriceValid(documentDetail, input)){
+            if(modifyingDocController.isDocNameOrPriceValid(chosenDocAttributeName, input)){
                 return input;
             }
         }
@@ -111,6 +111,7 @@ public class ModifyingDocument implements ManageDocumentImpl {
 
     private boolean isModifyConfirm(){
         modifyingDocController.printDocDetail();
+
         return SystemInput.isPerformConfirmed(
                 "Modify Confirmation",
                 DocumentManageCodes.MODIFYING.getCode(),

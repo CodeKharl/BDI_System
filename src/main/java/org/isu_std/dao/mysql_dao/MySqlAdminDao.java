@@ -1,9 +1,7 @@
-package org.isu_std.dao.mysql_dao;
+ package org.isu_std.dao.mysql_dao;
 
 import org.isu_std.dao.AdminDao;
-import org.isu_std.config.MySQLDBConfig;
 import org.isu_std.dao.jdbc_helper.JDBCHelper;
-import org.isu_std.io.SystemLogger;
 import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.models.Admin;
 
@@ -46,7 +44,7 @@ public class MySqlAdminDao implements AdminDao {
             );
 
             return rowsAffected == 1;
-        }catch (SQLException | IOException e){
+        }catch (SQLException e){
             throw new DataAccessException(e.getMessage(), e);
         }
     }
@@ -84,7 +82,48 @@ public class MySqlAdminDao implements AdminDao {
             int rowsAffected = jdbcHelper.executeUpdate(query, barangayId, adminId);
 
             return rowsAffected == 1;
-        }catch (SQLException | IOException e){
+        }catch (SQLException e){
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public boolean updateAdminInfo(String chosenAttributeName, Admin admin){
+        var query = "UPDATE admin SET %s = ? WHERE admin_id = ?".formatted(chosenAttributeName);
+        Object attributeValue = getUpdateAdminAttributeValue(admin);
+
+        try{
+            int rowsAffected = jdbcHelper.executeUpdate(
+                    query,
+                    attributeValue,
+                    admin.adminId()
+            );
+
+            return rowsAffected == 1;
+        }catch (SQLException e){
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    private Object getUpdateAdminAttributeValue(Admin admin){
+        Object[] values = {admin.adminName(), admin.adminPin()};
+
+        for(Object value : values){
+            if(value != null){
+                return value;
+            }
+        }
+
+        throw new NullPointerException("Theres no existing value on the admin : " + admin);
+    }
+
+    @Override
+    public boolean deleteAdmin(int adminId){
+        var query = "DELETE FROM admin WHERE admin_id = ?";
+
+        try {
+            return jdbcHelper.executeUpdate(query, adminId) == 1;
+        }catch (SQLException e){
             throw new DataAccessException(e.getMessage(), e);
         }
     }

@@ -9,14 +9,18 @@ import java.io.File;
 import java.util.Optional;
 
 public class ModifyingDocController {
-    private final String[] document_info;
     private final ModifyingDocService modifyingDocService;
     private final ModifyDocumentContext modifyDocumentContext;
+    private final String[] documentAttributeNames;
 
     public ModifyingDocController(ModifyingDocService modifyingDocService, int barangayId){
         this.modifyingDocService = modifyingDocService;
-        this.document_info = modifyingDocService.getDocumentArrInfo();
+        this.documentAttributeNames = modifyingDocService.getDocAttributeNames();
         this.modifyDocumentContext = modifyingDocService.createModDocContext(barangayId);
+    }
+
+    protected String[] getDocAttributeNames(){
+        return this.documentAttributeNames;
     }
 
     protected final boolean setValidDocumentId(){
@@ -30,23 +34,19 @@ public class ModifyingDocController {
         return false;
     }
 
-    protected final void setDocumentDetail(int inputChoice){
-        modifyDocumentContext.setDocumentDetail(
-                document_info[inputChoice - 1]
+    protected final void setChosenDocAttributeName(int inputChoice){
+        modifyDocumentContext.setChosenDocAttributeName(
+                documentAttributeNames[inputChoice - 1]
         );
     }
 
-    protected String[] getDocumentDetailArr(){
-        return this.document_info;
+    protected String getChosenDocAttributeName(){
+        return modifyDocumentContext.getChosenDocAttributeName();
     }
 
-    protected String getDocumentDetail(){
-        return modifyDocumentContext.getDocumentDetail();
-    }
-
-    protected final boolean isDocNameOrPriceValid(String documentDetail, String input){
+    protected final boolean isDocNameOrPriceValid(String chosenDocAttributeName, String input){
         try{
-            if(documentDetail.equals(document_info[0])){
+            if(chosenDocAttributeName.equals(documentAttributeNames[0])){
                 modifyingDocService.checkDocumentName(input);
             }else {
                 modifyingDocService.checkDocumentPrice(input);
@@ -149,7 +149,7 @@ public class ModifyingDocController {
 
     protected void printDocDetail(){
         Util.printMessage("Detail to Modify -> %s".formatted(
-                modifyDocumentContext.getDocumentDetail())
+                modifyDocumentContext.getChosenDocAttributeName())
         );
     }
 }

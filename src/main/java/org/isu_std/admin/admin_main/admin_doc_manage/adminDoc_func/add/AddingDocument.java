@@ -33,7 +33,7 @@ public class AddingDocument implements ManageDocumentImpl {
     }
 
     private boolean setDocumentInformation(){
-        String[] docInfoArr = addingDocController.getInfoArr();
+        String[] docInfoArr = addingDocController.getDocumentAttributeNames();
         // Set only the document name and price.
 
         int count = 0;

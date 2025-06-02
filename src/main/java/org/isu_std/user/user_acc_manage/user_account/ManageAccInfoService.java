@@ -6,11 +6,9 @@ import org.isu_std.io.SystemLogger;
 import org.isu_std.io.custom_exception.DataAccessException;
 import org.isu_std.io.custom_exception.OperationFailedException;
 import org.isu_std.io.custom_exception.ServiceException;
-import org.isu_std.io.dynamic_enum_handler.EnumValueProvider;
 import org.isu_std.models.User;
 import org.isu_std.models.model_builders.BuilderFactory;
 import org.isu_std.models.model_builders.UserBuilder;
-import org.isu_std.user_info_manager.UserInfoConfig;
 import org.isu_std.user_info_manager.UserInfoManager;
 
 public class ManageAccInfoService {
@@ -24,16 +22,12 @@ public class ManageAccInfoService {
         return new AccountInfoContext(userContext, BuilderFactory.createUserBuilder());
     }
 
-    protected String[] getUserDetails(){
-        return EnumValueProvider.getStringArrValue(
-                UserInfoConfig.USER_DETAILS.getValue()
-        );
+    protected String[] getUserAttributeNames(){
+        return UserInfoManager.getUserAttributeNames();
     }
 
-    protected String getChosenDetailSpecs(int index){
-        String[] specs = EnumValueProvider.getStringArrValue(
-                UserInfoConfig.USER_DETAIL_SPECS.getValue()
-        );
+    protected String getChosenAttributeSpec(int index){
+        String[] specs = UserInfoManager.getUserAttributeSpecs();
 
         return specs[index];
     }
@@ -64,9 +58,9 @@ public class ManageAccInfoService {
         return userBuilder.build();
     }
 
-    protected void updateUserPerform(String chosenDetail, User user){
+    protected void updateUserPerform(String chosenAttributeName, User user){
         try {
-            if (!userDao.updateUserInfo(chosenDetail, user)) {
+            if (!userDao.updateUserInfo(chosenAttributeName, user)) {
                 throw new OperationFailedException(
                         "Failed to update account info! Please try again."
                 );
@@ -74,7 +68,7 @@ public class ManageAccInfoService {
         }catch (DataAccessException e){
             SystemLogger.log(e.getMessage(), e);
 
-            throw new ServiceException("Failed to update user by %s".formatted(chosenDetail));
+            throw new ServiceException("Failed to update user by %s".formatted(chosenAttributeName));
         }
     }
 }

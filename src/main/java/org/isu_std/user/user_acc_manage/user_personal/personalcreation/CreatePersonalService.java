@@ -19,12 +19,12 @@ public class CreatePersonalService {
         this.userPersonalDao = userPersonalDao;
     }
 
-    protected String[] getPersonalDetails(){
-        return this.managePersonalService.getPersonalDetails();
+    protected String[] getPersonalAttributeNames(){
+        return this.managePersonalService.getPersonalAttributeNames();
     }
 
-    protected String[] getPersonalDetailSpecs(){
-        return this.managePersonalService.getPersonalDetailSpecs();
+    protected String[] getPersonalAttributeSpecs(){
+        return this.managePersonalService.getPersonalAttributeSpecs();
     }
 
     protected UserPersonalBuilder getUserPersonalBuilder(){

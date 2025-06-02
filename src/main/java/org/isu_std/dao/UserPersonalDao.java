@@ -7,5 +7,5 @@ import java.util.Optional;
 public interface UserPersonalDao {
     Optional<UserPersonal> getOptionalUserPersonal(int userId);
     boolean addUserPersonal(int userId, UserPersonal userPersonal);
-    boolean updateUserPersonal(int userId, String chosenDetail, UserPersonal userPersonal);
+    boolean updateUserPersonal(int userId, String chosenAttributeName, UserPersonal userPersonal);
 }

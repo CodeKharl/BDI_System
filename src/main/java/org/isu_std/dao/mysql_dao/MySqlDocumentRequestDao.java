@@ -66,9 +66,11 @@ public class MySqlDocumentRequestDao implements DocumentRequestDao {
                 "(reference_id, doc_requirement_name, doc_requirement_file) " +
                 "values(?, ?, ?)";
 
-        return jdbcHelper.executeUpdateWithFiles(
+        int rowsAffected = jdbcHelper.executeUpdateWithFiles(
                 query, referenceId, file.getName(), file
-        ) == 1;
+        );
+
+        return rowsAffected == 1;
     }
 
     @Override
@@ -127,7 +129,8 @@ public class MySqlDocumentRequestDao implements DocumentRequestDao {
         );
     }
 
-    private File getResultRequirmentFile(ResultSet resultSet, FolderConfig folderPath) throws SQLException, IOException{
+    private File getResultRequirmentFile(ResultSet resultSet, FolderConfig folderPath)
+            throws SQLException, IOException{
         String fileName = resultSet.getString(1);
         File file = new File(
                 folderPath.getDirectory() + File.separator + fileName
@@ -158,7 +161,7 @@ public class MySqlDocumentRequestDao implements DocumentRequestDao {
     private boolean requestQueryPerform(String query, String operationType, String referenceId){
         try{
             return jdbcHelper.executeUpdate(query, referenceId) == 1;
-        }catch (SQLException | IOException e){
+        }catch (SQLException e){
             throw new DataAccessException(
                     "Failed to %s by reference_id : %s".formatted(operationType, referenceId), e
             );

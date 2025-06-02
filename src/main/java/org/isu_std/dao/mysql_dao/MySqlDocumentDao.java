@@ -95,7 +95,7 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
     }
 
     @Override
-    public boolean updateDocument(String chosenDetail, Document document, int barangayId, int documentId) {
+    public boolean updateDocument(String chosenAttributeName, Document document, int barangayId, int documentId) {
         try{
             //If the document file is modify
             Object infoValue = ModelHelper.getFirstExistingValue(document.getValues());
@@ -105,15 +105,15 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
             }
 
             //Rest of Information
-            return updateDocumentInfo(chosenDetail, infoValue, barangayId, documentId);
+            return updateDocumentInfo(chosenAttributeName, infoValue, barangayId, documentId);
         }catch (SQLException | IOException e){
             throw new DataAccessException(e.getMessage(), e);
         }
     }
 
-    private boolean updateDocumentInfo(String chosenDetail, Object infoValue, int barangayId, int documentId)
+    private boolean updateDocumentInfo(String chosenAttributeName, Object infoValue, int barangayId, int documentId)
             throws SQLException, IOException {
-        String query = getUpdateDocInfoQuery(chosenDetail);
+        String query = getUpdateDocInfoQuery(chosenAttributeName);
 
         int rowsAffected = jdbcHelper.executeUpdate(
                 query,
@@ -125,14 +125,15 @@ public class MySqlDocumentDao implements DocManageDao, DocumentDao{
         return rowsAffected == 1;
     }
 
-    private String getUpdateDocInfoQuery(String chosenDetail){
+    private String getUpdateDocInfoQuery(String chosenAttributeName){
         return "UPDATE document SET %s = ? WHERE barangay_id = ? AND document_id = ?"
-                .formatted(chosenDetail);
+                .formatted(chosenAttributeName);
     }
 
 
 
-    private boolean updateDocumentFile(File docFile, int barangayId, int documentId) throws SQLException, IOException{
+    private boolean updateDocumentFile(File docFile, int barangayId, int documentId)
+            throws SQLException, IOException{
         var query = "UPDATE document SET doc_file_name = ?, document_file = ? " +
                 "WHERE barangay_id = ? AND document_id = ?";
 

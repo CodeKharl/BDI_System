@@ -3,7 +3,7 @@ package org.isu_std.admin.admin_main.admin_doc_manage.adminDoc_func.others;
 public enum DocumentManageCodes {
     ADDING('A'), DELETING('D'),
     MODIFYING('M'), CANCELING('C'),
-    DOCUMENT_INFO(new String[]{
+    DOCUMENT_ATTRIBUTE_NAMES(new String[]{
             "Document_Name", "Price", "Requirements", "Document_File"
     });
 

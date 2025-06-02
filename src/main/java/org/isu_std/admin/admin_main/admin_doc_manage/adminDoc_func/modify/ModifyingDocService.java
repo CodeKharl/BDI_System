@@ -39,18 +39,18 @@ public class ModifyingDocService {
         return new ModifyDocumentContext(barangayID, BuilderFactory.createDocumentBuilder());
     }
 
-    protected String[] getDocumentArrInfo(){
-        return DocumentManageCodes.DOCUMENT_INFO.getArrCode();
+    protected String[] getDocAttributeNames(){
+        return DocumentManageCodes.DOCUMENT_ATTRIBUTE_NAMES.getArrCode();
     }
 
     protected final boolean modifyPerformed(ModifyDocumentContext modifyDocumentContext){
-        String chosenDetail = modifyDocumentContext.getDocumentDetail();
+        String chosenAttributeName = modifyDocumentContext.getChosenDocAttributeName();
         Document document = modifyDocumentContext.getDocumentBuilder().build();
         int barangayId = modifyDocumentContext.getBarangayId();
         int documentId = modifyDocumentContext.getDocumentId();
 
         try {
-            if (docManageDao.updateDocument(chosenDetail, document, barangayId, documentId)) {
+            if (docManageDao.updateDocument(chosenAttributeName, document, barangayId, documentId)) {
                 return true;
             }
 

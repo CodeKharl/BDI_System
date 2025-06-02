@@ -24,21 +24,22 @@ public class ModifyPersonalController {
         );
     }
 
-    protected String[] getPersonalDetails(){
-        return modifyPersonalService.getPersonalDetails();
+    protected String[] getPersonalAttributeNames(){
+        return modifyPersonalService.getPersonalAttributeNames();
     }
 
-    protected String getPersonalDetailSpec(int choice) {
-        return modifyPersonalService.getPersonalDetailSpecs()[choice - 1];
+    protected String getPersonalAttributeSpec(int choice) {
+        return modifyPersonalService.getPersonalAttributeSpecs()[choice - 1];
     }
 
-    protected void setDetailToModify(String[] personalInfo, int choice){
-        String personalDetail = personalInfo[choice - 1];
-        modifyPersonalContext.setChosenDetail(personalDetail);
+    protected void setDetailToModify(String[] personalAttributeNames, int choice){
+        String personalAttributeName = personalAttributeNames[choice - 1];
+
+        modifyPersonalContext.setChosenAttributeName(personalAttributeName);
     }
 
-    protected String getChosenDetail(){
-        return modifyPersonalContext.getChosenDetail();
+    protected String getChosenAttributeName(){
+        return modifyPersonalContext.getChosenAttributeName();
     }
 
     protected boolean isNameSet(){
@@ -69,6 +70,7 @@ public class ModifyPersonalController {
         try {
             modifyPersonalService.saveModifiedPersonalInfo(this.modifyPersonalContext);
             modifyPersonalContext.getUserPersonalBuilder().resetValues();
+
             return true;
         }catch (ServiceException | OperationFailedException e){
             Util.printException(e.getMessage());

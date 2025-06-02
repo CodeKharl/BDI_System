@@ -7,7 +7,7 @@ public class ModifyPersonalContext {
     private final User user;
     private final UserPersonalBuilder userPersonalBuilder;
 
-    private String chosenDetail;
+    private String chosenAttributeName;
 
     public ModifyPersonalContext(User user, UserPersonalBuilder userPersonalBuilder){
         this.user = user;
@@ -18,12 +18,12 @@ public class ModifyPersonalContext {
         return user;
     }
 
-    protected void setChosenDetail(String chosenDetail){
-        this.chosenDetail = chosenDetail;
+    protected void setChosenAttributeName(String chosenAttributeName){
+        this.chosenAttributeName = chosenAttributeName;
     }
 
-    protected String getChosenDetail() {
-        return chosenDetail;
+    protected String getChosenAttributeName() {
+        return chosenAttributeName;
     }
 
     protected UserPersonalBuilder getUserPersonalBuilder() {

@@ -10,12 +10,12 @@ import org.isu_std.models.model_builders.UserBuilder;
 public class ManageAccInfoController {
     private final ManageAccInfoService manageAccInfoService;
     private final AccountInfoContext accountInfoContext;
-    private final String[] userDetails;
+    private final String[] userAttributeNames;
 
     public ManageAccInfoController(ManageAccInfoService manageAccInfoService, UserContext userContext){
         this.manageAccInfoService = manageAccInfoService;
         this.accountInfoContext = manageAccInfoService.createAccountInfoContext(userContext);
-        this.userDetails = manageAccInfoService.getUserDetails();
+        this.userAttributeNames = manageAccInfoService.getUserAttributeNames();
     }
 
     protected void printUserInfo(){
@@ -25,27 +25,28 @@ public class ManageAccInfoController {
                 .printUserDetails();
     }
 
-    protected String[] getAccountInfoDetails(){
-        return this.userDetails;
+    protected String[] getAccInfoAttributeNames(){
+        return this.userAttributeNames;
     }
 
-    protected void setChosenDetail(int choice){
+    protected void setChosenAttribute(int choice){
         int index = choice - 1;
-        String spec = manageAccInfoService.getChosenDetailSpecs(index);
-        accountInfoContext.setChosenDetail(userDetails[index]);
-        accountInfoContext.setChosenDetailSpec(spec);
+        String spec = manageAccInfoService.getChosenAttributeSpec(index);
+
+        accountInfoContext.setChosenAttributeName(userAttributeNames[index]);
+        accountInfoContext.setChosenAttributeSpec(spec);
     }
 
-    protected String getChosenDetailWithSpec(){
-        return accountInfoContext.getUserDetailWithSpec();
+    protected String getChosenAttrNameWithSpec(){
+        return accountInfoContext.getUserAttrNameWithSpec();
     }
 
     protected boolean isValueAccepted(String input){
         try{
-            String chosenDetail = accountInfoContext.getChosenDetail();
+            String chosenAttributeName = accountInfoContext.getChosenAttributeName();
             UserBuilder userBuilder = accountInfoContext.getUserBuilder();
 
-            setUserBuilderValues(chosenDetail, userBuilder, input);
+            setUserBuilderValues(chosenAttributeName, userBuilder, input);
 
             return true;
         }catch(IllegalArgumentException e){
@@ -55,28 +56,28 @@ public class ManageAccInfoController {
         return false;
     }
 
-    protected void setUserBuilderValues(String chosenDetail, UserBuilder userBuilder, String input)
+    protected void setUserBuilderValues(String chosenAttributeName, UserBuilder userBuilder, String input)
             throws IllegalArgumentException{
         // 0 == username, 1 == password
-        if(chosenDetail.equals(userDetails[0])) {
+        if(chosenAttributeName.equals(userAttributeNames[0])) {
             manageAccInfoService.checkInputUserName(input);
             userBuilder.username(input);
-        } else if(chosenDetail.equals(userDetails[1])){
+        } else if(chosenAttributeName.equals(userAttributeNames[1])){
             manageAccInfoService.checkInputPassword(input);
             userBuilder.password(input);
         } else {
             throw new IllegalStateException(
-                    "The string arr user details doesn't contain the chosen detail : " + chosenDetail
+                    "The string arr user details doesn't contain the chosen detail : " + chosenAttributeName
             );
         }
     }
 
     protected boolean isUpdateSuccess(){
-        String chosenDetail = accountInfoContext.getChosenDetail();
+        String chosenAttributeName = accountInfoContext.getChosenAttributeName();
         UserBuilder userBuilder = accountInfoContext.getUserBuilder();
         User actualUser = accountInfoContext.getUserContext().getUser();
 
-        if(updateUser(chosenDetail, actualUser, userBuilder)){
+        if(updateUser(chosenAttributeName, actualUser, userBuilder)){
             // Update on active user object
             actualUser = manageAccInfoService.createNewUser(actualUser, userBuilder);
 
@@ -92,14 +93,14 @@ public class ManageAccInfoController {
         return false;
     }
 
-    protected boolean updateUser(String chosenDetail, User actualUser, UserBuilder userBuilder){
+    protected boolean updateUser(String chosenAttributeName, User actualUser, UserBuilder userBuilder){
         try{
             // Update on the database
-            User incompletedUser = userBuilder
+            User incompleteUser = userBuilder
                     .userId(actualUser.userId())
                     .build();
             
-            this.manageAccInfoService.updateUserPerform(chosenDetail, incompletedUser);
+            this.manageAccInfoService.updateUserPerform(chosenAttributeName, incompleteUser);
             return true;
         }catch (ServiceException | OperationFailedException e){
             Util.printException(e.getMessage());

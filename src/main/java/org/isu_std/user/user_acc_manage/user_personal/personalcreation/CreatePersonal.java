@@ -33,16 +33,16 @@ public class CreatePersonal{
     }
 
     private boolean setOtherInformations(){
-        String[] informations = createPersonalController.getPersonalDetails();
+        String[] attributeNames = createPersonalController.getPersonalDetails();
         String[] specifications = createPersonalController.getPersonalDetailSpecs();
 
         char cancellationValue = ChoiceCollection.EXIT_CODE.getValue();
 
         int count = 1; // start at one since name is already set.
-        while(count < informations.length){
+        while(count < attributeNames.length){
             String input = SystemInput.getStringInput(
                     "Enter your %s %s (Cancel == %c) : "
-                            .formatted(informations[count], specifications[count], cancellationValue)
+                            .formatted(attributeNames[count], specifications[count], cancellationValue)
             );
 
             if(input.charAt(0) == cancellationValue){

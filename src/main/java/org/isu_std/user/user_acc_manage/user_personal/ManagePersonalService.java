@@ -1,6 +1,5 @@
 package org.isu_std.user.user_acc_manage.user_personal;
 
-import org.isu_std.dao.BarangayDao;
 import org.isu_std.dao.UserPersonalDao;
 import org.isu_std.io.SystemLogger;
 import org.isu_std.io.Validation;
@@ -29,6 +28,7 @@ import java.util.Optional;
 
 public class ManagePersonalService {
     private final UserPersonalDao userPersonalDao;
+
     public ManagePersonalService(UserPersonalDao userPersonalDao){
         this.userPersonalDao = userPersonalDao;
     }
@@ -73,13 +73,13 @@ public class ManagePersonalService {
         return NameCreationFactory.createNameCreation();
     }
 
-    public String[] getPersonalDetails(){
-        ConfigValue arrValue = PersonalInfoConfig.PERSONAL_INFORMATIONS.getValue();
+    public String[] getPersonalAttributeNames(){
+        ConfigValue arrValue = PersonalInfoConfig.PERSONAL_ATTRIBUTE_NAMES.getValue();
         return EnumValueProvider.getStringArrValue(arrValue);
     }
 
-    public String[] getPersonalDetailSpecs(){
-        ConfigValue arrValue = PersonalInfoConfig.PERSONAL_SPECIFICATION.getValue();
+    public String[] getPersonalAttributeSpecs(){
+        ConfigValue arrValue = PersonalInfoConfig.PERSONAL_ATTRIBUTE_SPECIFICATIONS.getValue();
         return EnumValueProvider.getStringArrValue(arrValue);
     }
 

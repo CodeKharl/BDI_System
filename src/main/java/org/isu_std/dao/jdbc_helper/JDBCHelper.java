@@ -18,7 +18,7 @@ public class JDBCHelper {
         this.mySQLDBConfig = mySQLDBConfig;
     }
 
-    public int executeUpdate(String sql, Object... params) throws SQLException, IOException{
+    public int executeUpdate(String sql, Object... params) throws SQLException{
         try(Connection connection = mySQLDBConfig.getConnection();
             PreparedStatement preStatement = connection.prepareStatement(sql)
         ){
